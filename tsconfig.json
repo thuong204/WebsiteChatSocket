@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "outDir": "js",
+        "target": "ES6",
+        "module": "commonjs",
+        "removeComments": true,
+        "esModuleInterop": true,
+         // dungf import thay cho requrie  
+    }
+}
