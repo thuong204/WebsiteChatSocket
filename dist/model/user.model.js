@@ -22,14 +22,32 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRoutes = void 0;
-const express_1 = require("express");
-const userController = __importStar(require("../../controller/client/user.controller"));
-const validateUser = __importStar(require("../../validate/validate-user"));
-const router = (0, express_1.Router)();
-router.get("/login", userController.login);
-router.get("/register", userController.register);
-router.post("/login", validateUser.validateLogin, userController.loginPost);
-router.post("/register", validateUser.validateRegister, userController.registerPost);
-exports.userRoutes = router;
+const mongoose_1 = __importDefault(require("mongoose"));
+const generate = __importStar(require("../helpers/generate"));
+const userSchema = new mongoose_1.default.Schema({
+    fullName: String,
+    email: String,
+    password: String,
+    googleId: String,
+    facebookId: String,
+    userToken: {
+        type: String,
+        default: generate.generateRandomString(20)
+    },
+    status: {
+        type: String,
+        default: "active"
+    },
+    dateOfBirth: Date,
+    phone: String,
+    avatar: String,
+    deleted: { type: Boolean, default: false },
+}, {
+    timestamps: true
+});
+const User = mongoose_1.default.model("User", userSchema, "users");
+exports.default = User;

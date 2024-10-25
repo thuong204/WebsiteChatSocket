@@ -1,155 +1,191 @@
 /* header  */
 * {
     /* max-width: 100vw;  */
-    box-sizing: border-box; /* Đảm bảo padding và border không làm tăng chiều rộng */
+    box-sizing: border-box;
+    /* Đảm bảo padding và border không làm tăng chiều rộng */
 }
 
 /* Ẩn cuộn ngang nếu không cần thiết */
-body, html {
-    overflow-x: hidden; /* Ẩn thanh cuộn ngang */
+body,
+html {
+    overflow-x: hidden;
+    /* Ẩn thanh cuộn ngang */
     overflow-y: hidden;
 }
 
-header{
+header {
     border-bottom: 1px solid #dddd;
 }
-.navbar-header{
+
+.navbar-header {
     justify-content: space-between;
     align-items: center;
     vertical-align: middle;
 }
 
-.navbar-list li a.list-item{
-   width: 46px;
-   height: 46px;
+.navbar-list li a.list-item {
+    width: 46px;
+    height: 46px;
 
-   background-color:#C6E2FF;
+    background-color: #C6E2FF;
 }
-a.background-none{
+
+a.background-none {
     background-color: transparent !important;
 }
+
 @media (max-width: 576px) {
     .navbar-list li a.list-item {
-       width: 38px; /* Smaller width */
-       height: 38px; /* Smaller height */
+        width: 38px;
+        /* Smaller width */
+        height: 38px;
+        /* Smaller height */
     }
-    .navbar-header img{
+
+    .navbar-header img {
         width: 20px;
-        
+
         height: 20px;
-        
+
     }
-    .aside-base{
+
+    .aside-base {
         display: none;
     }
-    .navbar-list li.item-chatbox,  .navbar-list li.item-stories {
+
+    .navbar-list li.item-chatbox,
+    .navbar-list li.item-stories {
         display: none;
-     }
-     .navbar-list {
+    }
+
+    .navbar-list {
         display: inline-flex;
         flex-direction: row !important;
-    
+
     }
-    .navbar-list li a img.img-avatar{
+
+    .navbar-list li a img.img-avatar {
         width: 35px;
         height: 35px;
     }
-    .navbar-logo{
+
+    .navbar-logo {
         width: 60px !important;
     }
-    .navbar-logo img{
+
+    .navbar-logo img {
         width: 30px !important;
         height: 30px !important;
         margin-right: 10px !important;
     }
-    .item-chat{
+
+    .item-chat {
         margin-left: 10px !important;
     }
 
-    .navbar-list-chat li.item-call,  .navbar-list li.video {
+    .navbar-list-chat li.item-call,
+    .navbar-list li.video {
         display: none;
-     }
-     .navbar-list {
+    }
+
+    .navbar-list {
         display: inline-flex;
         flex-direction: row !important;
-    
+
     }
-    .navbar-list li a img.img-avatar{
+
+    .navbar-list li a img.img-avatar {
         width: 35px;
         height: 35px;
     }
-    .item-search{
+
+    .item-search {
         display: none;
     }
-    .item-icon{
+
+    .item-icon {
         display: none;
     }
-    .item-image{
+
+    .item-image {
         text-align: center;
         margin-left: 10px;
     }
-    .item-add{
+
+    .item-add {
         display: none;
     }
-    .chat-body{
+
+    .chat-body {
         height: 750px;
     }
-    .input-message{
+
+    .input-message {
         margin-top: 5px;
         width: 200px !important;
     }
-    .item-mic{
+
+    .item-mic {
         display: none;
     }
-    ul.list-message-item{
+
+    ul.list-message-item {
         margin: 0 !important;
         padding: 0 !important;
     }
 
- }
+}
+
 .navbar-list>li {
     padding: 10px 10px 10px 10px;
 
 
 }
+
 .navbar-nav .dropdown-menu {
     /* Không cần thêm `position: static;` */
     position: absolute !important;
 }
 
 
-.navbar-logo{
+.navbar-logo {
     width: 70px;
     text-align: center;
     padding: 10px;
     border-right: 1px solid #ddd;
 }
-.navbar-content{
+
+.navbar-content {
     display: flex;
     justify-content: space-between;
     flex-grow: 1;
 }
+
 /* end header  */
 
 /* chat  */
 /* body  */
- /* aside  */
+/* aside  */
 
-.aside-base{
+.aside-base {
     margin-right: 0px;
     padding-right: 0px !important;
     border-right: 1px solid #ddd;
 }
- .aside-head{
+
+.aside-head {
     justify-content: space-between;
- }
- .btn-link{
+}
+
+.btn-link {
     border: none;
     background-color: transparent;
- }
+}
+
 .btn-link span {
     text-decoration: none;
 }
+
 /* General Styles for New and Filter */
 
 ul.d-flex li button {
@@ -171,75 +207,93 @@ ul.d-flex li button span {
 ul.d-flex li button span::after {
     content: "";
     position: absolute;
-    bottom: -2px; /* Khoảng cách của gạch dưới với văn bản */
+    bottom: -2px;
+    /* Khoảng cách của gạch dưới với văn bản */
     left: 0;
     width: 0;
     height: 2px;
-    background-color: #007bff; /* Màu gạch dưới */
-    transition: width 0.3s ease; /* Tạo hiệu ứng mượt */
+    background-color: #007bff;
+    /* Màu gạch dưới */
+    transition: width 0.3s ease;
+    /* Tạo hiệu ứng mượt */
 }
 
 /* ul.d-flex li button:hover span::after {
     width: 100%; 
 } */
 .aside-body {
-    height: 100vh; /* Chiếm toàn bộ chiều cao của cửa sổ trình duyệt */
-    overflow-y: auto; /* Đảm bảo có thể cuộn nếu nội dung vượt quá */
+    height: 100vh;
+    /* Chiếm toàn bộ chiều cao của cửa sổ trình duyệt */
+    overflow-y: auto;
+    /* Đảm bảo có thể cuộn nếu nội dung vượt quá */
 }
-.aside-head{
+
+.aside-head {
     margin-left: 20px;
 }
-.list-tool-item{
+
+.list-tool-item {
     margin: 13px 5px 13px 13px;
     vertical-align: middle;
 }
-.img-tool{
+
+.img-tool {
     margin-right: 5px;
     font-weight: 400;
 }
 
-.search-contact{
+.search-contact {
     background-color: #C6E2FF !important;
-    
+
 }
+
 .position-relative {
-    position: relative; /* Cho phép sử dụng position absolute bên trong */
+    position: relative;
+    /* Cho phép sử dụng position absolute bên trong */
 }
 
 .position-absolute {
     position: absolute;
-    left: 30px; /* Điều chỉnh vị trí icon theo ý muốn */
+    left: 30px;
+    /* Điều chỉnh vị trí icon theo ý muốn */
     top: 50%;
-    transform: translateY(-50%); /* Đặt icon ở giữa chiều cao của ô input */
-    color: #888; /* Màu của icon */
+    transform: translateY(-50%);
+    /* Đặt icon ở giữa chiều cao của ô input */
+    color: #888;
+    /* Màu của icon */
 }
 
 input.search-contact {
-    padding-left: 55px; /* Để tránh chèn vào icon, tạo khoảng trống bên trái */
+    padding-left: 55px;
+    /* Để tránh chèn vào icon, tạo khoảng trống bên trái */
     box-shadow: none !important;
     margin-left: 10px;
-    border:none !important;
+    border: none !important;
     width: calc(100% - 20px);
 }
-.aside-body{
+
+.aside-body {
     height: 100%;
 }
-.tab-content{
+
+.tab-content {
     margin-left: 10px;
     margin-right: 10px;
 }
 
 
 
-ul.list-aside-item{
+ul.list-aside-item {
     display: flex;
     flex-direction: column;
-    max-height: 580px; /* Chiều cao tối đa của danh sách */
+    max-height: 580px;
+    /* Chiều cao tối đa của danh sách */
     overflow-y: auto;
     list-style: none;
-    margin-top:10px;
+    margin-top: 10px;
     vertical-align: middle;
-    padding: 0 !important; /* Loại bỏ padding mặc định của ul */
+    padding: 0 !important;
+    /* Loại bỏ padding mặc định của ul */
 }
 
 .scrollable-list {
@@ -247,91 +301,114 @@ ul.list-aside-item{
     transition: all 0.3s ease;
     scrollbar-gutter: stable;
 }
-  
-  /* Hiển thị thanh cuộn khi di chuột vào danh sách */
-.tab-panel:hover  .scrollable-list {
-    overflow-y: auto !important; /* Hiển thị thanh cuộn dọc */
-  }
 
-  .chat-body:hover {
-    overflow-y: auto !important; /* Hiển thị thanh cuộn dọc */
-  }
+/* Hiển thị thanh cuộn khi di chuột vào danh sách */
+.tab-panel:hover .scrollable-list {
+    overflow-y: auto !important;
+    /* Hiển thị thanh cuộn dọc */
+}
+
+.chat-body:hover {
+    overflow-y: auto !important;
+    /* Hiển thị thanh cuộn dọc */
+}
+
 .scrollable-list::-webkit-scrollbar {
-    width: 5px; /* Chiều rộng thanh cuộn */
+    width: 5px;
+    /* Chiều rộng thanh cuộn */
 }
 
 .scrollable-list::-webkit-scrollbar-thumb {
-    background-color: #888; /* Màu của thanh cuộn */
-    border-radius: 10px; /* Bo góc thanh cuộn */
+    background-color: #888;
+    /* Màu của thanh cuộn */
+    border-radius: 10px;
+    /* Bo góc thanh cuộn */
 }
 
 .scrollable-list::-webkit-scrollbar-thumb:hover {
-    background-color: #555; /* Màu khi hover trên thanh cuộn */
+    background-color: #555;
+    /* Màu khi hover trên thanh cuộn */
 }
 
 .scrollable-list::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Màu nền của thanh cuộn */
+    background: #f1f1f1;
+    /* Màu nền của thanh cuộn */
 }
 
 /* Tùy chỉnh cho các trình duyệt khác */
 .scrollable-list {
-    scrollbar-width: thin; /* Đặt thanh cuộn mỏng */
-    scrollbar-color: #888 #f1f1f1; /* Màu của thanh cuộn và nền */
+    scrollbar-width: thin;
+    /* Đặt thanh cuộn mỏng */
+    scrollbar-color: #888 #f1f1f1;
+    /* Màu của thanh cuộn và nền */
 }
-ul li.aside-item-chat{
+
+ul li.aside-item-chat {
     margin-right: 5px !important;
     border: 1px solid #ddd;
     padding: 0;
     margin-top: 5px;
     border-radius: 10px;
 }
-ul li.aside-item-chat .media img{
+
+ul li.aside-item-chat .media img {
     margin: 10px;
     width: 48px !important;
     height: 48px !important;
 
 }
-.detail-content{
+
+.detail-content {
     padding: 0 !important;
     max-height: 670px;
-    
+
 }
-.detail-content:hover{
-    overflow-y:auto !important ;
+
+.detail-content:hover {
+    overflow-y: auto !important;
 }
-ul li.aside-item-chat .user-info{
+
+ul li.aside-item-chat .user-info {
     padding-top: 10px !important;
 
 }
-.media-col{
+
+.media-col {
     flex-direction: column;
     padding-top: 5px;
 }
+
 .user-message {
     max-width: 100%;
 }
 
 .user-message .message {
-    white-space: nowrap; /* Không cho phép ngắt dòng */
-    overflow: hidden; /* Ẩn phần tin nhắn vượt quá chiều rộng */
-    text-overflow: ellipsis; /* Hiển thị dấu ba chấm khi nội dung quá dài */
-    max-width: 200px; /* Giới hạn chiều rộng của phần tử */
+    white-space: nowrap;
+    /* Không cho phép ngắt dòng */
+    overflow: hidden;
+    /* Ẩn phần tin nhắn vượt quá chiều rộng */
+    text-overflow: ellipsis;
+    /* Hiển thị dấu ba chấm khi nội dung quá dài */
+    max-width: 200px;
+    /* Giới hạn chiều rộng của phần tử */
     display: inline-block;
     margin-right: 10px;
     font-weight: 400;
     font-size: 14px;
 }
-span.time{
+
+span.time {
     font-size: 12px;
     padding-top: 25px;
 }
 
 /* chat head  */
-.chat-content{
+.chat-content {
     margin: 0 !important;
     padding: 0 !important;
 }
-.chat-head{
+
+.chat-head {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #ddd;
@@ -339,67 +416,83 @@ span.time{
     border-right: 1px solid #ddd;
 
 }
-.media-chat{
+
+.media-chat {
     margin-top: 10px;
     flex-direction: column;
 
-    
+
 }
-.media-img{
+
+.media-img {
     padding: 15px;
 }
-.media-img img{
+
+.media-img img {
     width: 48px !important;
     height: 48px !important;
 }
-.media-chat .user-info h6{
+
+.media-chat .user-info h6 {
     padding: 0;
     margin: 0 !important;
 
 
 }
-.media-chat h6.message{
+
+.media-chat h6.message {
     font-size: 10px;
     padding-top: 5px;
 }
+
 .media-group-chat {
-    display: flex; /* Sử dụng Flexbox */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    justify-content: center; /* Căn giữa theo chiều ngang (nếu cần) */
-    gap:0.8rem;
+    display: flex;
+    /* Sử dụng Flexbox */
+    align-items: center;
+    /* Căn giữa theo chiều dọc */
+    justify-content: center;
+    /* Căn giữa theo chiều ngang (nếu cần) */
+    gap: 0.8rem;
 }
-.media-feature .navbar-list-chat{
+
+.media-feature .navbar-list-chat {
     flex-direction: row;
 
 }
 
 
-.navbar-list-chat li a.list-item{
+.navbar-list-chat li a.list-item {
     width: 46px;
     height: 46px;
-    background-color:#dcefff;
- }
- .navbar-list-chat>li {
+    background-color: #dcefff;
+}
+
+.navbar-list-chat>li {
     padding: 20px 10px 20px 10px;
 }
+
 .col-xl-7 {
-    transition: width 0.3s ease; /* Hiệu ứng mượt khi thay đổi kích thước */
+    transition: width 0.3s ease;
+    /* Hiệu ứng mượt khi thay đổi kích thước */
 }
 
-.item-detail:focus ~ .col-xl-2,
-.item-detail:hover ~ .col-xl-2 {
-    display: block; /* Hiển thị col-xl-2 khi focus hoặc hover vào item-detail */
+.item-detail:focus~.col-xl-2,
+.item-detail:hover~.col-xl-2 {
+    display: block;
+    /* Hiển thị col-xl-2 khi focus hoặc hover vào item-detail */
 }
 
-.item-detail:focus ~ .chat-content .col-xl-7,
-.item-detail:hover ~ .chat-content .col-xl-7 {
-    width: 75%; /* Chuyển col-xl-7 thành col-xl-9 (75% tương đương col-xl-9) */
+.item-detail:focus~.chat-content .col-xl-7,
+.item-detail:hover~.chat-content .col-xl-7 {
+    width: 75%;
+    /* Chuyển col-xl-7 thành col-xl-9 (75% tương đương col-xl-9) */
 }
 
-li.active a{
+li.active a {
     background-color: #2d88e9 !important;
 }
-li.nav-item:hover a{
+
+li.nav-item:hover a {
     background-color: #2d88e9 !important;
 
 }
@@ -411,15 +504,17 @@ li.nav-item:hover a{
     padding: 15px;
     background-color: #f9f9f9;
     overflow-y: auto;
-    max-height: 70%; /* Chiều cao tối đa của danh sách */
+    max-height: 70%;
+    /* Chiều cao tối đa của danh sách */
     border-bottom: 1px solid #ddd;
     border-right: 1px solid #ddd;
 }
 
-.chat-message{
+.chat-message {
     justify-content: space-between;
     flex-direction: column;
 }
+
 /* Tin nhắn gửi đi */
 .reply-item.outgoing {
     display: flex;
@@ -479,26 +574,32 @@ li.nav-item:hover a{
     margin-top: 5px;
     text-align: right;
 }
-.chat-body{
+
+.chat-body {
     background-color: #C6E2FF;
 }
-.media img{
+
+.media img {
     margin-bottom: 8px;
 }
-.reply-link{
+
+.reply-link {
     border-radius: 10px;
     padding-top: 10px;
 }
-.reply-link h6{
+
+.reply-link h6 {
     background-color: #fff;
     padding-top: 10px;
     padding-bottom: 10px;
     margin-bottom: 0px;
 }
-.reply-image{
+
+.reply-image {
     width: 100% !important;
 }
-.list-insert-item{
+
+.list-insert-item {
     margin: 13px 13px 13px 13px;
     vertical-align: middle;
     justify-content: center;
@@ -506,30 +607,37 @@ li.nav-item:hover a{
     list-style: none;
     padding: 5px !important;
 }
-ul.list-insert-item>li{
+
+ul.list-insert-item>li {
     background-color: #C6E2FF;
     margin-right: 10px;
     border-radius: 50%;
     padding-top: 6px;
     padding-bottom: 6px;
 }
+
 /* Kích thước mặc định cho màn hình lớn */
 .input-message {
-    max-width: 800px; /* Chiều rộng tối đa */
+    max-width: 800px;
+    /* Chiều rộng tối đa */
     padding: 3px;
-    border:1px solid  #C6E2FF;;
+    border: 1px solid #C6E2FF;
+    ;
     width: 430px;
 
     margin-right: 10px !important;
     border-radius: 10px;
-    background-color:  #C6E2FF;
+    background-color: #C6E2FF;
 
 }
 
 .input-message:focus {
-    outline: none; /* Xóa outline mặc định của trình duyệt */
-    border-color: #A0C4FF; /* Thay đổi màu border khi focus */
-    background-color: #B2D4FF; /* Có thể thay đổi màu nền nếu cần */
+    outline: none;
+    /* Xóa outline mặc định của trình duyệt */
+    border-color: #A0C4FF;
+    /* Thay đổi màu border khi focus */
+    background-color: #B2D4FF;
+    /* Có thể thay đổi màu nền nếu cần */
 }
 
 /* Khi màn hình nhỏ hơn 1200px */
@@ -556,27 +664,31 @@ ul.list-insert-item>li{
 /* Khi màn hình nhỏ hơn 576px (thiết bị di động nhỏ) */
 @media (max-width: 576px) {
     .input-message {
-        width: 100%; /* Sử dụng 100% chiều rộng của container */
+        width: 100%;
+        /* Sử dụng 100% chiều rộng của container */
     }
 }
 
-.chat-form-enter{
+.chat-form-enter {
     display: flex;
     justify-content: space-between !important;
 }
+
 .chat-form {
     background-color: #fff;
     border-right: 1px solid #ddd;
     justify-content: space-between;
 
 }
-.list-message-item{
+
+.list-message-item {
     vertical-align: middle;
     list-style: none;
     margin: 0px !important;
     align-items: center;
 }
-ul.list-message-item>li{
+
+ul.list-message-item>li {
     background-color: #b3cfec;
     margin-right: 10px;
     padding-top: 6px;
@@ -585,41 +697,50 @@ ul.list-message-item>li{
 }
 
 /* cot 3  */
-.detail-content{
+.detail-content {
     margin: 0;
     padding: 0 !important;
-    
+
 }
-.chat-cover{
+
+.chat-cover {
     margin: 0;
     padding: 0;
 }
-.chat-cover img{
+
+.chat-cover img {
     width: 97% !important;
 }
-.media-group{
+
+.media-group {
     margin-top: -20px;
 }
-.media-group .media-col{
+
+.media-group .media-col {
     margin-top: 0px;
 }
-.media-group .media-col span{
+
+.media-group .media-col span {
     font-size: 12px;
     margin-top: -10px !important;
-} 
-.media-group .media-col h6{
-   margin: 0;
-} 
-.aside-row{
+}
+
+.media-group .media-col h6 {
+    margin: 0;
+}
+
+.aside-row {
     margin-top: 20px;
     margin-bottom: 10px;
 }
-.list-option{
+
+.list-option {
     list-style: none;
     justify-content: space-between;
     margin: 6px 50px 6px 50px !important;
 }
-.list-option>li{
+
+.list-option>li {
     border: 1px solid #ddd;
     padding: 0px;
     font-size: 14px;
@@ -627,52 +748,418 @@ ul.list-message-item>li{
     background-color: #fff;
 
 }
-.list-media-item li{
-    margin-right:5px;
+
+.list-media-item li {
+    margin-right: 5px;
     margin-left: 5px;
 
-    
+
 }
 
-.list-option .nav-link.active{
+.list-option .nav-link.active {
     padding-bottom: 10px;
     color: #007bff !important;
     font-weight: bold;
     border-radius: 20px;
     background-color: #bfdbfe;
     outline: none;
-  }
+}
 
-.list-media-item .nav-link.active{
+.list-media-item .nav-link.active {
     padding-bottom: 10px;
     color: #007bff !important;
     font-weight: bold;
     border-bottom: 2px solid #007bff !important;
     border-top: none !important;
     border-left: none !important;
-    border-right: none  !important;
-    outline: none; /* Loại bỏ viền outline mặc định */
-  }
-  span.icon{
+    border-right: none !important;
+    outline: none;
+    /* Loại bỏ viền outline mặc định */
+}
+
+span.icon {
     font-size: 16px !important;
-  }
-  .list-chat-image{
+}
+
+.list-chat-image {
     margin-right: 12px !important;
     margin-left: -12px !important;
-  }
-  .list-chat-image img{
+}
+
+.list-chat-image img {
     width: 100px;
     height: 100px;
     border-radius: 10px;
     margin-bottom: 8px;
-  }
-  .list-chat-video{
+}
+
+.list-chat-video {
     margin-right: 5px !important;
     margin-left: -12px !important;
-  }
-  .list-chat-video img{
+}
+
+.list-chat-video img {
     width: 150px;
     height: 150px;
     border-radius: 10px;
     margin-bottom: 12px;
-  }
+}
+
+
+
+/* register */
+.body-register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position: center;
+    padding: 10px;
+    margin-top: 20px;
+    background-size: cover;
+}
+
+.register-box {
+    position: relative;
+    width: 460px;
+    height: 700px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background: #FFF;
+    border: 1px solid #ddd;
+}
+
+.register-header {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 20px 0 20px 0;
+}
+
+
+.register-header header {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    font-size: 30px;
+    margin-bottom: Spx;
+
+}
+
+.register-header p {
+    color: #555;
+}
+
+.register-box .name {
+    display: flex;
+
+}
+
+.input-box {
+    position: relative;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.input-box label {
+    position: absolute;
+    top: 7px;
+    left: 15px;
+    color: #555;
+    transition: .15s ease-in-out;
+}
+
+.input-box .input-field {
+    font-size: 1em;
+    color: #333;
+    padding-left: 15px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
+
+}
+
+.input-box .input-lock {
+    font-size: 1em;
+    color: #333;
+    padding-left: 15px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    outline: none;
+    background: #e6dcdc;
+    width: 96%;
+    height: 40px;
+    margin-bottom: 10px;
+
+}
+
+.input-box input[type="password"] {
+    margin-bottom: 10px;
+}
+
+.input-box .input-field:focus {
+    border: 2px solid #8749F2;
+}
+
+.input-field:focus~label,
+.input-field:valid~label {
+    top: -8px;
+    left: 12px;
+    font-size: 12px;
+    color: #7931F5;
+    background: #FFF;
+    padding: 0 5px;
+}
+
+.input-box label.focus {
+    top: -8px;
+    left: 12px;
+    font-size: 12px;
+    color: black;
+    background: #e6dcdc;
+    padding: 0 5px;
+}
+
+.input-field:valid~label {
+    color: #555;
+}
+
+.forgot {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+
+}
+
+
+#check {
+    margin-right: 10px;
+
+}
+
+section .forgot-link {
+    font-weight: 500;
+    text-decoration: none;
+    color: #7931F5;
+}
+
+.input-submit {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    color: #FFF;
+    background: #7931F5;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.middle-text {
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.or-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #FFF;
+    color: #777;
+    padding: 15px;
+    margin-top: -10px;
+}
+
+hr {
+    border: 1px solid #ddd;
+}
+
+.social-sign-up {
+    display: flex;
+    gap: 15px;
+}
+
+.input-social {
+    width: 100%;
+    margin: 0px 0px 5px;
+    border: 1px solid #ad1c1c;
+}
+
+.input-social img {
+    width: 25px;
+}
+
+.input-social p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    margin-left: 20px;
+    width: 100%;
+    display: inline;
+}
+
+
+.input-google:hover,
+.input-twitter:hover,
+.input-submit:hover {
+    opacity: 0.9;
+}
+
+.sign-up {
+    position: absolute;
+    bottom: -10px;
+    right: 0;
+}
+
+.sign-up p {
+    font-size: 14px;
+    margin-right: 5px;
+
+
+}
+
+.sign-up p>a {
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+@media only screen and (max-width:510px) {
+    .login-box {
+        padding: 10px 30px;
+        margin: 20px;
+    }
+
+}
+
+@media only screen and (max-width:415px) {
+    .login-box {
+        padding: 10px 25px;
+        margin: 15px;
+    }
+
+}
+
+/* login  */
+.body-login {
+    margin-bottom: 20px;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position: center;
+    background-size: cover;
+}
+
+.login-box {
+    position: relative;
+    width: 470px;
+    height: 550px;
+    padding: 10px 30px;
+    background: #FFF;
+    border: 1px solid #ddd;
+}
+
+.login-header {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 20px 0 50px 0;
+}
+
+.login-header header {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+.login-header p {
+    color: #555;
+}
+
+section .forgot-link {
+    font-weight: 500;
+    text-decoration: none;
+    color: #7931F5;
+}
+
+
+.sign-up {
+    position: absolute;
+    bottom: -12px;
+    right: 0;
+}
+
+
+.sign-up p {
+    font-size: 14px;
+}
+
+.sign-up p>a {
+    text-decoration: none;
+}
+
+@media only screen and (max-width:510px) {
+    .login-box {
+        padding: 10px 30px;
+        margin: 20px;
+    }
+}
+
+@media only screen and (max-width:415px) {
+    .login-box {
+        padding: 10px 25px;
+        margin: 15px;
+    }
+}
+
+
+.body-forgotpassword {
+    margin-bottom: 50px;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position: center;
+    background-size: cover;
+}
+
+.forgot-password-box {
+    position: relative;
+    width: 460px;
+    height: 210px;
+    padding: 10px 30px;
+    background: #FFF;
+    border: 1px solid #ddd;
+}
+
+
+.otp-forgotpassword {
+    margin-bottom: 50px;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position: center;
+    background-size: cover;
+}
+
+.otp-password-box {
+    position: relative;
+    width: 460px;
+    height: 250px;
+    padding: 10px 30px;
+    background: #FFF;
+    border: 1px solid #ddd;
+}
+
+.send-otp {
+    margin-top: 25px;
+    text-align: right;
+    margin-right: 15px;
+}
