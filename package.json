@@ -4,14 +4,26 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && node copy-dir.js",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
     "start": "nodemon index.ts"
   },
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+  ],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "fs-extra": "^11.2.0",
+    "pre-commit": "^1.2.2",
+    "pug": "^3.0.3",
+    "socket.io": "^4.8.1",
     "typescript": "^5.6.3"
   },
   "devDependencies": {

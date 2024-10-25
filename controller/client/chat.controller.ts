@@ -1,5 +1,4 @@
 import { Request,Response } from "express"
 export const index = (req:Request,res:Response) =>{
-    res.send("heleoe")
-
+    res.render("client/pages/chat/index.pug")
 }

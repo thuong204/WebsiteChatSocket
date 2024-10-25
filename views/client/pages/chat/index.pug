@@ -1,0 +1,284 @@
+extends ../../layouts/default.pug
+block main
+    .main-content 
+        .row
+            .col-xl-3.col-lg-4.col-md-5.col-sm-5.aside-base
+                .aside-head.d-flex.justify-content-between.align-items-center
+                    .aside-text
+                        h3 Chats
+                    .aside-tools
+                        ul.d-flex.justify-content-center.align-item-center.list-tool-item
+                            li.dropdown.d-flex
+                                button.btn-link(data-bs-toggle="modal" data-bs-target="#newChat")
+                                    img(class="img-tool" src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729692070/aspv69wrdzbkzauwktit.png" width="10" height="10")
+                                    span New
+                            li.dropdown.d-flex
+                                button.btn-link(data-bs-toggle="dropdown" data-bs-offset="0,10")
+                                    img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729693494/fhd1b5lbxzrjremb3ofo.png" width="10" height="10" alt="" class="img-tool")
+                                    span Filter
+                                ul(class="dropdown-menu dropdown-menu-end")
+                                    li  
+                                        a(class="dropdown-item" href="#") All Chat
+                                    li  
+                                        a(class="dropdown-item" href="#") Active contact
+                                    li  
+                                        a(class="dropdown-item" href="#") Active chat
+                                    li  
+                                        a(class="dropdown-item" href="#") Spam message
+                                    li  
+                                        a(class="dropdown-item" href="#") Trask
+                .aside-body
+                    .aside-search 
+                        .position-relative
+                            i.fa-solid.fa-magnifying-glass.position-absolute
+                            input(type="search" id="lname" class="form-control me-2 rounded-pill search-contact" placeholder="Search contact/chat" )
+                    .tab-content
+
+                        .tab-panel
+                            ul.list-aside-item.scrollable-list
+                                li.aside-item-chat
+                                    .group-media.d-flex.align-items-center
+                                        .media
+                                            img(src="https://cdn.tcquoctesaigon.edu.vn/wp-content/uploads/2024/06/avatar-cho-nu-1.jpg" alt="User Image" class="rounded-circle")
+                                        .media-col.d-flex
+                                            .user-info
+                                                h6 UserName 
+                                            .user-message
+                                                h6.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
+                                        .media-col.d-flex
+                                            span.time 10:30 AM
+                                li.aside-item-chat
+                                    .group-media.d-flex.align-items-center
+                                        .media
+                                            img(src="https://cdn.tcquoctesaigon.edu.vn/wp-content/uploads/2024/06/avatar-cho-nu-1.jpg" alt="User Image" class="rounded-circle")
+                                        .media-col.d-flex
+                                            .user-info
+                                                h6 UserName 
+                                            .user-message
+                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
+                                        .media-col.d-flex
+                                            span.time 10:30 AM
+                                li.aside-item-chat
+                                    .group-media.d-flex.align-items-center
+                                        .media
+                                            img(src="https://cdn.tcquoctesaigon.edu.vn/wp-content/uploads/2024/06/avatar-cho-nu-1.jpg" alt="User Image" class="rounded-circle")
+                                        .media-col.d-flex
+                                            .user-info
+                                                h6 UserName 
+                                            .user-message
+                                                h6.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
+                                        .media-col.d-flex
+                                            span.time 10:30 AM
+                                li.aside-item-chat
+                                    .group-media.d-flex.align-items-center
+                                        .media
+                                            img(src="https://via.placeholder.com/40" alt="User Image" class="rounded-circle")
+                                        .media-col.d-flex
+                                            .user-info
+                                                h6 UserName 
+                                            .user-message
+                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
+                                        .media-col.d-flex
+                                            span.time 10:30 AM
+                                li.aside-item-chat
+                                    .group-media.d-flex.align-items-center
+                                        .media
+                                            img(src="https://via.placeholder.com/40" alt="User Image" class="rounded-circle")
+                                        .media-col.d-flex
+                                            .user-info
+                                                h6 UserName 
+                                            .user-message
+                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
+                                        .media-col.d-flex
+                                            span.time 10:30 AM
+                                li.aside-item-chat
+                                    .group-media.d-flex.align-items-center
+                                        .media
+                                            img(src="https://via.placeholder.com/40" alt="User Image" class="rounded-circle")
+                                        .media-col.d-flex
+                                            .user-info
+                                                h6 UserName 
+                                            .user-message
+                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
+                                        .media-col.d-flex
+                                            span.time 10:30 AM
+                                li.aside-item-chat
+                                    .group-media.d-flex.align-items-center
+                                        .media
+                                            img(src="https://via.placeholder.com/40" alt="User Image" class="rounded-circle")
+                                        .media-col.d-flex
+                                            .user-info
+                                                h6 UserName 
+                                            .user-message
+                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
+                                        .media-col.d-flex
+                                            span.time 10:30 AM
+                                li.aside-item-chat
+                                    .group-media.d-flex.align-items-center
+                                        .media
+                                            img(src="https://via.placeholder.com/40" alt="User Image" class="rounded-circle")
+                                        .media-col.d-flex
+                                            .user-info
+                                                h6 UserName 
+                                            .user-message
+                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
+                                        .media-col.d-flex
+                                            span.time 10:30 AM
+            .col-xl-6.col-lg-8.col-md-7.col-12.col-sm-7.chat-content       
+                .chat-head
+                    .media-group-chat.d-flex.align-items-center
+                        .media-img
+                            img(src="https://cdn.tcquoctesaigon.edu.vn/wp-content/uploads/2024/06/avatar-cho-nu-1.jpg" alt="User Image" class="rounded-circle")
+                        .media-chat.d-flex
+                            .user-info.d-flex
+                                h6 Trần Công Thường
+                            .user-message.d-flex
+                                h6.message Hoạt động 8 phút trước
+                    .media-feature.justify-content-center.align-item-center
+                        ul(class="navbar-nav navbar-list-chat d-flex justify-content-center zalign-item-center")
+                            li(class="nav-item item-call")
+                                a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="#" role="button")  
+                                    img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729752516/svx3nmhmi227ugrsqhvi.png" width="20" height="20" class="rounded-circle ")
+                            li(class="nav-item item-video")
+                                a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="#" role="button" )  
+                                    img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729752517/u9ckz40lwiggpobn7c5h.png" width="25" height="25" class="rounded-circle")
+                            li(class="nav-item item-search")
+                                a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="#" role="button" )  
+                                    img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729752516/mrlnba4qzcwklqtmpytm.png" width="25" height="25" class="rounded-circle")
+                            li(class="nav-item active item-detail")
+                                a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="#" role="button" )  
+                                    img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729752516/p2us7vduqlhuopvglhxu.png" width="22" height="22" class="rounded-circle")
+                .chat-body.scrollable-list
+                    .chat-message.d-flex
+                        .reply-item.outgoing
+                            .reply-group
+                                .reply-bubble 
+                                    .reply-text Hello every body
+                                    .reply-tool
+                                .reply-bubble 
+                                    .reply-text Hello every body
+                                    .reply-tool
+                                .reply-bubble 
+                                    .reply-text Hello every body
+                                    .reply-tool
+                        .reply-item.incoming.d-flex
+                            .reply-avatar 
+                                .media 
+                                    img(src="https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474073uGi/hinh-anh-cho-doi-dep-nhat_045114229.png" width="32" height="32" class="rounded-circle")
+                            .reply-group
+                                .reply-bubble 
+                                    .reply-link 
+                                        a(href="" class="text-decoration-none")
+                                            img(src="https://images2.thanhnien.vn/528068263637045248/2024/1/25/e093e9cfc9027d6a142358d24d2ee350-65a11ac2af785880-17061562929701875684912.jpg" width="300") 
+                                            .reply-text.reply-image hêhedsfsdfsdfgsgaf
+                                    .reply-tool
+                                .reply-bubble 
+                                    .reply-text Hello every body
+                                    .reply-tool
+                                .reply-bubble 
+                                    .reply-text Hello every body
+                                    .reply-tool
+                .chat-form.d-flex
+                    .chat-form-insert.d-flex
+                        ul.d-flex.justify-content-center.align-item-center.list-insert-item 
+                            li.dropup.rounder-circle.item-first.item-add
+                                button.btn.btn-pill(data-bs-toggle="dropdown" aria-expanded="true")  
+                                    img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729759474/uckhwhi8bvcznf1lhzfi.png" width="16" height="16")
+                                .dropdown-menu 
+                                    ul.list-style-none
+                                        li 
+                                            a(href="")
+                                                img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729692070/aspv69wrdzbkzauwktit.png" alt="")
+                                                span 
+                                        li 
+                                            a(href="")
+                                                img(src="" alt="")
+                                                span 
+
+                            li.dropup.rounder-circle.item-image
+                                button.btn.btn-pill
+                                    img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729759474/pfibusmf5ez9ndyg86s2.png" width="16" height="16")
+                            li.dropup.rounder-circle.item-icon  
+                                button.btn.btn-pill
+                                    img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729759475/aqmfxk2flgkk3qtzhbmj.png" width="16" height="16")
+
+                    .chat-form-enter.d-flex.justify-content-center.align-item-center.list-insert-item  
+                        .chat-form-input
+                            input.input-message(type="text")
+                        .chat-form-send
+                            ul.d-flex.justify-content-center.align-item-center.list-message-item    
+                                li.dropup.rounded-circle.item-mic
+                                    button.btn.btn-pill
+                                        img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/snik3mdu8hpoanp4oxy0.png" width="16" height="16")
+                                li.dropup.rounded-circle.item-send
+                                    button.btn.btn-pill
+                                        img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/jd6jpps9rx1wpi2xcwmw.png" width="16" height="16")
+            .col-xl-3.detail-content.scrollable-list
+                .chat-cover   
+                    img(src="https://img.pikbest.com/ai/illus_our/20230418/64e0e89c52dec903ce07bb1821b4bcc8.jpg!w700wp" width="240" height="150")
+                .media-group.text-center
+                    .media 
+                        img(src="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/07/anh-avatar-dep-cho-con-gai-2.jpg" width="56" height="56" alt="") 
+                    .media-col.d-flex.flex-column
+                        .media-row 
+                            h6 Trần Công Thường
+                        .media-row
+                            span Đang hoạt động
+
+                .aside-row.justify-content-center.align-item-center
+                    ul.d-flex.list-option.nav.text-center(role="tablist")   
+                        li.nav-item
+                            button.nav-link.chat-mute.d-flex.flex-column
+                                span.icon
+                                    i(class="fa-solid fa-bell")
+                                span Mute
+                        li.nav-item
+                            button.nav-link.chat-mute.d-flex.flex-column.active(data-bs-toggle="tab" data-bs-target="#chat-media" type="button" role="tab" id="nav-media-tab" aria-control="nav-media" aria-selected="true")
+                                span.icon
+                                    i(class="fa-solid fa-images") 
+                                span Media
+                        li.nav-item 
+                            button.nav-link.chat-mute.d-flex.flex-column(data-bs-toggle="tab" data-bs-target="#chat-option" type="button" role="tab" id="nav-option-tab" aria-control="nav-option" aria-selected="true")
+                                span.icon 
+                                    i(class="fa-solid fa-sliders")
+                                span Options
+
+                .tab-content 
+                    .tab-pane.fade.show.active(id="chat-media" role="tabpanel" aria-labelledby="nav-media-tab")
+                        .aside-row 
+                            ul.nav.nav-tabs.d-flex.list-media-item.text-center
+                                li.nav-item 
+                                    button.nav-link.active.media-images(data-bs-toggle="tab" data-bs-target="#media-images" type="button" role="tab" id="nav-images-tab" aria-control="nav-images" aria-selected="true") Images
+                                li.nav-item
+                                    button.nav-link.media-videos(data-bs-toggle="tab" data-bs-target="#media-videos" type="button" role="tab" id="nav-videoss-tab" aria-control="nav-images" aria-selected="true") Videos
+                                li.nav-item
+                                    button.nav-link.media-files(data-bs-toggle="tab" data-bs-target="#media-files" type="button" role="tab" id="nav-filess-tab" aria-control="nav-images" aria-selected="true") Files
+                                li.nav-item
+                                    button.nav-link.media-links(data-bs-toggle="tab" data-bs-target="#media-links" type="button" role="tab" id="nav-links-tab" aria-control="nav-images" aria-selected="true") Links
+                        .aside-row 
+                            .tab-content
+                                .tab-pane.fade.show.active(id="media-images" role="tabpanel" aria-labelledby="nav-images-tab")
+                                    .row.list-chat-image 
+                                        .col-4 
+                                            img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+                                        .col-4 
+                                            img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+                                        .col-4 
+                                             img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+                                        .col-4
+                                             img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+                                .tab-pane.fade(id="media-videos" role="tabpanel" aria-labelledby="nav-images-tab")
+                                    .row.list-chat-video
+                                        .col-6 
+                                            img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+                                        .col-6
+                                            img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+                                        .col-6 
+                                            img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+                                        .col-6
+                                            img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+
+
+                    .tab-pane.fade.p-3(id="chat-option" role="tabpanel" aria-labelledby="nav-option-tab")
+                        h2 hloe
+

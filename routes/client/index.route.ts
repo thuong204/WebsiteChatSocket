@@ -1,8 +1,8 @@
 import { Express } from "express";
-import {homeRoutes}  from "./home.route"
+import {chatRoutes}  from "./chat.route"
 
 const clientRoutes = (app:Express) =>{
-    app.use(`/`,homeRoutes)
+    app.use(`/`,chatRoutes)
 
 
 }
