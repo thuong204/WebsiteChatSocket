@@ -9,6 +9,7 @@ import mongoose from "mongoose";
 import http from "http";
 import * as database from "./config/database"
 import { Server, Socket } from "socket.io";
+import MongoStore from "connect-mongo";
 
 
 
@@ -21,14 +22,16 @@ app.use(cookieParser("JHGJKLKLGFLJK"))
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "default_secret",
-    resave: false, 
+    resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }), // Thay bằng URI của bạn
     cookie: {
-      maxAge: 60000, 
+      maxAge: 60000,
       secure: process.env.NODE_ENV === 'production',
     },
   })
 );
+
 database.connect();
 app.use(flash())
 

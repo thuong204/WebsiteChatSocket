@@ -37,6 +37,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const http_1 = __importDefault(require("http"));
 const database = __importStar(require("./config/database"));
 const socket_io_1 = require("socket.io");
+const connect_mongo_1 = __importDefault(require("connect-mongo"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
@@ -45,6 +46,7 @@ app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET || "default_secret",
     resave: false,
     saveUninitialized: false,
+    store: connect_mongo_1.default.create({ mongoUrl: process.env.MONGODB_URL }),
     cookie: {
         maxAge: 60000,
         secure: process.env.NODE_ENV === 'production',
