@@ -16,12 +16,12 @@ import MongoStore from "connect-mongo";
 dotenv.config()
 const app: Express = express()
 
-const port = process.env.PORT || 3000
+const port:number |string = process.env.PORT || 3000;
 
 app.use(cookieParser("JHGJKLKLGFLJK"))
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "default_secret",
+    secret: "thuong" ,
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }), // Thay bằng URI của bạn

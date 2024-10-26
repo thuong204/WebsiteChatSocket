@@ -43,7 +43,7 @@ const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 app.use((0, cookie_parser_1.default)("JHGJKLKLGFLJK"));
 app.use((0, express_session_1.default)({
-    secret: process.env.SESSION_SECRET || "default_secret",
+    secret: "thuong",
     resave: false,
     saveUninitialized: false,
     store: connect_mongo_1.default.create({ mongoUrl: process.env.MONGO_URL }),
