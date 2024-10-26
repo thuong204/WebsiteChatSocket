@@ -17,12 +17,16 @@ const app: Express = express()
 
 const port = process.env.PORT || 3000
 
-app.use(cookieParser());
+app.use(cookieParser("JHGJKLKLGFLJK"))
 app.use(
   session({
-    secret: "thuong",
-    resave: false,
-    saveUninitialized: true,
+    secret: process.env.SESSION_SECRET || "default_secret",
+    resave: false, 
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 60000, 
+      secure: process.env.NODE_ENV === 'production',
+    },
   })
 );
 database.connect();

@@ -40,11 +40,15 @@ const socket_io_1 = require("socket.io");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
-app.use((0, cookie_parser_1.default)());
+app.use((0, cookie_parser_1.default)("JHGJKLKLGFLJK"));
 app.use((0, express_session_1.default)({
-    secret: "thuong",
+    secret: process.env.SESSION_SECRET || "default_secret",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 60000,
+        secure: process.env.NODE_ENV === 'production',
+    },
 }));
 database.connect();
 app.use((0, express_flash_1.default)());
