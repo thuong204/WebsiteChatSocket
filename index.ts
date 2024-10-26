@@ -24,7 +24,7 @@ app.use(
     secret: process.env.SESSION_SECRET || "default_secret",
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }), // Thay bằng URI của bạn
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }), // Thay bằng URI của bạn
     cookie: {
       maxAge: 60000,
       secure: process.env.NODE_ENV === 'production',

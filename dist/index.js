@@ -46,7 +46,7 @@ app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET || "default_secret",
     resave: false,
     saveUninitialized: false,
-    store: connect_mongo_1.default.create({ mongoUrl: process.env.MONGODB_URL }),
+    store: connect_mongo_1.default.create({ mongoUrl: process.env.MONGO_URL }),
     cookie: {
         maxAge: 60000,
         secure: process.env.NODE_ENV === 'production',
