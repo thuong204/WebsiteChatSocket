@@ -10,6 +10,7 @@ import http from "http";
 import * as database from "./config/database"
 import { Server, Socket } from "socket.io";
 import MongoStore from "connect-mongo";
+export let _io;
 
 
 
@@ -43,7 +44,7 @@ const io = new Server(server, {
       methods: ["GET", "POST"]
   }
 });
-export const _io = io;
+_io = io;
 
 
 
@@ -57,3 +58,4 @@ clientRoutes(app)
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`)
 })
+export default app;
