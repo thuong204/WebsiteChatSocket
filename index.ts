@@ -38,12 +38,7 @@ app.use(flash())
 
 // socket 
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-      origin: "*", // Cho phép mọi nguồn truy cập
-      methods: ["GET", "POST"]
-  }
-});
+const io = new Server(server);
 _io = io;
 
 

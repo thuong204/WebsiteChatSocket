@@ -55,12 +55,7 @@ app.use((0, express_session_1.default)({
 database.connect();
 app.use((0, express_flash_1.default)());
 const server = http_1.default.createServer(app);
-const io = new socket_io_1.Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
-});
+const io = new socket_io_1.Server(server);
 exports._io = io;
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.static(`${__dirname}/public`));
