@@ -22,7 +22,7 @@ const port:number |string = process.env.PORT || 3000;
 app.use(cookieParser("JHGJKLKLGFLJK"))
 app.use(
   session({
-    secret: "thuong" ,
+    secret: "keyboard cat" ,
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }), // Thay bằng URI của bạn
