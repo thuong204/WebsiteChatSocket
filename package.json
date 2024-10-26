@@ -29,6 +29,7 @@
     "pre-commit": "^1.2.2",
     "pug": "^3.0.3",
     "socket.io": "^4.8.1",
+    "twilio": "^5.3.5",
     "typescript": "^5.6.3"
   },
   "devDependencies": {
@@ -38,6 +39,7 @@
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.7.8",
     "nodemon": "^3.1.7",
+    "socket.io": "^4.8.1",
     "ts-node": "^10.9.2"
   }
 }

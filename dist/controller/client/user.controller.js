@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerPost = exports.loginPost = exports.register = exports.login = void 0;
+exports.verifyotp = exports.registerPost = exports.loginPost = exports.register = exports.login = void 0;
 const user_model_1 = __importDefault(require("../../model/user.model"));
 const login = (req, res) => {
     res.render("client/pages/user/login", {
@@ -45,7 +45,7 @@ const loginPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 req.flash("Tài khoản đã bị khóa");
             }
             else {
-                res.cookie("tokenUser", user.userToken);
+                res.cookie("tokenUser", user.tokenUser);
                 res.redirect("/chat");
             }
         }
@@ -83,3 +83,9 @@ const registerPost = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.registerPost = registerPost;
+const verifyotp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.render("client/pages/user/verifyotp", {
+        pageTitle: "Xác thực OTP"
+    });
+});
+exports.verifyotp = verifyotp;

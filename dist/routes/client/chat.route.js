@@ -27,5 +27,7 @@ exports.chatRoutes = void 0;
 const express_1 = require("express");
 const chatController = __importStar(require("../../controller/client/chat.controller"));
 const router = (0, express_1.Router)();
-router.get("/chat", chatController.index);
+router.get("/", chatController.index);
+router.get("/receiver/:receiverId", chatController.fetchMessage);
+router.get("/:roomId", chatController.roomMessage);
 exports.chatRoutes = router;

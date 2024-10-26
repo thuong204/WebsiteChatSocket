@@ -1,11 +1,11 @@
 import { Express } from "express";
 import {chatRoutes}  from "./chat.route"
 import { userRoutes } from "./user.route";
+import * as authUser  from "../../middlewares/clients/auth.middleware";
+import * as infoUser  from "../../middlewares/clients/user.middleware";
 
 const clientRoutes = (app:Express) =>{
-    app.use(`/`,chatRoutes)
+    app.use(`/chat`,authUser.authUser,infoUser.infoUser,chatRoutes)
     app.use("/user",userRoutes)
-
-
 }
 export default clientRoutes

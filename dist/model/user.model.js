@@ -34,7 +34,7 @@ const userSchema = new mongoose_1.default.Schema({
     password: String,
     googleId: String,
     facebookId: String,
-    userToken: {
+    tokenUser: {
         type: String,
         default: generate.generateRandomString(20)
     },

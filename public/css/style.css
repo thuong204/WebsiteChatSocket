@@ -504,8 +504,8 @@ li.nav-item:hover a {
     padding: 15px;
     background-color: #f9f9f9;
     overflow-y: auto;
-    max-height: 70%;
-    /* Chiều cao tối đa của danh sách */
+    height: 500px;
+    max-height:500px;
     border-bottom: 1px solid #ddd;
     border-right: 1px solid #ddd;
 }
@@ -520,7 +520,6 @@ li.nav-item:hover a {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    margin-bottom: 15px;
 }
 
 /* Tin nhắn nhận vào */
@@ -1119,7 +1118,7 @@ section .forgot-link {
 }
 
 
-.body-forgotpassword {
+.otp-verifyaccount {
     margin-bottom: 50px;
     margin-top: 50px;
     display: flex;
@@ -1152,7 +1151,6 @@ section .forgot-link {
 .otp-password-box {
     position: relative;
     width: 460px;
-    height: 250px;
     padding: 10px 30px;
     background: #FFF;
     border: 1px solid #ddd;

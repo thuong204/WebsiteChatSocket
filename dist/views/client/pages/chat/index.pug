@@ -1,6 +1,6 @@
 extends ../../layouts/default.pug
 block main
-    .main-content 
+    .main-content(myId= user.id)
         .row
             .col-xl-3.col-lg-4.col-md-5.col-sm-5.aside-base
                 .aside-head.d-flex.justify-content-between.align-items-center
@@ -36,94 +36,22 @@ block main
 
                         .tab-panel
                             ul.list-aside-item.scrollable-list
-                                li.aside-item-chat
-                                    .group-media.d-flex.align-items-center
-                                        .media
-                                            img(src="https://cdn.tcquoctesaigon.edu.vn/wp-content/uploads/2024/06/avatar-cho-nu-1.jpg" alt="User Image" class="rounded-circle")
-                                        .media-col.d-flex
-                                            .user-info
-                                                h6 UserName 
-                                            .user-message
-                                                h6.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
-                                        .media-col.d-flex
-                                            span.time 10:30 AM
-                                li.aside-item-chat
-                                    .group-media.d-flex.align-items-center
-                                        .media
-                                            img(src="https://cdn.tcquoctesaigon.edu.vn/wp-content/uploads/2024/06/avatar-cho-nu-1.jpg" alt="User Image" class="rounded-circle")
-                                        .media-col.d-flex
-                                            .user-info
-                                                h6 UserName 
-                                            .user-message
-                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
-                                        .media-col.d-flex
-                                            span.time 10:30 AM
-                                li.aside-item-chat
-                                    .group-media.d-flex.align-items-center
-                                        .media
-                                            img(src="https://cdn.tcquoctesaigon.edu.vn/wp-content/uploads/2024/06/avatar-cho-nu-1.jpg" alt="User Image" class="rounded-circle")
-                                        .media-col.d-flex
-                                            .user-info
-                                                h6 UserName 
-                                            .user-message
-                                                h6.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
-                                        .media-col.d-flex
-                                            span.time 10:30 AM
-                                li.aside-item-chat
-                                    .group-media.d-flex.align-items-center
-                                        .media
-                                            img(src="https://via.placeholder.com/40" alt="User Image" class="rounded-circle")
-                                        .media-col.d-flex
-                                            .user-info
-                                                h6 UserName 
-                                            .user-message
-                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
-                                        .media-col.d-flex
-                                            span.time 10:30 AM
-                                li.aside-item-chat
-                                    .group-media.d-flex.align-items-center
-                                        .media
-                                            img(src="https://via.placeholder.com/40" alt="User Image" class="rounded-circle")
-                                        .media-col.d-flex
-                                            .user-info
-                                                h6 UserName 
-                                            .user-message
-                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
-                                        .media-col.d-flex
-                                            span.time 10:30 AM
-                                li.aside-item-chat
-                                    .group-media.d-flex.align-items-center
-                                        .media
-                                            img(src="https://via.placeholder.com/40" alt="User Image" class="rounded-circle")
-                                        .media-col.d-flex
-                                            .user-info
-                                                h6 UserName 
-                                            .user-message
-                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
-                                        .media-col.d-flex
-                                            span.time 10:30 AM
-                                li.aside-item-chat
-                                    .group-media.d-flex.align-items-center
-                                        .media
-                                            img(src="https://via.placeholder.com/40" alt="User Image" class="rounded-circle")
-                                        .media-col.d-flex
-                                            .user-info
-                                                h6 UserName 
-                                            .user-message
-                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
-                                        .media-col.d-flex
-                                            span.time 10:30 AM
-                                li.aside-item-chat
-                                    .group-media.d-flex.align-items-center
-                                        .media
-                                            img(src="https://via.placeholder.com/40" alt="User Image" class="rounded-circle")
-                                        .media-col.d-flex
-                                            .user-info
-                                                h6 UserName 
-                                            .user-message
-                                                p.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
-                                        .media-col.d-flex
-                                            span.time 10:30 AM
+
+                                if(users && users.length>0)
+                                    each user in users
+                                        li.aside-item-chat(data-user=user.id style="cursor:pointer")
+
+                                            .group-media.d-flex.align-items-center
+                                                .media
+                                                    img(src="https://cdn.tcquoctesaigon.edu.vn/wp-content/uploads/2024/06/avatar-cho-nu-1.jpg" alt="User Image" class="rounded-circle")
+                                                .media-col.d-flex
+                                                    .user-info
+                                                        h6 #{user.fullName}
+                                                    .user-message
+                                                        h6.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
+                                                .media-col.d-flex
+                                                    span.time 10:30 AM
+
             .col-xl-6.col-lg-8.col-md-7.col-12.col-sm-7.chat-content       
                 .chat-head
                     .media-group-chat.d-flex.align-items-center
@@ -150,34 +78,27 @@ block main
                                     img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729752516/p2us7vduqlhuopvglhxu.png" width="22" height="22" class="rounded-circle")
                 .chat-body.scrollable-list
                     .chat-message.d-flex
-                        .reply-item.outgoing
-                            .reply-group
-                                .reply-bubble 
-                                    .reply-text Hello every body
-                                    .reply-tool
-                                .reply-bubble 
-                                    .reply-text Hello every body
-                                    .reply-tool
-                                .reply-bubble 
-                                    .reply-text Hello every body
-                                    .reply-tool
-                        .reply-item.incoming.d-flex
-                            .reply-avatar 
-                                .media 
-                                    img(src="https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474073uGi/hinh-anh-cho-doi-dep-nhat_045114229.png" width="32" height="32" class="rounded-circle")
-                            .reply-group
-                                .reply-bubble 
-                                    .reply-link 
-                                        a(href="" class="text-decoration-none")
-                                            img(src="https://images2.thanhnien.vn/528068263637045248/2024/1/25/e093e9cfc9027d6a142358d24d2ee350-65a11ac2af785880-17061562929701875684912.jpg" width="300") 
-                                            .reply-text.reply-image hêhedsfsdfsdfgsgaf
-                                    .reply-tool
-                                .reply-bubble 
-                                    .reply-text Hello every body
-                                    .reply-tool
-                                .reply-bubble 
-                                    .reply-text Hello every body
-                                    .reply-tool
+                     if(messages && messages.length >0)
+                        each message in messages 
+                            if(message.sender === user.id)
+                                .reply-item.outgoing
+                                    .reply-group
+                                        .reply-bubble 
+                                            .reply-text #{message.content}
+                                            .reply-tool
+                                      
+                            else
+                                .reply-item.incoming.d-flex
+                                    .reply-avatar 
+                                        .media 
+                                            img(src="https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474073uGi/hinh-anh-cho-doi-dep-nhat_045114229.png" width="32" height="32" class="rounded-circle")
+                                    .reply-group
+                                        .reply-bubble 
+                                            .reply-link 
+                                                a(href="" class="text-decoration-none")
+                                                    .reply-text.reply-image #{message.content}
+                                            .reply-tool
+                                      
                 .chat-form.d-flex
                     .chat-form-insert.d-flex
                         ul.d-flex.justify-content-center.align-item-center.list-insert-item 
@@ -202,17 +123,18 @@ block main
                                 button.btn.btn-pill
                                     img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729759475/aqmfxk2flgkk3qtzhbmj.png" width="16" height="16")
 
-                    .chat-form-enter.d-flex.justify-content-center.align-item-center.list-insert-item  
-                        .chat-form-input
-                            input.input-message(type="text")
-                        .chat-form-send
-                            ul.d-flex.justify-content-center.align-item-center.list-message-item    
-                                li.dropup.rounded-circle.item-mic
-                                    button.btn.btn-pill
-                                        img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/snik3mdu8hpoanp4oxy0.png" width="16" height="16")
-                                li.dropup.rounded-circle.item-send
-                                    button.btn.btn-pill
-                                        img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/jd6jpps9rx1wpi2xcwmw.png" width="16" height="16")
+                    form(id="form-send")
+                        .chat-form-enter.d-flex.justify-content-center.align-item-center.list-insert-item  
+                            .chat-form-input
+                                input.input-message(type="text" name="content" autocomplete="off")
+                            .chat-form-send
+                                ul.d-flex.justify-content-center.align-item-center.list-message-item    
+                                    li.dropup.rounded-circle.item-mic
+                                        button.btn.btn-pill
+                                            img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/snik3mdu8hpoanp4oxy0.png" width="16" height="16")
+                                    li.dropup.rounded-circle.item-send
+                                        button.btn.btn-pill(type="submit")
+                                            img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/jd6jpps9rx1wpi2xcwmw.png" width="16" height="16")
             .col-xl-3.detail-content.scrollable-list
                 .chat-cover   
                     img(src="https://img.pikbest.com/ai/illus_our/20230418/64e0e89c52dec903ce07bb1821b4bcc8.jpg!w700wp" width="240" height="150")
@@ -264,9 +186,9 @@ block main
                                         .col-4 
                                             img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
                                         .col-4 
-                                             img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+                                            img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
                                         .col-4
-                                             img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+                                            img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
                                 .tab-pane.fade(id="media-videos" role="tabpanel" aria-labelledby="nav-images-tab")
                                     .row.list-chat-video
                                         .col-6 
@@ -281,4 +203,6 @@ block main
 
                     .tab-pane.fade.p-3(id="chat-option" role="tabpanel" aria-labelledby="nav-option-tab")
                         h2 hloe
+    script(src="/socket.io/socket.io.js") 
+    script(type="module" src="/js/chat.js") 
 

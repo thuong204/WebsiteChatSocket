@@ -32,4 +32,5 @@ router.get("/login", userController.login);
 router.get("/register", userController.register);
 router.post("/login", validateUser.validateLogin, userController.loginPost);
 router.post("/register", validateUser.validateRegister, userController.registerPost);
+router.get("/register/otp/", userController.verifyotp);
 exports.userRoutes = router;

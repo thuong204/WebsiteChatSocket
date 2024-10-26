@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import User from "../../model/user.model"
+import { sendOTP, verifyOTP } from '../../helpers/otp';
 export const login = (req: Request, res: Response) => {
     res.render("client/pages/user/login", {
         pageTitle: "Đăng nhập"
@@ -12,7 +13,7 @@ export const register = (req: Request, res: Response) => {
     })
 
 }
-export const loginPost = async(req: Request, res: Response) => {
+export const loginPost = async (req: Request, res: Response) => {
     const existPhoneNumber = await User.findOne({
         phone: req.body.phone,
         deleted: false
@@ -31,7 +32,7 @@ export const loginPost = async(req: Request, res: Response) => {
                 req.flash("Tài khoản đã bị khóa")
             }
             else {
-                res.cookie("tokenUser", user.userToken)
+                res.cookie("tokenUser", user.tokenUser)
                 res.redirect("/chat")
             }
         }
@@ -61,6 +62,7 @@ export const registerPost = async (req: Request, res: Response) => {
         req.flash("Error", "Số điện thoại đẫ tồn tại! Vui lòng chọn một số điện thoại khác")
         res.redirect("back")
     } else {
+
         const user = new User(req.body)
         await user.save()
         req.flash("Success", "Đăng kí tài khoản Chat thành công. Vui lòng đăng nhập để dùng dịch vụ."
@@ -70,4 +72,10 @@ export const registerPost = async (req: Request, res: Response) => {
         })
 
     }
+}
+export const verifyotp = async (req: Request, res: Response) => {
+
+    res.render("client/pages/user/verifyotp", {
+        pageTitle: "Xác thực OTP"
+    })
 }
