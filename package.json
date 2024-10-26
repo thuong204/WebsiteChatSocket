@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc && node copy-dir.js",
     "ts.check": "tsc --project tsconfig.json",
-    "add-build": "git add dist",
-    "start": "nodemon index.ts"
+    "add-build": "git add dist"
   },
   "pre-commit": [
     "ts.check",
@@ -27,7 +27,6 @@
     "express-session": "^1.18.1",
     "fs-extra": "^11.2.0",
     "mongoose": "^8.7.2",
-    "pre-commit": "^1.2.2",
     "pug": "^3.0.3",
     "socket.io": "^4.8.1",
     "twilio": "^5.3.5",
@@ -40,6 +39,7 @@
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.7.8",
     "nodemon": "^3.1.7",
+    "pre-commit": "^1.2.2",
     "socket.io": "^4.8.1",
     "ts-node": "^10.9.2"
   }
