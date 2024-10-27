@@ -16,23 +16,43 @@ exports.chatSocket = void 0;
 const message_model_1 = __importDefault(require("../model/message.model"));
 const room_model_1 = __importDefault(require("../model/room.model"));
 const index_1 = require("../index");
+const user_model_1 = __importDefault(require("../model/user.model"));
 const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = res.locals.user.id;
+    console.log(userId);
     const fullName = res.locals.user.fullName;
     index_1._io.once('connection', (socket) => {
         socket.on('CLIENT_SEND_MESSAGE', (data) => __awaiter(void 0, void 0, void 0, function* () {
+            console.log(userId);
             const room = yield room_model_1.default.findOne({
                 deleted: false,
                 user_id: res.locals.user.id
             });
+            if (!room) {
+                const room = new room_model_1.default({
+                    user_id: [res.locals.user.id],
+                });
+            }
+            const filteredUserIds = room.user_id.filter(userId => userId == res.locals.user.id);
+            const userReceiver = yield user_model_1.default.findOne({
+                deleted: false,
+                status: "active",
+                _id: filteredUserIds
+            }).select("fullName avatar");
             if (data) {
                 const message = new message_model_1.default({
                     sender: userId,
                     room_id: room.id,
-                    content: data,
+                    content: data.content,
                 });
                 yield message.save();
             }
+            index_1._io.emit('SERVER_RETURN_MESSAGE', {
+                sender: userId,
+                room_id: room.id,
+                content: data.content,
+                receiver: userReceiver
+            });
         }));
     });
 });

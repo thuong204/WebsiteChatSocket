@@ -33,7 +33,14 @@ const userSchema = new mongoose_1.default.Schema({
     email: String,
     password: String,
     googleId: String,
-    facebookId: String,
+    gender: {
+        type: String,
+        enum: ['male', 'female'],
+    },
+    avatar: {
+        type: String,
+        default: "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"
+    },
     tokenUser: {
         type: String,
         default: generate.generateRandomString(20)
@@ -44,7 +51,6 @@ const userSchema = new mongoose_1.default.Schema({
     },
     dateOfBirth: Date,
     phone: String,
-    avatar: String,
     deleted: { type: Boolean, default: false },
 }, {
     timestamps: true

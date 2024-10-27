@@ -11,17 +11,27 @@ export const index = async (req: Request, res: Response) => {
 
 
     chatSocket.chatSocket(res)
-    const users = await User.find({
+
+    const rooms = await Room.find({
+        deleted: false,
+        user_id: res.locals.user.id
+    });
+    let userIds = [];
+    for (const room of rooms) {
+        userIds = userIds.concat(room.user_id);
+    }
+    userIds = userIds.filter(id => id !== res.locals.user.id);
+
+    const listUsers = await User.find({
         deleted: false,
         status: "active",
-        _id: { $ne: res.locals.user.id } // Loại trừ người dùng có ID là res.locals.user.id
+        _id: { $in: userIds } 
     });
-    
 
 
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Trang chat",
-        users: users
+        listUsers: listUsers
     })
 }
 export const fetchMessage = async (req: Request, res: Response) => {
@@ -31,13 +41,26 @@ export const fetchMessage = async (req: Request, res: Response) => {
     const room = await Room.findOne({
         user_id: { $all: idsToSearch }
     })
+
     if (room) {
-        const message = await Message.find({
+        const messages = await Message.find({
             room_id: room.id
-        })
+        }).select("sender content room_id images attachments")
+        const filteredUserIds = room.user_id.filter(userId => userId !== res.locals.user.id);
+
+        const user = await User.findOne({
+            deleted: false,
+            status: "active",
+            _id: filteredUserIds // Loại trừ người dùng có ID là res.locals.user.id
+        }).select("fullName avatar");
+
         res.json({
             "code": 200,
-            "data": message
+            "data": {
+                messages: messages,
+                infoReceiver: user,
+                roomId:room.id
+            }
         })
     } else {
         res.json({
@@ -49,19 +72,43 @@ export const fetchMessage = async (req: Request, res: Response) => {
 }
 export const roomMessage = async (req: Request, res: Response) => {
     chatSocket.chatSocket(res)
-    const users = await User.find({
+
+    const userInRoom = await Room.findOne({
+        deleted: false,
+        _id: req.params.roomId
+    }).select("user_id")
+    const filteredUserIds = userInRoom.user_id.filter(userId => userId !== res.locals.user.id);
+
+    const user = await User.findOne({
         deleted: false,
         status: "active",
-        _id: { $ne: res.locals.user.id } // Loại trừ người dùng có ID là res.locals.user.id
+        _id: filteredUserIds // Loại trừ người dùng có ID là res.locals.user.id
+    }).select("fullName avatar");
+    const rooms = await Room.find({
+        deleted: false,
+        user_id: res.locals.user.id
     });
+    let userIds = [];
+    for (const room of rooms) {
+        userIds = userIds.concat(room.user_id);
+    }
+    userIds = userIds.filter(id => id !== res.locals.user.id);
+
+    const listUsers = await User.find({
+        deleted: false,
+        status: "active",
+        _id: { $in: userIds } 
+    });
+
     const messages = await Message.find({
         room_id: req.params.roomId
     })
-    
+
 
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Trang chat",
-        users: users,
-        messages:messages
+        messages: messages,
+        userreceive: user,
+        listUsers: listUsers
     })
 }

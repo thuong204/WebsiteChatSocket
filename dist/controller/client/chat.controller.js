@@ -42,14 +42,23 @@ const chatSocket = __importStar(require("../../socket/chat"));
 const user_model_1 = __importDefault(require("../../model/user.model"));
 const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     chatSocket.chatSocket(res);
-    const users = yield user_model_1.default.find({
+    const rooms = yield room_model_1.default.find({
+        deleted: false,
+        user_id: res.locals.user.id
+    });
+    let userIds = [];
+    for (const room of rooms) {
+        userIds = userIds.concat(room.user_id);
+    }
+    userIds = userIds.filter(id => id !== res.locals.user.id);
+    const listUsers = yield user_model_1.default.find({
         deleted: false,
         status: "active",
-        _id: { $ne: res.locals.user.id }
+        _id: { $in: userIds }
     });
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Trang chat",
-        users: users
+        listUsers: listUsers
     });
 });
 exports.index = index;
@@ -61,12 +70,22 @@ const fetchMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         user_id: { $all: idsToSearch }
     });
     if (room) {
-        const message = yield message_model_1.default.find({
+        const messages = yield message_model_1.default.find({
             room_id: room.id
-        });
+        }).select("sender content room_id images attachments");
+        const filteredUserIds = room.user_id.filter(userId => userId !== res.locals.user.id);
+        const user = yield user_model_1.default.findOne({
+            deleted: false,
+            status: "active",
+            _id: filteredUserIds
+        }).select("fullName avatar");
         res.json({
             "code": 200,
-            "data": message
+            "data": {
+                messages: messages,
+                infoReceiver: user,
+                roomId: room.id
+            }
         });
     }
     else {
@@ -79,18 +98,38 @@ const fetchMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.fetchMessage = fetchMessage;
 const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     chatSocket.chatSocket(res);
-    const users = yield user_model_1.default.find({
+    const userInRoom = yield room_model_1.default.findOne({
+        deleted: false,
+        _id: req.params.roomId
+    }).select("user_id");
+    const filteredUserIds = userInRoom.user_id.filter(userId => userId !== res.locals.user.id);
+    const user = yield user_model_1.default.findOne({
         deleted: false,
         status: "active",
-        _id: { $ne: res.locals.user.id }
+        _id: filteredUserIds
+    }).select("fullName avatar");
+    const rooms = yield room_model_1.default.find({
+        deleted: false,
+        user_id: res.locals.user.id
+    });
+    let userIds = [];
+    for (const room of rooms) {
+        userIds = userIds.concat(room.user_id);
+    }
+    userIds = userIds.filter(id => id !== res.locals.user.id);
+    const listUsers = yield user_model_1.default.find({
+        deleted: false,
+        status: "active",
+        _id: { $in: userIds }
     });
     const messages = yield message_model_1.default.find({
         room_id: req.params.roomId
     });
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Trang chat",
-        users: users,
-        messages: messages
+        messages: messages,
+        userreceive: user,
+        listUsers: listUsers
     });
 });
 exports.roomMessage = roomMessage;

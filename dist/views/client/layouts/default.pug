@@ -12,6 +12,6 @@ html
         include ../partials/header.pug
         block main 
         include ../partials/footer.pug
-    script(src="/js/script.js")
-    script(src="/js/chat.js")
-    //- script(src="/socket.io/socket.io.js")
+script(type="module" src="/js/script.js")
+script(src="/socket.io/socket.io.js")
+script(src="/js/chat.js")
