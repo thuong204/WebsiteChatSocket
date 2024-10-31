@@ -42,7 +42,7 @@ const io = new Server(server, {
   cors: {
       origin: "*", // Thay đổi URL này
       methods: ["GET", "POST"]
-  },transports: ['websocket'], 
+  }
 });
 
 global._io = io;

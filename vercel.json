@@ -13,10 +13,6 @@
   ],
   "routes": [
     {
-      "src": "/api/socket",
-      "dest": "/api/socket.js"
-    },
-    {
       "src": "/(.*)",
       "dest": "/dist/index.js"
     }
