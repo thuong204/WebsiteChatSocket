@@ -18,7 +18,6 @@ dotenv.config()
 const app: Express = express()
 
 const port:number |string = process.env.PORT || 3000;
-app.use(cors());
 
 app.use(cookieParser("JHGJKLKLGFLJK"))
 app.use(
@@ -41,14 +40,14 @@ app.use(flash())
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-      origin: "https://socialchat-dusky.vercel.app/", // Thay đổi URL này
+      origin: "*", // Thay đổi URL này
       methods: ["GET", "POST"]
   }
 });
 
 global._io = io;
 
-
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }))
 

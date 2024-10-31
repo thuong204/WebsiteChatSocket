@@ -41,7 +41,6 @@ const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
-app.use((0, cors_1.default)());
 app.use((0, cookie_parser_1.default)("JHGJKLKLGFLJK"));
 app.use((0, express_session_1.default)({
     secret: "keyboard cat",
@@ -58,11 +57,12 @@ app.use((0, express_flash_1.default)());
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: "https://socialchat-dusky.vercel.app/",
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });
 global._io = io;
+app.use((0, cors_1.default)());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.static(`${__dirname}/public`));
 app.set("views", `${__dirname}/views`);
