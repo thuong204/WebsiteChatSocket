@@ -2,11 +2,9 @@ import { Request, Response } from "express"
 import { Server } from "socket.io"
 import Room from "../../model/room.model"
 import Message from "../../model/message.model"
-import { _io } from "../../index"
 import * as chatSocket from "../../socket/chat"
 import User from "../../model/user.model"
 
-// let _io:Server
 export const index = async (req: Request, res: Response) => {
 
 

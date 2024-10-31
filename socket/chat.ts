@@ -2,7 +2,6 @@ import Chat from "twilio/lib/rest/Chat";
 import Message from "../model/message.model";
 import Room from "../model/room.model";
 import { Response } from "express";
-import { _io } from "../index";
 import User from "../model/user.model";
 
 interface MessageData {
@@ -13,7 +12,7 @@ export const chatSocket = async (res: Response) => {
     console.log(userId)
 
     const fullName = res.locals.user.fullName
-    _io.once('connection', (socket) => {
+    global._io.once('connection', (socket) => {
         socket.on('CLIENT_SEND_MESSAGE', async (data: MessageData) => {
             console.log(userId)
             const room = await Room.findOne({
@@ -41,7 +40,7 @@ export const chatSocket = async (res: Response) => {
                 });
                 await message.save()
             }
-            _io.emit('SERVER_RETURN_MESSAGE', {
+            global._io.emit('SERVER_RETURN_MESSAGE', {
                 sender: userId,
                 room_id: room.id,
                 content: data.content,

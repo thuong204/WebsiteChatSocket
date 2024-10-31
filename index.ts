@@ -10,7 +10,7 @@ import http from "http";
 import * as database from "./config/database"
 import { Server, Socket } from "socket.io";
 import MongoStore from "connect-mongo";
-export let _io;
+
 
 
 
@@ -39,7 +39,8 @@ app.use(flash())
 // socket 
 const server = http.createServer(app);
 const io = new Server(server);
-_io = io;
+
+global._io = io;
 
 
 

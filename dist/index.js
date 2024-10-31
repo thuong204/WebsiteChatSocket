@@ -26,7 +26,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._io = void 0;
 const express_1 = __importDefault(require("express"));
 const index_route_1 = __importDefault(require("./routes/client/index.route"));
 const express_flash_1 = __importDefault(require("express-flash"));
@@ -56,7 +55,7 @@ database.connect();
 app.use((0, express_flash_1.default)());
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server);
-exports._io = io;
+global._io = io;
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.static(`${__dirname}/public`));
 app.set("views", `${__dirname}/views`);

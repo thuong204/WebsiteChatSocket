@@ -15,13 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.chatSocket = void 0;
 const message_model_1 = __importDefault(require("../model/message.model"));
 const room_model_1 = __importDefault(require("../model/room.model"));
-const index_1 = require("../index");
 const user_model_1 = __importDefault(require("../model/user.model"));
 const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = res.locals.user.id;
     console.log(userId);
     const fullName = res.locals.user.fullName;
-    index_1._io.once('connection', (socket) => {
+    global._io.once('connection', (socket) => {
         socket.on('CLIENT_SEND_MESSAGE', (data) => __awaiter(void 0, void 0, void 0, function* () {
             console.log(userId);
             const room = yield room_model_1.default.findOne({
@@ -47,7 +46,7 @@ const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
                 });
                 yield message.save();
             }
-            index_1._io.emit('SERVER_RETURN_MESSAGE', {
+            global._io.emit('SERVER_RETURN_MESSAGE', {
                 sender: userId,
                 room_id: room.id,
                 content: data.content,
