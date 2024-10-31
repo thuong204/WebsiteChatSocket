@@ -37,9 +37,11 @@ const http_1 = __importDefault(require("http"));
 const database = __importStar(require("./config/database"));
 const socket_io_1 = require("socket.io");
 const connect_mongo_1 = __importDefault(require("connect-mongo"));
+const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
+app.use((0, cors_1.default)());
 app.use((0, cookie_parser_1.default)("JHGJKLKLGFLJK"));
 app.use((0, express_session_1.default)({
     secret: "keyboard cat",
@@ -57,9 +59,7 @@ const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
     cors: {
         origin: "https://socialchat-dusky.vercel.app/",
-        methods: ["GET", "POST"],
-        allowedHeaders: ["my-custom-header"],
-        credentials: true
+        methods: ["GET", "POST"]
     }
 });
 global._io = io;

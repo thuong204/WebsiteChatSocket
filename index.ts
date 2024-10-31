@@ -10,7 +10,7 @@ import http from "http";
 import * as database from "./config/database"
 import { Server, Socket } from "socket.io";
 import MongoStore from "connect-mongo";
-
+import cors from"cors"
 
 
 
@@ -18,6 +18,7 @@ dotenv.config()
 const app: Express = express()
 
 const port:number |string = process.env.PORT || 3000;
+app.use(cors());
 
 app.use(cookieParser("JHGJKLKLGFLJK"))
 app.use(
@@ -41,9 +42,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
       origin: "https://socialchat-dusky.vercel.app/", // Thay đổi URL này
-      methods: ["GET", "POST"],
-      allowedHeaders: ["my-custom-header"],
-      credentials: true
+      methods: ["GET", "POST"]
   }
 });
 
