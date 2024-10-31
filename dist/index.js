@@ -59,7 +59,7 @@ const io = new socket_io_1.Server(server, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"]
-    }
+    }, transports: ['websocket'],
 });
 global._io = io;
 app.use((0, cors_1.default)());
