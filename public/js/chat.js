@@ -15,7 +15,7 @@ if (form) {
         const content = e.target.elements.content.value
         if (content) {
             socket.emit("CLIENT_SEND_MESSAGE", {
-                content:content
+                content: content
             })
             e.target.elements.content.value = ""
         }
@@ -33,6 +33,8 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
     let htmlImages = "";
     console.log(data.sender)
     console.log(userId.getAttribute("myId"))
+
+
     if (data.sender == userId.getAttribute("myId")) {
         div.classList.add("reply-item")
         div.classList.add("outgoing")
@@ -91,3 +93,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // Cuộn xuống dưới cùng khi truy cập vào trang
     scrollToBottom();
 })
+
+
+import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
+const emojiPicker = document.querySelector("emoji-picker")
+const tooltip = document.querySelector('.tooltip')
+const inputChat = document.querySelector(".input-message")
+const button = document.querySelector(".btn-icon-emoji")
+console.log(button)
+if (button) {
+    Popper.createPopper(button, tooltip, {
+        placement: 'top', // Position the tooltip above the button
+    });
+    button.addEventListener("click", () => {
+        tooltip.classList.toggle('shown')
+    })
+}
+if (emojiPicker) {
+    emojiPicker.addEventListener("emoji-click", (event) => {
+        const icon = event.detail.unicode
+        inputChat.value = inputChat.value + icon
+        const end = inputChat.value.length
+        inputChat.setSelectionRange(end, end)
+        inputChat.focus()
+    })
+}

@@ -1161,3 +1161,15 @@ section .forgot-link {
     text-align: right;
     margin-right: 15px;
 }
+
+.aside-item-chat.active {
+    background-color: #bfdbfe;
+
+}
+.tooltip{
+    visibility: hidden;
+}
+.tooltip.shown{
+    visibility: visible;
+    opacity: 1;
+}

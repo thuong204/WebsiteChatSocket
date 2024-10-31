@@ -33,10 +33,15 @@ detailItem.addEventListener('click', (e) => {
 
 
 const listUserChats = document.querySelectorAll("[data-user]")
+const mediaImage = document.querySelector(".media-group-chat .media-img img")
+const fullName = document.querySelector(".user-info h6.fullname-chat")
+const mediaImageDetail = document.querySelector(".media-group .media img")
+const fullNameDetail = document.querySelector(".media-group .media-col h6.fullname-chat")
+
+console.log(fullName)
 listUserChats.forEach(item => {
     item.addEventListener("click", () => {
         const idReceiver = item.getAttribute("data-user")
-        console.log(idReceiver)
         fetch(`/chat/receiver/${idReceiver}`)
             .then(response => {
                 if (!response.ok) {
@@ -54,6 +59,9 @@ listUserChats.forEach(item => {
                 chatBody.innerHTML = '';
 
                 // Tạo một phần tử chat-message để chứa tất cả các tin nhắn
+
+
+
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('chat-message', 'd-flex'); // Thêm class để định dạng
 
@@ -63,27 +71,27 @@ listUserChats.forEach(item => {
                     // Kiểm tra xem tin nhắn có phải là tin nhắn gửi đi hay không
                     if (message.sender === myId) { // currentUserId là ID của người dùng hiện tại
                         individualMessage = `
-            <div class="reply-item outgoing">
-                <div class="reply-group">
-                    <div class="reply-bubble">
-                        <div class="reply-text">${message.content || ''}</div>
-                    </div>
-                </div>
-            </div>`;
+                            <div class="reply-item outgoing">
+                                <div class="reply-group">
+                                    <div class="reply-bubble">
+                                        <div class="reply-text">${message.content || ''}</div>
+                                    </div>
+                                </div>
+                            </div>`;
                     } else {
                         individualMessage = `
-            <div class="reply-item incoming">
-                <div class="reply-avatar">
-                    <div class="media">
-                        <img src="${infoReceiver.avatar ? infoReceiver.avatar : 'https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730012457/wcyuwuirlhgthg9jqhcx.png'}" width="32" height="32" class="rounded-circle" alt="User Avatar">
-                    </div>
-                </div>
-                <div class="reply-group">
-                    <div class="reply-bubble">
-                        <div class="reply-text">${message.content || ''}</div>
-                    </div>
-                </div>
-            </div>`;
+                            <div class="reply-item incoming">
+                                <div class="reply-avatar">
+                                    <div class="media">
+                                        <img src="${infoReceiver.avatar ? infoReceiver.avatar : 'https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730012457/wcyuwuirlhgthg9jqhcx.png'}" width="32" height="32" class="rounded-circle" alt="User Avatar">
+                                    </div>
+                                </div>
+                                <div class="reply-group">
+                                    <div class="reply-bubble">
+                                        <div class="reply-text">${message.content || ''}</div>
+                                    </div>
+                                </div>
+                            </div>`;
                     }
 
                     // Thêm tin nhắn vào messageElement
@@ -92,6 +100,20 @@ listUserChats.forEach(item => {
 
                 // Thêm phần tử chat-message vào chatBody
                 chatBody.appendChild(messageElement);
+
+                const itemActive = document.querySelector(".aside-item-chat.active")
+
+                itemActive.classList.remove("active")
+                item.classList.add("active")
+        
+
+                mediaImage.setAttribute("src", infoReceiver.avatar)
+                fullName.textContent= infoReceiver.fullName
+
+                mediaImageDetail.setAttribute("src", infoReceiver.avatar)
+                fullNameDetail.textContent= infoReceiver.fullName
+
+
 
                 const roomid = data.data.roomId
                 history.pushState(null, '', `/chat/${roomid}`);
@@ -103,3 +125,4 @@ listUserChats.forEach(item => {
 
     })
 })
+

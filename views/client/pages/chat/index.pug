@@ -36,11 +36,9 @@ block main
 
                         .tab-panel
                             ul.list-aside-item.scrollable-list
-
-                                if(listUsers && listUsers.length>0)
-                                    each user in listUsers
-                                        li.aside-item-chat(data-user=user.id style="cursor:pointer")
-
+                                if (listUsers && listUsers.length > 0)
+                                    each user, index in listUsers
+                                        li.aside-item-chat(data-user=user.id style="cursor:pointer" class=(index === 0 ? 'active' : ''))
                                             .group-media.d-flex.align-items-center
                                                 .media
                                                     img(src=user.avatar alt="User Image" class="rounded-circle")
@@ -48,23 +46,28 @@ block main
                                                     .user-info
                                                         h6 #{user.fullName}
                                                     .user-message
-                                                        h6.message Last message previewfsfsefsdfsdgfsdgdffgfdgfds... 
+                                                        h6.message Last message preview...
                                                 .media-col.d-flex
                                                     span.time 10:30 AM
+            .col-xl-6.col-lg-8.col-md-7.col-12.col-sm-7.chat-content
 
-            .col-xl-6.col-lg-8.col-md-7.col-12.col-sm-7.chat-content       
                 .chat-head
                     .media-group-chat.d-flex.align-items-center
                         .media-img
                             if(userreceive)
                                 img(src=userreceive.avatar alt="User Image" class="rounded-circle")
+                            else 
+                                img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png" alt="User Image" class="rounded-circle")
                         .media-chat.d-flex
                             .user-info.d-flex
                                 if(userreceive)
-                                    h6 #{userreceive.fullName}
+                                    h6.fullname-chat #{userreceive.fullName}
+                                else 
+                                    h6.fullname-chat
                             .user-message.d-flex
                                 h6.message Hoạt động 10 phút trước
                     .media-feature.justify-content-center.align-item-center
+
                         ul(class="navbar-nav navbar-list-chat d-flex justify-content-center zalign-item-center")
                             li(class="nav-item item-call")
                                 a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="#" role="button")  
@@ -88,7 +91,6 @@ block main
                                             .reply-bubble 
                                                 .reply-text #{message.content}
                                                 .reply-tool
-
                                 else
                                     .reply-item.incoming.d-flex
                                         .reply-avatar 
@@ -125,8 +127,10 @@ block main
                                 button.btn.btn-pill
                                     img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729759474/pfibusmf5ez9ndyg86s2.png" width="16" height="16")
                             li.dropup.rounder-circle.item-icon  
-                                button.btn.btn-pill
+                                button.btn.btn-pill.btn-icon-emoji
                                     img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729759475/aqmfxk2flgkk3qtzhbmj.png" width="16" height="16")
+                            div(class="tooltip" role="tooltip")            
+                                        emoji-picker
 
                     form(id="form-send")
                         .chat-form-enter.d-flex.justify-content-center.align-item-center.list-insert-item  
@@ -140,17 +144,25 @@ block main
                                     li.dropup.rounded-circle.item-send
                                         button.btn.btn-pill(type="submit")
                                             img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/jd6jpps9rx1wpi2xcwmw.png" width="16" height="16")
+                                    
+
+
             .col-xl-3.detail-content.scrollable-list
                 .chat-cover   
                     img(src="https://img.pikbest.com/ai/illus_our/20230418/64e0e89c52dec903ce07bb1821b4bcc8.jpg!w700wp" width="240" height="150")
                 .media-group.text-center
                     .media 
-                        if(user.receive)
-                            img(src=userreceive.avatar width="56" height="56" alt="") 
+                        if(userreceive)
+                            img(src=userreceive.avatar width="56" height="56" alt="" class="rounded-circle") 
+
+                        else 
+                            img(src width="56" height="56" alt="" class="rounded-circle" )
                     .media-col.d-flex.flex-column
                         .media-row 
-                            if(user.receive)
-                                h6 #{userreceive.fullName}
+                            if(userreceive)
+                                h6.fullname-chat #{userreceive.fullName}
+                            else 
+                                h6.fullname-chat
                         .media-row
                             span Đang hoạt động
 
