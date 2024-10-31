@@ -38,7 +38,14 @@ app.use(flash())
 
 // socket 
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+      origin: "https://socialchat-dusky.vercel.app/", // Thay đổi URL này
+      methods: ["GET", "POST"],
+      allowedHeaders: ["my-custom-header"],
+      credentials: true
+  }
+});
 
 global._io = io;
 
