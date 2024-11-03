@@ -1,23 +1,34 @@
+
+
+
 const socket = io()
 
-const scrollList = document.querySelector(".chat-body.scrollable-list");
 
+
+const scrollList = document.querySelector(".chat-body.scrollable-list");
 // Hàm cuộn xuống cuối danh sách
 const scrollToBottom = () => {
     scrollList.scrollTop = scrollList.scrollHeight;
 };
 const form = document.getElementById("form-send")
 
-
+const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-image', {
+    multiple: true,
+    maxFileCount: 6
+});
 if (form) {
     form.addEventListener("submit", (e) => {
         e.preventDefault()
         const content = e.target.elements.content.value
-        if (content) {
+        const images = upload.cachedFileArray || []
+
+        if (content || images.length > 0) {
             socket.emit("CLIENT_SEND_MESSAGE", {
-                content: content
+                content: content,
+                images: images
             })
             e.target.elements.content.value = ""
+            upload.resetPreviewPanel(); // clear all selected images
         }
     })
 }
@@ -28,57 +39,68 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
     const div = document.createElement("div")
     const replyMessages = document.querySelectorAll(".reply-item");
     const lastReplyMessage = replyMessages[replyMessages.length - 1];
-    let htmlFullName = "";
-    let htmlContent = "";
-    let htmlImages = "";
-    console.log(data.sender)
-    console.log(userId.getAttribute("myId"))
+
+    // Xu li hinh anh tin nhan file
+    let htmlImages = '';
+    if (data.images && data.images.length > 0) {
+        htmlImages = `<div class="reply-image d-flex">`;
+        data.images.forEach(image => {
+            htmlImages += `<img src="${image}" width="100" height="100">`;
+        });
+        htmlImages += `</div>`;
+    }
+
+    let htmlText = data.content ? `<div class="reply-text">${data.content}</div>` : '';
+
+    let htmlContent = `
+        <div class="reply-group">
+            <div class="reply-bubble">
+                ${htmlText}
+                ${htmlImages} 
+                <div class="reply-tool"></div>
+            </div>
+        </div>
+    `;
 
 
     if (data.sender == userId.getAttribute("myId")) {
         div.classList.add("reply-item")
         div.classList.add("outgoing")
-        if (data.content) {
-            htmlContent = ` <div class="reply-group">
-                                <div class="reply-bubble">
-                                    <div class="reply-text"> ${data.content}  </div>                   
-                                    <div class="reply-tool">
-         
-                                    </div>
-                                </div>
-                            </div>`
-        }
-        div.innerHTML = `
+        if(data.content || data.images){
+             div.innerHTML = `
         ${htmlContent}
         `
+        }
+       
         if (lastReplyMessage) {
             lastReplyMessage.insertAdjacentElement("afterend", div);
         } else {
-            // Nếu không có tin nhắn nào, chèn vào đầu danh sách
             message.appendChild(div);
         }
         scrollToBottom();
     } else {
         div.classList.add("reply-item")
         div.classList.add("incoming")
-        if (data.content) {
-            htmlContent = ` 
-                            <div class="reply-avatar">
-                                <div class="media">
-                                    <img src="${data.receiver.avatar}" width="32" height="32" class="rounded-circle">
-                                </div>
-                            </div>
-                            <div class="reply-group">
-                                <div class="reply-bubble">
-                                    <div class="reply-text"> ${data.content}  </div>                   
-                                    <div class="reply-tool">
-                                    </div>
-                                </div>
-                            </div>`
-        }
-        div.innerHTML = `
+
+        let htmlSender = `
+            <div class="reply-avatar">
+                <div class="media">
+                    <img 
+                        src= ${data.receiver.avatar}
+                        width="32" 
+                        height="32" 
+                        class="rounded-circle"
+                    />
+                </div>
+            </div>
+       `
+        if (data.content || data.images) {
+            div.innerHTML = `
+        ${htmlSender}
         ${htmlContent}
         `
+        }
+
         if (lastReplyMessage) {
             lastReplyMessage.insertAdjacentElement("afterend", div);
         } else {
@@ -96,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
+
 const emojiPicker = document.querySelector("emoji-picker")
 const tooltip = document.querySelector('.tooltip')
 const inputChat = document.querySelector(".input-message")
@@ -118,3 +141,4 @@ if (emojiPicker) {
         inputChat.focus()
     })
 }
+

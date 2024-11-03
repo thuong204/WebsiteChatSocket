@@ -4,6 +4,13 @@ const detailItemActive = document.querySelector(".item-detail")
 const colXl7 = document.querySelector('.chat-content');
 const colXl2 = document.querySelector('.detail-content');
 
+const scrollList = document.querySelector(".chat-body.scrollable-list");
+// Hàm cuộn xuống cuối danh sách
+const scrollToBottom = () => {
+    scrollList.scrollTop = scrollList.scrollHeight;
+};
+scrollToBottom()
+
 // Cờ để theo dõi trạng thái
 let isExpanded = false;
 const inputMessage = document.querySelector('.input-message'); // Lấy trường nhập liệu
@@ -68,13 +75,25 @@ listUserChats.forEach(item => {
                 messages.forEach(message => {
                     let individualMessage;
 
+                    let htmlImages = '';
+                    if (message.images && message.images.length > 0) {
+                        htmlImages = `<div class="reply-image d-flex">`;
+                        message.images.forEach(image => {
+                            htmlImages += `<img src="${image}" width="100" height="100">`;
+                        });
+                        htmlImages += `</div>`;
+                    }
+                
+                    let htmlText = message.content ? `<div class="reply-text">${message.content}</div>` : '';
+
                     // Kiểm tra xem tin nhắn có phải là tin nhắn gửi đi hay không
                     if (message.sender === myId) { // currentUserId là ID của người dùng hiện tại
                         individualMessage = `
                             <div class="reply-item outgoing">
                                 <div class="reply-group">
                                     <div class="reply-bubble">
-                                        <div class="reply-text">${message.content || ''}</div>
+                                        ${htmlText}
+                                        ${htmlImages}
                                     </div>
                                 </div>
                             </div>`;
@@ -88,7 +107,8 @@ listUserChats.forEach(item => {
                                 </div>
                                 <div class="reply-group">
                                     <div class="reply-bubble">
-                                        <div class="reply-text">${message.content || ''}</div>
+                                    ${htmlText}
+                                    ${htmlImages}
                                     </div>
                                 </div>
                             </div>`;
@@ -114,6 +134,8 @@ listUserChats.forEach(item => {
                 fullNameDetail.textContent= infoReceiver.fullName
 
 
+
+                scrollToBottom()
 
                 const roomid = data.data.roomId
                 history.pushState(null, '', `/chat/${roomid}`);

@@ -103,6 +103,7 @@ export const roomMessage = async (req: Request, res: Response) => {
     })
 
 
+
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Trang chat",
         messages: messages,

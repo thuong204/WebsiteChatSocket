@@ -3,22 +3,28 @@ import Message from "../model/message.model";
 import Room from "../model/room.model";
 import { Response } from "express";
 import User from "../model/user.model";
+import * as uploadToCloudinary from "../helpers/uploadToCloudinary"
 
 interface MessageData {
-    content: string;
+    content: string,
+    images: []
 }
 export const chatSocket = async (res: Response) => {
     const userId = res.locals.user.id
-    console.log(userId)
 
     const fullName = res.locals.user.fullName
     global._io.once('connection', (socket) => {
         socket.on('CLIENT_SEND_MESSAGE', async (data: MessageData) => {
-            console.log(userId)
             const room = await Room.findOne({
                 deleted: false,
                 user_id: res.locals.user.id
             })
+            let images = []
+            for (const imageBuffer of data.images) {
+                const link = await uploadToCloudinary.uploadToCloudinary(imageBuffer)
+                images.push(link)
+            }
+
             if(!room){
                 const room = new Room({
                     user_id: [res.locals.user.id],
@@ -37,6 +43,7 @@ export const chatSocket = async (res: Response) => {
                     sender: userId,
                     room_id: room.id,
                     content: data.content,
+                    images:images
                 });
                 await message.save()
             }
@@ -44,6 +51,7 @@ export const chatSocket = async (res: Response) => {
                 sender: userId,
                 room_id: room.id,
                 content: data.content,
+                images:images,
                 receiver:userReceiver
             })
         });

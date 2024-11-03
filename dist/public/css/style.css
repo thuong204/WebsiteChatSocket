@@ -505,7 +505,7 @@ li.nav-item:hover a {
     background-color: #f9f9f9;
     overflow-y: auto;
     height: 500px;
-    max-height:500px;
+    max-height:800px;
     border-bottom: 1px solid #ddd;
     border-right: 1px solid #ddd;
 }
@@ -1172,4 +1172,29 @@ section .forgot-link {
 .tooltip.shown{
     visibility: visible;
     opacity: 1;
+}
+.reply-image img{
+    margin: 2px;
+    border-radius: 10px;
+}
+.label-container{
+    display: none !important;
+}
+.input-container{
+    display: none !important;
+}
+.image-preview{
+    height: auto !important;
+    background: transparent;
+    padding: 0!important;
+    width: 430px !important;
+    overflow-x: hidden;
+    position: absolute;
+    top: -90px;
+    border-radius: 0 !important  ;
+}
+ .image-preview-item{
+    background-size: contain !important;
+    width: 50px !important; 
+    height: 50px !important;
 }

@@ -19,9 +19,9 @@
   "description": "",
   "dependencies": {
     "body-parser": "^1.20.3",
+    "cloudinary": "^2.5.1",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-flash": "^0.0.2",
@@ -30,6 +30,7 @@
     "mongoose": "^8.7.2",
     "pug": "^3.0.3",
     "socket.io": "^4.8.1",
+    "streamifier": "^0.1.1",
     "twilio": "^5.3.5",
     "typescript": "^5.6.3"
   },
@@ -39,6 +40,7 @@
     "@types/express-session": "^1.18.0",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.7.8",
+    "@types/streamifier": "^0.1.2",
     "nodemon": "^3.1.7",
     "pre-commit": "^1.2.2",
     "socket.io": "^4.8.1",

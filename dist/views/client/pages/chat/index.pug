@@ -89,10 +89,15 @@ block main
                                     .reply-item.outgoing
                                         .reply-group
                                             .reply-bubble 
-                                                .reply-text #{message.content}
-                                                .reply-tool
+                                                if(message.content)
+                                                    .reply-text #{message.content}
+                                                if(message.images && message.images.length > 0)
+                                                    .reply-image.d-flex
+                                                        each image in message.images
+                                                            img(src=image width="100" height="100")
+                                                    .reply-tool
                                 else
-                                    .reply-item.incoming.d-flex
+                                    .reply-item.incoming.d-flex.flex-row
                                         .reply-avatar 
                                             .media 
                                                 if(userreceive.avatar)
@@ -101,10 +106,15 @@ block main
                                                     img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png" width="32" height="32" class="rounded-circle")
                                         .reply-group
                                             .reply-bubble 
-                                                .reply-link 
-                                                    a(href="" class="text-decoration-none")
-                                                        .reply-text.reply-image #{message.content}
+                                                if(message.content)
+                                                    .reply-text #{message.content}
+                                                if(message.images && message.images.length > 0)
+                                                    .reply-image.d-flex
+                                                        each image in message.images
+                                                            img(src=image width="100" height="100")
+                                                    .reply-tool
                                                 .reply-tool
+
 
                 .chat-form.d-flex
                     .chat-form-insert.d-flex
@@ -125,17 +135,21 @@ block main
 
                             li.dropup.rounder-circle.item-image
                                 button.btn.btn-pill
-                                    img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729759474/pfibusmf5ez9ndyg86s2.png" width="16" height="16")
+                                    label(for="file-upload-with-preview-upload-image" style="cursor:pointer")
+                                        img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729759474/pfibusmf5ez9ndyg86s2.png" width="16" height="16")
+
                             li.dropup.rounder-circle.item-icon  
                                 button.btn.btn-pill.btn-icon-emoji
                                     img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729759475/aqmfxk2flgkk3qtzhbmj.png" width="16" height="16")
                             div(class="tooltip" role="tooltip")            
-                                        emoji-picker
+                                emoji-picker
 
                     form(id="form-send")
                         .chat-form-enter.d-flex.justify-content-center.align-item-center.list-insert-item  
                             .chat-form-input
+                                .custom-file-container.file-upload-with-preview-upload-image(data-upload-id="upload-image")
                                 input.input-message(type="text" name="content" autocomplete="off")
+
                             .chat-form-send
                                 ul.d-flex.justify-content-center.align-item-center.list-message-item    
                                     li.dropup.rounded-circle.item-mic
@@ -144,7 +158,7 @@ block main
                                     li.dropup.rounded-circle.item-send
                                         button.btn.btn-pill(type="submit")
                                             img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/jd6jpps9rx1wpi2xcwmw.png" width="16" height="16")
-                                    
+
 
 
             .col-xl-3.detail-content.scrollable-list
@@ -222,5 +236,4 @@ block main
 
                     .tab-pane.fade.p-3(id="chat-option" role="tabpanel" aria-labelledby="nav-option-tab")
                         h2 hloe
-
 
