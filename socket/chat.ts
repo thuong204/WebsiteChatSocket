@@ -7,12 +7,16 @@ import * as uploadToCloudinary from "../helpers/uploadToCloudinary"
 
 interface MessageData {
     content: string,
-    images: []
+    images: [],
+    files:{
+        buffer: Buffer,
+        name:string
+    }[]
 }
 export const chatSocket = async (res: Response) => {
     const userId = res.locals.user.id
 
-    const fullName = res.locals.user.fullName
+    const fullName = res.locals.user.fullNamez
     global._io.once('connection', (socket) => {
         socket.on('CLIENT_SEND_MESSAGE', async (data: MessageData) => {
             const room = await Room.findOne({
@@ -20,10 +24,23 @@ export const chatSocket = async (res: Response) => {
                 user_id: res.locals.user.id
             })
             let images = []
+
+
             for (const imageBuffer of data.images) {
                 const link = await uploadToCloudinary.uploadToCloudinary(imageBuffer)
                 images.push(link)
             }
+
+            let files = []
+            
+            
+            for (const fileBuffer of data.files) {
+                const nameFile = fileBuffer.name.split(":")[0]
+                const link = await uploadToCloudinary.uploadSingle(fileBuffer.buffer)
+                files.push({ link: link, name: nameFile });
+                
+            }
+            console.log(files)
 
             if(!room){
                 const room = new Room({
@@ -43,7 +60,8 @@ export const chatSocket = async (res: Response) => {
                     sender: userId,
                     room_id: room.id,
                     content: data.content,
-                    images:images
+                    images:images,
+                    files:files
                 });
                 await message.save()
             }
@@ -52,6 +70,7 @@ export const chatSocket = async (res: Response) => {
                 room_id: room.id,
                 content: data.content,
                 images:images,
+                files:files,
                 receiver:userReceiver
             })
         });

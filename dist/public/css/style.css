@@ -1,6 +1,6 @@
 /* header  */
 * {
-    /* max-width: 100vw;  */
+    max-width: 100vw; 
     box-sizing: border-box;
     /* Đảm bảo padding và border không làm tăng chiều rộng */
 }
@@ -8,9 +8,9 @@
 /* Ẩn cuộn ngang nếu không cần thiết */
 body,
 html {
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     /* Ẩn thanh cuộn ngang */
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
 }
 
 header {
@@ -195,6 +195,7 @@ ul.d-flex li button {
     text-decoration: none;
     background: none;
     border: none;
+    cursor: pointer;
     color: #000;
     position: relative;
     font-weight: 400 !important;
@@ -619,9 +620,8 @@ ul.list-insert-item>li {
 .input-message {
     max-width: 800px;
     /* Chiều rộng tối đa */
-    padding: 3px;
+    height: 40px !important;
     border: 1px solid #C6E2FF;
-    ;
     width: 430px;
 
     margin-right: 10px !important;
@@ -1197,4 +1197,195 @@ section .forgot-link {
     background-size: contain !important;
     width: 50px !important; 
     height: 50px !important;
+}
+.file-preview {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 400px;
+    overflow-wrap: break-word;
+}
+
+.file-preview::before {
+    content: "📄"; /* Biểu tượng tài liệu */
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.file-preview .file-name {
+    font-weight: bold;
+    color: #007bff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+
+.file-preview .remove-file {
+    cursor: pointer;
+    color: #ff4d4d;
+    font-size: 16px;
+    margin-left: auto;
+    display: inline-block;
+}
+/* Điều khiển chung cho các nút */
+/* Điều khiển chung cho các nút */
+
+  
+  /* Ẩn tất cả các nút khi không cần thiết */
+  .d-none {
+    display: none;
+  }
+  
+  /* Chỉnh vị trí cho nút ghi âm và exit */
+  .record-button, .exit-button {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    font-size: 22px;
+    background-color: transparent;
+  }
+  
+  .exit-button {
+    display: none;
+  }
+  
+  .stop-button, .play-button, .pause-button {
+    position: absolute !important;
+    left: -450px;
+    top:20px;
+    transform: translate(-50%, -50%);
+    font-size: 22px;
+    background-color: transparent;
+    
+  }
+  .stop-button i, .play-button i, .pause-button i {
+    border: 2px solid black;
+    border-radius: 20px;
+    font-size: 16px;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    width: 32.8px;
+    height: 28px;
+  }
+  .record-button i, .exit-button i {
+    font-size: 18px;
+    width: 16px;
+    height: 16px;
+  }
+  
+  .audio-progress-bar {
+    width: 400px;
+    background: rgb(193, 193, 247);
+    border-radius: 5px;
+    position: absolute !important; 
+    outline: none;
+    left: -430px;
+    top:0px;
+  }
+  .audio-progress-bar::-ms-track {
+    height: 50px; /* Đặt chiều cao của track cho IE */
+    background: #ddd;
+    border-radius: 10px;
+    border: none;
+  }
+  
+  .audio-progress-bar::-webkit-slider-thumb {
+    width: 50px; /* Chiều rộng của nút kéo */
+    height: 50px; /* Chiều cao của nút kéo */
+    background: black !important;
+    border-radius: 50%; /* Hình tròn */
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    position: relative;
+    top: 50%; /* Dịch chuyển nút kéo theo chiều dọc */
+    transform: translateY(-50%); /* Căn giữa nút kéo theo chiều dọc */
+  }
+
+  .audio-progress-bar::-webkit-slider-runnable-track {
+    height: 40px; /* Đặt chiều cao của track */
+    background: rgb(193, 193, 247);
+    align-items: center;
+    vertical-align: middle;
+    border-radius: 10px;
+  }
+  .audio-progress-bar::-ms-thumb {
+    width: 20px; /* Kích thước nút kéo */
+    background:black;
+    border-radius: 50%;
+    height: 50px;
+    cursor: pointer;
+  }
+
+ 
+  .time-info{
+    position: absolute !important;
+    top: 7px;
+    left: -80px;
+    font-weight: bold;
+  }
+
+  .audio-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: #f8f8f8;
+}
+
+.audio-container .custom-audio-player {
+    display: none; /* Ẩn điều khiển mặc định */
+}
+
+.custom-play-button,
+.custom-pause-button {
+    background-color: transparent;
+    color:black;
+    border: none;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.custom-pause-button.custom-hidden {
+    display: none;
+}
+
+.custom-progress-bar {
+    width: 100%;
+    cursor: pointer;
+    appearance: none;
+    background-color: #ddd;
+    border-radius: 5px;
+    height: 5px;
+}
+.custom-progress-bar::-webkit-slider-thumb {
+    width: 10px;
+    height: 10px;
+    background-color: black !important;
+    cursor: pointer;
+}
+
+/* Tùy chỉnh cho Firefox */
+.custom-progress-bar::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    background-color: black !important;
+    cursor: pointer;
 }

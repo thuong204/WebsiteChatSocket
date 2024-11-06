@@ -4,6 +4,7 @@ import Room from "../../model/room.model"
 import Message from "../../model/message.model"
 import * as chatSocket from "../../socket/chat"
 import User from "../../model/user.model"
+import { timeStamp } from "console"
 
 export const index = async (req: Request, res: Response) => {
 
@@ -43,7 +44,10 @@ export const fetchMessage = async (req: Request, res: Response) => {
     if (room) {
         const messages = await Message.find({
             room_id: room.id
-        }).select("sender content room_id images attachments")
+        }).select("sender content room_id images files").limit(20).sort({
+             createdAt:"desc"
+        })
+        messages.reverse();
         const filteredUserIds = room.user_id.filter(userId => userId !== res.locals.user.id);
 
         const user = await User.findOne({
@@ -100,7 +104,10 @@ export const roomMessage = async (req: Request, res: Response) => {
 
     const messages = await Message.find({
         room_id: req.params.roomId
+    }).limit(20).sort({
+        createdAt:"desc"
     })
+    messages.reverse();
 
 
 

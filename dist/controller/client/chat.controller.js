@@ -72,7 +72,10 @@ const fetchMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     if (room) {
         const messages = yield message_model_1.default.find({
             room_id: room.id
-        }).select("sender content room_id images attachments");
+        }).select("sender content room_id images files").limit(20).sort({
+            createdAt: "desc"
+        });
+        messages.reverse();
         const filteredUserIds = room.user_id.filter(userId => userId !== res.locals.user.id);
         const user = yield user_model_1.default.findOne({
             deleted: false,
@@ -124,7 +127,10 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     });
     const messages = yield message_model_1.default.find({
         room_id: req.params.roomId
+    }).limit(20).sort({
+        createdAt: "desc"
     });
+    messages.reverse();
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Trang chat",
         messages: messages,

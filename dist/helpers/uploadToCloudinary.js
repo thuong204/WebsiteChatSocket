@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadToCloudinary = void 0;
+exports.uploadFields = exports.uploadSingle = exports.uploadToCloudinary = void 0;
 const cloudinary_1 = require("cloudinary");
 const streamifier_1 = __importDefault(require("streamifier"));
 require('dotenv').config();
@@ -39,3 +39,33 @@ const uploadToCloudinary = (buffer) => __awaiter(void 0, void 0, void 0, functio
     return result.url;
 });
 exports.uploadToCloudinary = uploadToCloudinary;
+const uploadSingle = (fileBuffer) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, exports.uploadToCloudinary)(fileBuffer);
+        return result;
+    }
+    catch (error) {
+        console.log(error);
+        throw new Error('Upload failed');
+    }
+});
+exports.uploadSingle = uploadSingle;
+const uploadFields = (files) => __awaiter(void 0, void 0, void 0, function* () {
+    const results = {};
+    try {
+        for (const key in files) {
+            results[key] = [];
+            const array = files[key];
+            for (const item of array) {
+                const result = yield (0, exports.uploadToCloudinary)(item.buffer);
+                results[key].push(result);
+            }
+        }
+        return results;
+    }
+    catch (error) {
+        console.log(error);
+        throw new Error('Upload failed');
+    }
+});
+exports.uploadFields = uploadFields;

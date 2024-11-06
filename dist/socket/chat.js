@@ -42,7 +42,7 @@ const user_model_1 = __importDefault(require("../model/user.model"));
 const uploadToCloudinary = __importStar(require("../helpers/uploadToCloudinary"));
 const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = res.locals.user.id;
-    const fullName = res.locals.user.fullName;
+    const fullName = res.locals.user.fullNamez;
     global._io.once('connection', (socket) => {
         socket.on('CLIENT_SEND_MESSAGE', (data) => __awaiter(void 0, void 0, void 0, function* () {
             const room = yield room_model_1.default.findOne({
@@ -54,6 +54,13 @@ const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
                 const link = yield uploadToCloudinary.uploadToCloudinary(imageBuffer);
                 images.push(link);
             }
+            let files = [];
+            for (const fileBuffer of data.files) {
+                const nameFile = fileBuffer.name.split(":")[0];
+                const link = yield uploadToCloudinary.uploadSingle(fileBuffer.buffer);
+                files.push({ link: link, name: nameFile });
+            }
+            console.log(files);
             if (!room) {
                 const room = new room_model_1.default({
                     user_id: [res.locals.user.id],
@@ -70,7 +77,8 @@ const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
                     sender: userId,
                     room_id: room.id,
                     content: data.content,
-                    images: images
+                    images: images,
+                    files: files
                 });
                 yield message.save();
             }
@@ -79,6 +87,7 @@ const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
                 room_id: room.id,
                 content: data.content,
                 images: images,
+                files: files,
                 receiver: userReceiver
             });
         }));

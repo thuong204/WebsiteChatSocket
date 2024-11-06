@@ -95,6 +95,18 @@ block main
                                                     .reply-image.d-flex
                                                         each image in message.images
                                                             img(src=image width="100" height="100")
+                                                if(message.files && message.files.length > 0)
+                                                    .reply-file
+                                                        each file in message.files 
+                                                            .audio-container
+                                                                audio.custom-audio-player(controls)
+                                                                    source(src=file.link type="audio/mpeg")
+                                                                button.custom-play-button
+                                                                    i(class="fa-solid fa-play")
+                                                                button.custom-pause-button.d-none 
+                                                                    i(class="fa-solid fa-pause")
+                                                                input.custom-progress-bar(type="range" min="0" max="100" value="0")
+                                                                span.custom-current-time 0:00                                              
                                                     .reply-tool
                                 else
                                     .reply-item.incoming.d-flex.flex-row
@@ -112,10 +124,20 @@ block main
                                                     .reply-image.d-flex
                                                         each image in message.images
                                                             img(src=image width="100" height="100")
+                                                if(message.files && message.files.length > 0)
+                                                    .reply-file
+                                                        each file in message.files 
+                                                            .audio-container
+                                                                audio.custom-audio-player(controls)
+                                                                    source(src=file.link type="audio/mpeg")
+                                                                button.custom-play-button
+                                                                    i(class="fa-solid fa-play")
+                                                                button.custom-pause-button.d-none 
+                                                                    i(class="fa-solid fa-pause")
+                                                                input.custom-progress-bar(type="range" min="0" max="100" value="0")
+                                                                span.custom-current-time 0:00             
                                                     .reply-tool
                                                 .reply-tool
-
-
                 .chat-form.d-flex
                     .chat-form-insert.d-flex
                         ul.d-flex.justify-content-center.align-item-center.list-insert-item 
@@ -124,14 +146,10 @@ block main
                                     img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729759474/uckhwhi8bvcznf1lhzfi.png" width="16" height="16")
                                 .dropdown-menu 
                                     ul.list-style-none
-                                        li 
-                                            a(href="")
-                                                img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729692070/aspv69wrdzbkzauwktit.png" alt="")
-                                                span 
-                                        li 
-                                            a(href="")
-                                                img(src="" alt="")
-                                                span 
+                                        li
+                                            img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729692070/aspv69wrdzbkzauwktit.png" alt="Image description")
+                                            input(type="file" accept=".pdf, .doc, .docx" class="fileInput d-none") 
+                                            span.files-text(style="cursor:pointer;") Files
 
                             li.dropup.rounder-circle.item-image
                                 button.btn.btn-pill
@@ -153,10 +171,24 @@ block main
                             .chat-form-send
                                 ul.d-flex.justify-content-center.align-item-center.list-message-item    
                                     li.dropup.rounded-circle.item-mic
-                                        button.btn.btn-pill
+                                        audio.playback-audio(id="audio-player" class="d-none")
+
+                                        button.btn.btn-pill.record-button
                                             img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/snik3mdu8hpoanp4oxy0.png" width="16" height="16")
+                                        button.btn.btn-pill.exit-button.d-none
+                                            i(class="fa-solid fa-times")
+                                        button.btn.btn-pill.stop-button.d-none
+                                            i(class="fa-solid fa-stop")
+                                        button.btn.btn-pill.play-button.d-none
+                                            i(class="fa-solid fa-play")
+                                        button.btn.btn-pill.pause-button.d-none
+                                            i(class="fa-solid fa-pause")
+                                        input(type="range" class="audio-progress-bar d-none" min="0" max="100" value="0")
+                                        span.time-info.d-none
+                                            span.current-time 00:00 
+
                                     li.dropup.rounded-circle.item-send
-                                        button.btn.btn-pill(type="submit")
+                                        button.btn.btn-pill(type="submit" btn-send)
                                             img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/jd6jpps9rx1wpi2xcwmw.png" width="16" height="16")
 
 
@@ -237,3 +269,4 @@ block main
                     .tab-pane.fade.p-3(id="chat-option" role="tabpanel" aria-labelledby="nav-option-tab")
                         h2 hloe
 
+                    a(href="http://res.cloudinary.com/dwk6tmsmh/image/upload/v1730813417/jkquok4c13oxgvzi3l3h.pdf" download="example.pdf") tải file xuống

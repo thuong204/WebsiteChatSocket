@@ -9,24 +9,10 @@ const messageSchema = new mongoose_1.default.Schema({
     room_id: String,
     content: String,
     images: [String],
-    attachments: [
-        {
-            fileType: {
-                type: String,
-                enum: ["audio", "pdf", "word", "other"],
-                required: true
-            },
-            url: {
-                type: String,
-                required: true
-            },
-            fileName: String,
-            uploadedAt: {
-                type: Date,
-                default: Date.now
-            }
-        }
-    ],
+    files: [{
+            link: String,
+            name: String
+        }],
     deleted: {
         type: Boolean,
         default: false
