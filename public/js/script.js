@@ -152,8 +152,6 @@ listUserChats.forEach(item => {
                 mediaImageDetail.setAttribute("src", infoReceiver.avatar)
                 fullNameDetail.textContent = infoReceiver.fullName
 
-
-
                 scrollToBottom()
 
                 const event = new CustomEvent('audioListUpdated');
@@ -228,3 +226,7 @@ document.addEventListener('audioListUpdated', function() {
     initializeAudioPlayers();
 })
 // Gọi hàm để khởi tạo tất cả các audio players
+
+
+
+

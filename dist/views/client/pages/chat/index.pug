@@ -49,10 +49,14 @@ block main
                                                         h6.message Last message preview...
                                                 .media-col.d-flex
                                                     span.time 10:30 AM
+                                                .media-col.d-flex 
+                                                    if(user.statusOnline=="online")
+                                                        div(class="dot-active")
+                                                    else 
+                                                        div(class="dot-active d-none")
             .col-xl-6.col-lg-8.col-md-7.col-12.col-sm-7.chat-content
-
                 .chat-head
-                    .media-group-chat.d-flex.align-items-center
+                    .media-group-chat.d-flex.align-items-center( userreceiveinfo= userreceive ? userreceive.id : "")
                         .media-img
                             if(userreceive)
                                 img(src=userreceive.avatar alt="User Image" class="rounded-circle")
@@ -73,7 +77,7 @@ block main
                                 a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="#" role="button")  
                                     img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729752516/svx3nmhmi227ugrsqhvi.png" width="20" height="20" class="rounded-circle ")
                             li(class="nav-item item-video")
-                                a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="#" role="button" )  
+                                a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" role="button" )  
                                     img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729752517/u9ckz40lwiggpobn7c5h.png" width="25" height="25" class="rounded-circle")
                             li(class="nav-item item-search")
                                 a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="#" role="button" )  
@@ -167,12 +171,10 @@ block main
                             .chat-form-input
                                 .custom-file-container.file-upload-with-preview-upload-image(data-upload-id="upload-image")
                                 input.input-message(type="text" name="content" autocomplete="off")
-
                             .chat-form-send
                                 ul.d-flex.justify-content-center.align-item-center.list-message-item    
                                     li.dropup.rounded-circle.item-mic
                                         audio.playback-audio(id="audio-player" class="d-none")
-
                                         button.btn.btn-pill.record-button
                                             img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/snik3mdu8hpoanp4oxy0.png" width="16" height="16")
                                         button.btn.btn-pill.exit-button.d-none
@@ -186,7 +188,6 @@ block main
                                         input(type="range" class="audio-progress-bar d-none" min="0" max="100" value="0")
                                         span.time-info.d-none
                                             span.current-time 00:00 
-
                                     li.dropup.rounded-circle.item-send
                                         button.btn.btn-pill(type="submit" btn-send)
                                             img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729764961/jd6jpps9rx1wpi2xcwmw.png" width="16" height="16")
@@ -264,9 +265,13 @@ block main
                                             img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
                                         .col-6
                                             img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+                            
 
 
                     .tab-pane.fade.p-3(id="chat-option" role="tabpanel" aria-labelledby="nav-option-tab")
                         h2 hloe
 
                     a(href="http://res.cloudinary.com/dwk6tmsmh/image/upload/v1730813417/jkquok4c13oxgvzi3l3h.pdf" download="example.pdf") tải file xuống
+                    
+
+                    

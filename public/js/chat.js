@@ -7,6 +7,7 @@ const scrollToBottom = () => {
 };
 const form = document.getElementById("form-send")
 
+
 const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-image', {
     multiple: true,
     maxFileCount: 6,
@@ -46,7 +47,7 @@ if (form) {
                 images: images,
                 files: [...otherFiles, audioFile].filter(Boolean)
             })
-            audioBlob=""
+            audioBlob = ""
             e.target.elements.content.value = ""
             clearMedia();
             upload.resetPreviewPanel(); // clear all selected images
@@ -123,7 +124,7 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
         }
         scrollToBottom();
 
-        
+
     } else {
         div.classList.add("reply-item")
         div.classList.add("incoming")
@@ -394,3 +395,113 @@ const clearMedia = () => {
     timeInfo.classList.add("d-none")
     recordButton.classList.remove("d-none");
 }
+
+// call
+
+let myId; // Kết nối với server
+
+// Kiểm tra xem peer đã được tạo chưa, nếu chưa thì tạo mới
+
+// const peer = new Peer(); // Tạo peer mới
+
+// // Lấy userId từ DOM
+// const userIdElement = document.querySelector("[myId]");
+// if (userIdElement) {
+//     myId = userIdElement.getAttribute("myId");
+// }
+
+// // Hiển thị ID Peer của chính mình và đăng ký với server
+// peer.on('open', (id) => {
+//     alert(`Peer ID của bạn: ${id}`);
+//     socket.emit("CLIENT_REGISTER", {
+//         userId: myId,
+//         peerId: id
+//     });
+// });
+
+// Nhận cuộc gọi đến
+
+// Lắng nghe sự kiện "CLIENT_CALLVIDEO" từ server
+
+
+// Bắt sự kiện click để thực hiện cuộc gọi
+const itemVideo = document.querySelector(".item-video");
+let idUserReceiver = document.querySelector("[userreceiveinfo]");
+if (idUserReceiver) {
+    idUserReceiver = idUserReceiver.getAttribute("userreceiveinfo");
+}
+const userId = document.querySelector("[myId]").getAttribute("myId")
+let localStream
+// Khi người gọi nhấn vào để gọi
+if (itemVideo) {
+    itemVideo.addEventListener("click", () => {
+
+        // Gửi thông báo đến server về người nhận cuộc gọi
+        socket.emit("CLIENT_CALLVIDEO", {
+            callerId: userId,
+            calleeId: idUserReceiver
+        });
+
+        const videoCallWindow = window.open(
+            `video/${idUserReceiver}`, // Đường dẫn tới trang video call
+            "_blank",          // Mở trong tab hoặc cửa sổ mới
+            "width=800,height=600,toolbar=no,location=no"
+        );
+        // Kiểm tra nếu cửa sổ bị chặn bởi trình duyệt
+        if (!videoCallWindow) {
+            alert("Cửa sổ bật lên bị chặn. Hãy bật popup trong trình duyệt của bạn.");
+        }
+        // Lấy media stream từ camera và microphone
+    });
+}
+
+// Lắng nghe cuộc gọi từ server
+
+// Xử lý khi có cuộc gọi đến
+
+
+socket.on("SERVER_RETURN_USER_ONLINE", (userId) => {
+    const dataUser = document.querySelector(`[data-user="${userId}"]`)
+    if (dataUser) {
+        const active = dataUser.querySelector(".dot-active.d-none")
+        if (active) {
+            active.classList.remove("d-none")
+        }
+
+    }
+})
+socket.emit("CLIENT_LOGIN", userId)
+
+socket.on("SERVER_CALLVIDEO", (data) => {
+    console.log("Nhận yêu cầu gọi video từ: ", data.callerId);
+
+    // Hiển thị thông báo hoặc UI yêu cầu người nhận có muốn nhận cuộc gọi video không
+    const acceptCall = window.confirm("Bạn có muốn nhận cuộc gọi video  không?");
+
+    if (acceptCall) {
+        // Nếu người nhận đồng ý, gửi peerId của họ về server để người gọi có thể kết nối
+        const videoCallWindow = window.open(
+            `video/${data.callerId}`, // Đường dẫn tới trang video call
+            "_blank",          // Mở trong tab hoặc cửa sổ mới
+            "width=800,height=600,toolbar=no,location=no"
+        );
+        socket.emit("CLIENT_ACCEPT_CALL", {
+            userId: data.userId,
+        });
+        // Kiểm tra nếu cửa sổ bị chặn bởi trình duyệt
+        if (!videoCallWindow) {
+            alert("Cửa sổ bật lên bị chặn. Hãy bật popup trong trình duyệt của bạn.");
+        }
+    } else {
+        // Nếu người nhận từ chối, gửi tín hiệu từ chối về server
+        socket.emit("CLIENT_REJECT_CALL", {
+            userId: data.userId
+        });
+        console.log("Cuộc gọi bị từ chối");
+    }
+});
+
+
+
+
+

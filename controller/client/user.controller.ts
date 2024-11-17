@@ -27,12 +27,19 @@ export const loginPost = async (req: Request, res: Response) => {
             phone: req.body.phone,
             password: req.body.password
         })
+
         if (user) {
             if (user.status == "inactive") {
                 req.flash("Tài khoản đã bị khóa")
             }
             else {
                 res.cookie("tokenUser", user.tokenUser)
+                await user.updateOne({
+                    statusOnline: "online"
+                })
+                global._io.once("connection",(socket) =>{
+                    socket.broadcast.emit("SERVER_RETURN_USER_ONLINE", user.id)
+                })
                 res.redirect("/chat")
             }
         }

@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.roomMessage = exports.fetchMessage = exports.index = void 0;
+exports.videoCall = exports.roomMessage = exports.fetchMessage = exports.index = void 0;
 const room_model_1 = __importDefault(require("../../model/room.model"));
 const message_model_1 = __importDefault(require("../../model/message.model"));
 const chatSocket = __importStar(require("../../socket/chat"));
@@ -139,3 +139,14 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     });
 });
 exports.roomMessage = roomMessage;
+const videoCall = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.params.userId;
+    const objectCall = {
+        caller: res.locals.user.id,
+        callee: userId
+    };
+    res.render("client/pages/chat/call.pug", {
+        objectCall: objectCall
+    });
+});
+exports.videoCall = videoCall;

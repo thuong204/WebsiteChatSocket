@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+  head
+    title PeerJS Video Call
+  body
+    h1 PeerJS Video Call
+
+    h4(myid = objectCall.caller) myId #{objectCall.caller}
+    h4 friendId #{objectCall.callee}
+    input#peer-id(type="text" placeholder="Nhập ID Peer khác")
+    button#call-peer Bắt đầu gọi
+    button#join Tham gia 
+    video#local-video(autoplay muted playsinline)
+    video#remote-video(autoplay playsinline)
+    script(src="/js/socket.io.js")
+    script(src="/socket.io/socket.io.js")  
+    script(type ="module" src="/js/call.js")
+    //- script(type="module", src="/js/chat.js")
+    script(src="https://unpkg.com/file-upload-with-preview@6.0.2/dist/file-upload-with-preview.iife.js")
+    script(src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js")

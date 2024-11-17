@@ -46,6 +46,12 @@ const loginPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             }
             else {
                 res.cookie("tokenUser", user.tokenUser);
+                yield user.updateOne({
+                    statusOnline: "online"
+                });
+                global._io.once("connection", (socket) => {
+                    socket.broadcast.emit("SERVER_RETURN_USER_ONLINE", user.id);
+                });
                 res.redirect("/chat");
             }
         }

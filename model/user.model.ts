@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema(
             type: String,
             enum: ['male', 'female'], 
         },
+        statusOnline: {
+            type:String, 
+            default:"offline"
+        },
         avatar: {
             type: String,
             default: "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"

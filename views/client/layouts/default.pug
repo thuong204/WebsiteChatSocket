@@ -14,11 +14,14 @@ html
         block main 
         include ../partials/footer.pug
 script( src="/js/script.js")
-script( src="/socket.io/socket.io.js")
+//- script( src="/socket.io/socket.io.js")
+script(src="/js/socket.io.js")
 script(type ="module" src="/js/chat.js")
 script(src="https://unpkg.com/file-upload-with-preview@6.0.2/dist/file-upload-with-preview.iife.js")
 script(src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js")
 
+
 //- script(src="https://cdn.socket.io/4.5.3/socket.io.min.js")
 
 script(type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js")
+script(src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js")

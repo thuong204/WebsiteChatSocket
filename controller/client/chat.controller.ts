@@ -109,12 +109,21 @@ export const roomMessage = async (req: Request, res: Response) => {
     })
     messages.reverse();
 
-
-
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Trang chat",
         messages: messages,
         userreceive: user,
         listUsers: listUsers
+    })
+}
+export const videoCall = async(req:Request,res:Response) =>{ 
+    const userId = req.params.userId
+    const objectCall = {
+        caller: res.locals.user.id,
+        callee: userId
+    }
+   
+    res.render("client/pages/chat/call.pug",{
+        objectCall: objectCall
     })
 }

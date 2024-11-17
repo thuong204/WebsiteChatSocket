@@ -40,6 +40,7 @@ const message_model_1 = __importDefault(require("../model/message.model"));
 const room_model_1 = __importDefault(require("../model/room.model"));
 const user_model_1 = __importDefault(require("../model/user.model"));
 const uploadToCloudinary = __importStar(require("../helpers/uploadToCloudinary"));
+const arrUserInfo = [];
 const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = res.locals.user.id;
     const fullName = res.locals.user.fullNamez;
@@ -91,6 +92,46 @@ const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
                 receiver: userReceiver
             });
         }));
+        socket.on("CLIENT_REGISTER", (data) => __awaiter(void 0, void 0, void 0, function* () {
+            console.log("helo");
+            const exists = arrUserInfo.some(user => user.userId === data.userId);
+            if (exists) {
+                const user = arrUserInfo.find(user => user.userId === data.userId);
+                if (user) {
+                    user.peerId = data.peerId;
+                }
+            }
+            else {
+                arrUserInfo.push(data);
+            }
+            console.log(arrUserInfo);
+        }));
+        socket.on("CLIENT_CALLVIDEO", (data) => {
+            const callerId = data.callerId;
+            const calleeId = data.calleeId;
+            const user = arrUserInfo.find(user => user === calleeId);
+            if (user) {
+                console.log(calleeId);
+                global._io.to(calleeId).emit("SERVER_CALLVIDEO", {
+                    callerId: callerId,
+                    calleeId: calleeId
+                });
+                console.log("Gửi tới người nhận ");
+            }
+            else {
+                console.log("Không tìm thấy người nhận.");
+            }
+        });
+        socket.on("CLIENT_LOGIN", (userId) => {
+            const user = arrUserInfo.find(user => user === userId);
+            if (!user) {
+                arrUserInfo.push(userId);
+            }
+            else {
+            }
+            console.log(arrUserInfo);
+            socket.join(userId);
+        });
     });
 });
 exports.chatSocket = chatSocket;
