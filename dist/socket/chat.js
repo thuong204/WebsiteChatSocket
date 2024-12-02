@@ -123,6 +123,7 @@ const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
             }
         });
         socket.on("CLIENT_LOGIN", (userId) => {
+            console.log("ok");
             const user = arrUserInfo.find(user => user === userId);
             if (!user) {
                 arrUserInfo.push(userId);

@@ -1,9 +1,7 @@
 export const peer = new Peer(); // Tạo peer mới
 const socketPeer = io()
 let localStream;
-// Hiển thị ID Peer của chính mình và đăng ký với server
-const myId = document.querySelector("[myid]").getAttribute("myid")
-// Hiển thị ID Peer của chính mình
+
 peer.on('open', (id) => {
     alert(`Peer ID của bạn: ${id}`);
 });
@@ -75,10 +73,7 @@ socketPeer.on("SERVER_CALLVIDEO", (data) => {
 });
 
 peer.on('call', (call) => {
-    // Đáp lại cuộc gọi từ người khác
-    call.answer(localStream); // Trả lời cuộc gọi với stream của mình
-
-    // Nhận stream từ người gọi
+    call.answer(localStream); 
     call.on('stream', (remoteStream) => {
         const remoteVideo = document.getElementById('remote-video');
         remoteVideo.srcObject = remoteStream;

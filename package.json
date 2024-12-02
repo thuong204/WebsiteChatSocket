@@ -30,7 +30,9 @@
     "fs-extra": "^11.2.0",
     "mongoose": "^8.7.2",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.16",
     "p-limit": "^6.1.0",
+    "passport": "^0.7.0",
     "pug": "^3.0.3",
     "socket.io": "^4.8.1",
     "streamifier": "^0.1.1",
@@ -45,7 +47,7 @@
     "@types/node": "^22.7.8",
     "@types/streamifier": "^0.1.2",
     "nodemon": "^3.1.7",
-    "pre-commit": "^1.2.2",
+    "pre-commit": "^1.0.10",
     "socket.io": "^4.8.1",
     "ts-node": "^10.9.2"
   }

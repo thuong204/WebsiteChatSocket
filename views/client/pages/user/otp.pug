@@ -1,0 +1,28 @@
+extends ../../layouts/defaultUser.pug
+include ../../mixins/alert.pug
+block main 
+    +alert-success(3000)
+    +alert-error(3000)
+    .container.body-forgot-password
+        .row.justify-content-center
+            .col-xl-4.col-lg-5.col-md-7.col-sm-9
+                .text-center.logo
+                    img(src="https://cryptologos.cc/logos/chatcoin-chat-logo.png", alt="" width="50px")
+                    a.logo(href="") ConnectMe
+                form(action="/user/password/otp" method="post")
+                    .otp-password-box
+                        .forgot-password-header.mb-3 
+                            h3 Nhập mã OTP xác thực
+                        .input-box
+                            input.input-lock(type="text" name="email" autocomplete="off" value= email required readonly)
+                            label.focus(for="email") Email
+                        .input-box
+                            input.input-field(type="text" name="otp" autocomplete="off" required)
+                            label(for="otp") Mã OTP
+                        .input-box
+                            button.input-submit.btn.btn-primary(type="submit") Xác nhận 
+                        .send-otp
+                            a(href="send-otp").text-decoration-none.text-primary Gửi lại mã xác nhận
+
+                        
+

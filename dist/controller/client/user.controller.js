@@ -12,8 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyotp = exports.registerPost = exports.loginPost = exports.register = exports.login = void 0;
+exports.resetPasswordPost = exports.resetPassword = exports.otpPasswordPost = exports.otpPassword = exports.forgotPasswordPost = exports.forgotPassword = exports.logout = exports.verifyotp = exports.registerPost = exports.loginPost = exports.register = exports.login = void 0;
 const user_model_1 = __importDefault(require("../../model/user.model"));
+const generate_1 = require("../../helpers/generate");
+const sendmail_1 = require("../../helpers/sendmail");
+const forgotpassword_model_1 = __importDefault(require("../../model/forgotpassword.model"));
 const login = (req, res) => {
     res.render("client/pages/user/login", {
         pageTitle: "Đăng nhập"
@@ -95,3 +98,81 @@ const verifyotp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.verifyotp = verifyotp;
+const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.clearCookie("tokenUser");
+    res.redirect("/user/login");
+});
+exports.logout = logout;
+const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.render("client/pages/user/forgotpassword", {
+        pageTitle: "Quên mật khẩu"
+    });
+});
+exports.forgotPassword = forgotPassword;
+const forgotPasswordPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
+    const user = yield user_model_1.default.findOne({
+        email: email,
+        deleted: false
+    });
+    if (!user) {
+        req.flash("Error", "Email không tồn tại. Vui lòng thử lại.");
+        res.redirect("back");
+        return;
+    }
+    const objectForgotPassword = {
+        email: email,
+        otp: "",
+        expireAt: Date.now()
+    };
+    objectForgotPassword.otp = (0, generate_1.generateRandomNumber)(4);
+    const forgotPassword = new forgotpassword_model_1.default(objectForgotPassword);
+    yield forgotPassword.save();
+    const subject = `Mã OTP xác minh lấy lại mật khẩu`;
+    const html = `
+        Mã OTP xác minh lấy lại mật khẩu là <b> ${objectForgotPassword.otp} </b>. Lưu ý không để lộ mã OTP. Thời hạn sử dụng mã là 3 phút
+    `;
+    (0, sendmail_1.sendMail)(email, subject, html);
+    res.redirect(`/user/password/otp?email=${email}`);
+});
+exports.forgotPasswordPost = forgotPasswordPost;
+const otpPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.render("client/pages/user/otp", {
+        pageTitle: "Nhập OTP",
+        email: req.query.email
+    });
+});
+exports.otpPassword = otpPassword;
+const otpPasswordPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const otp = req.body.otp;
+    const email = req.body.email;
+    const otpPassword = yield forgotpassword_model_1.default.findOne({
+        otp: otp,
+        email: email
+    });
+    if (!otpPassword) {
+        req.flash("Error", "Mã OTP không chính xác hoặc đã hét hạn. Vui lòng thử lại.");
+        res.redirect("back");
+    }
+    const user = yield user_model_1.default.findOne({
+        email: email
+    });
+    res.cookie("tokenUser", user.tokenUser);
+    res.redirect("/user/password/reset");
+});
+exports.otpPasswordPost = otpPasswordPost;
+const resetPassword = (req, res) => {
+    res.render("client/pages/user/changepassword");
+};
+exports.resetPassword = resetPassword;
+const resetPasswordPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const password = req.body.password;
+    yield user_model_1.default.updateOne({
+        tokenUser: req.cookies.tokenUser
+    }, {
+        password: password
+    });
+    req.flash("Success", "Thay đổi mật khẩu thành công");
+    res.redirect("/chat");
+});
+exports.resetPasswordPost = resetPasswordPost;

@@ -430,7 +430,7 @@ let idUserReceiver = document.querySelector("[userreceiveinfo]");
 if (idUserReceiver) {
     idUserReceiver = idUserReceiver.getAttribute("userreceiveinfo");
 }
-const userId = document.querySelector("[myId]").getAttribute("myId")
+const userId = document.querySelector("[myid]").getAttribute("myid")
 let localStream
 // Khi người gọi nhấn vào để gọi
 if (itemVideo) {
@@ -475,30 +475,33 @@ socket.emit("CLIENT_LOGIN", userId)
 socket.on("SERVER_CALLVIDEO", (data) => {
     console.log("Nhận yêu cầu gọi video từ: ", data.callerId);
 
-    // Hiển thị thông báo hoặc UI yêu cầu người nhận có muốn nhận cuộc gọi video không
-    const acceptCall = window.confirm("Bạn có muốn nhận cuộc gọi video  không?");
-
-    if (acceptCall) {
-        // Nếu người nhận đồng ý, gửi peerId của họ về server để người gọi có thể kết nối
-        const videoCallWindow = window.open(
-            `video/${data.callerId}`, // Đường dẫn tới trang video call
-            "_blank",          // Mở trong tab hoặc cửa sổ mới
-            "width=800,height=600,toolbar=no,location=no"
-        );
-        socket.emit("CLIENT_ACCEPT_CALL", {
-            userId: data.userId,
-        });
-        // Kiểm tra nếu cửa sổ bị chặn bởi trình duyệt
-        if (!videoCallWindow) {
-            alert("Cửa sổ bật lên bị chặn. Hãy bật popup trong trình duyệt của bạn.");
+    Swal.fire({
+        title: 'Yêu cầu cuộc gọi video',
+        text: `Bạn có muốn nhận cuộc gọi từ ${data.callerId}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Chấp nhận',
+        cancelButtonText: 'Từ chối'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const videoCallWindow = window.open(
+                `video/${data.callerId}`,
+                "_blank",
+                "width=800,height=600,toolbar=no,location=no"
+            );
+            socket.emit("CLIENT_ACCEPT_CALL", {
+                userId: data.userId,
+            });
+            if (!videoCallWindow) {
+                alert("Cửa sổ bật lên bị chặn. Hãy bật popup trong trình duyệt của bạn.");
+            }
+        } else {
+            socket.emit("CLIENT_REJECT_CALL", {
+                userId: data.userId
+            });
+            console.log("Cuộc gọi bị từ chối");
         }
-    } else {
-        // Nếu người nhận từ chối, gửi tín hiệu từ chối về server
-        socket.emit("CLIENT_REJECT_CALL", {
-            userId: data.userId
-        });
-        console.log("Cuộc gọi bị từ chối");
-    }
+    });
 });
 
 
