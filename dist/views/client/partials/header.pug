@@ -2,7 +2,7 @@ header
     nav.navbar.navbar-light.bg-light.navbar-expand-sm.navbar-header
         .container-fluid
             .navbar-logo
-                a.navbar-branch.mb-0.branch-name.justify-content-center.align-items-center(href="")
+                a.navbar-branch.mb-0.branch-name.justify-content-center.align-items-center(href="/chat")
                     img(class="d-inline-block align-top"
                         src="https://cryptologos.cc/logos/chatcoin-chat-logo.png"
                         width="45" height="45") 
@@ -10,10 +10,10 @@ header
                 div(class="d-flex")
                     ul(class="navbar-nav navbar-list")
                         li(class="nav-item active item-chat")
-                            a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="#" role="button")  
+                            a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="/chat" role="button")  
                                 img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729677339/mcpxhnkpdjnew41sdfig.png" width="20" height="20" class="rounded-circle ")
                         li(class="nav-item item-contact")
-                            a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="#" role="button" )  
+                            a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="/friends" role="button" )  
                                 img(src="https://res.cloudinary.com/dsvgomynt/image/upload/v1729677175/nxyus2m8fcsmik2be90a.png" width="25" height="25" class="rounded-circle")
                         li(class="nav-item item-chatbox")
                             a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item" href="#" role="button" )  
@@ -36,8 +36,12 @@ header
                                 li  
                                     a(class="dropdown-item" href="#") Profile
                         li(class="nav-item dropdown") 
-                            a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item background-none" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") 
-                                img(class="rounded-circle img-avatar" src=user.avatar width="45" height ="45")
+                            a(class="nav-link rounded-circle d-flex justify-content-center align-items-center list-item background-none" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false")
+                              if(user)  
+                                img(class="rounded-circle img-avatar" src=user.avatar  width="45" height ="45")
+                              else  
+                                 img(class="rounded-circle img-avatar" src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"  width="45" height ="45")
+
                             ul(class="dropdown-menu dropdown-menu-end")
                                 li  
                                     a(class="dropdown-item" href="#") Profile

@@ -1,0 +1,17 @@
+mixin aside-list(pageTitle)
+    .aside-nav.aside-list-friends
+        .nav-item(class=pageTitle == "Tìm kiếm" ? "active" : "")
+            a.btn(href="/friends/find")
+                span Tìm kiếm 
+        .nav-item(class=pageTitle == "Bạn bè" ? "active" : "")
+            a.btn(href="/friends")
+                span Danh sách bạn bè
+        .nav-item(class=pageTitle == "Nhóm và cộng đồng" ? "active" : "")
+            a.btn(href="/friends/groups")
+                span Danh sách nhóm và cộng đồng
+        .nav-item(class=pageTitle == "Lời mời kết bạn" ? "active" : "")
+            a.btn(href="/friends/friend-requests")
+                span Lời mời kết bạn
+        .nav-item(class=pageTitle == "Gợi ý kết bạn" ? "active" : "")
+            a.btn(href="/friends/suggestions")
+                span Gợi ý kết bạn

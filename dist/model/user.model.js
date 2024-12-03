@@ -41,6 +41,10 @@ const userSchema = new mongoose_1.default.Schema({
         type: String,
         default: "offline"
     },
+    listFriends: {
+        type: Array,
+        default: []
+    },
     avatar: {
         type: String,
         default: "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"
@@ -52,6 +56,10 @@ const userSchema = new mongoose_1.default.Schema({
     status: {
         type: String,
         default: "active"
+    },
+    lastOnline: {
+        type: Date,
+        default: Date.now()
     },
     dateOfBirth: Date,
     phone: String,

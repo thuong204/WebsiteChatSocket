@@ -8,6 +8,8 @@ import * as uploadToCloudinary from "../helpers/uploadToCloudinary"
 interface MessageData {
     content: string,
     images: [],
+    roomId: String,
+    idUserReceiver: String,
     files: {
         buffer: Buffer,
         name: string
@@ -22,13 +24,13 @@ const arrUserInfo: UserInfo[] = [];
 export const chatSocket = async (res: Response) => {
     const userId = res.locals.user.id
 
-    const fullName = res.locals.user.fullNamez
+    const fullName = res.locals.user.fullName
     global._io.once('connection', (socket) => {
         socket.on('CLIENT_SEND_MESSAGE', async (data: MessageData) => {
             const room = await Room.findOne({
-                deleted: false,
-                user_id: res.locals.user.id
-            })
+                deleted: false, // Phòng chưa bị xóa
+                _id: data.roomId
+            });
             let images = []
 
 

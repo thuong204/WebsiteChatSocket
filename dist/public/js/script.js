@@ -9,37 +9,43 @@ const scrollList = document.querySelector(".chat-body.scrollable-list");
 const scrollToBottom = () => {
     scrollList.scrollTop = scrollList.scrollHeight;
 };
-scrollToBottom()
+if (scrollList) {
+    scrollToBottom()
+}
+
 
 // Cờ để theo dõi trạng thái
 let isExpanded = false;
 const inputMessage = document.querySelector('.input-message'); // Lấy trường nhập liệu
 
-// Sự kiện click
-detailItem.addEventListener('click', (e) => {
-    e.preventDefault(); // Ngăn chặn hành động mặc định của link
+//0 Sự kiện click
+if (detailItem) {
+    detailItem.addEventListener('click', (e) => {
+        e.preventDefault(); // Ngăn chặn hành động mặc định của link
 
-    if (isExpanded) {
-        // Nếu đang mở rộng, trở lại kích thước ban đầu
-        colXl7.classList.remove('col-xl-9');
-        colXl7.classList.add('col-xl-6');
-        detailItemActive.classList.add("active")
-        inputMessage.style.width = '430px';
-        colXl2.style.display = 'block';
-        isExpanded = false;
-    } else {
-        // Mở rộng col-xl-7 thành col-xl-9
-        colXl7.classList.remove('col-xl-6');
-        colXl7.classList.add('col-xl-9');
-        detailItemActive.classList.remove("active")
-        inputMessage.style.width = '780px';
-        colXl2.style.display = 'none'; // Ẩn col-xl-2
-        isExpanded = true;
-    }
-});
+        if (isExpanded) {
+            // Nếu đang mở rộng, trở lại kích thước ban đầu
+            colXl7.classList.remove('col-xl-9');
+            colXl7.classList.add('col-xl-6');
+            detailItemActive.classList.add("active")
+            inputMessage.style.width = '430px';
+            colXl2.style.display = 'block';
+            isExpanded = false;
+        } else {
+            // Mở rộng col-xl-7 thành col-xl-9
+            colXl7.classList.remove('col-xl-6');
+            colXl7.classList.add('col-xl-9');
+            detailItemActive.classList.remove("active")
+            inputMessage.style.width = '780px';
+            colXl2.style.display = 'none'; // Ẩn col-xl-2
+            isExpanded = true;
+        }
+    });
+}
 
 
-const listUserChats = document.querySelectorAll("[data-user]")
+
+const listUserChats = document.querySelectorAll(".aside-item-chat.chat-main")
 const mediaImage = document.querySelector(".media-group-chat .media-img img")
 const fullName = document.querySelector(".user-info h6.fullname-chat")
 const mediaImageDetail = document.querySelector(".media-group .media img")
@@ -142,6 +148,55 @@ listUserChats.forEach(item => {
 
                 const itemActive = document.querySelector(".aside-item-chat.active")
 
+                const usersStatus = document.querySelectorAll(".user-message .status")
+
+
+                //cap nhat thoi gian hoat dong
+                usersStatus.forEach((status) => {
+                    if (infoReceiver.statusOnline === "online") {
+                        status.textContent = "Đang hoạt động";
+                    } else {
+                        const lastOnline = new Date(infoReceiver.lastOnline);
+                        const now = new Date();
+                        const diff = now.getTime() - lastOnline.getTime(); // Tính chênh lệch thời gian (ms)
+
+                        const seconds = Math.floor(diff / 1000);
+                        const minutes = Math.floor(seconds / 60);
+                        const hours = Math.floor(minutes / 60);
+                        const days = Math.floor(hours / 24);
+
+                        if (seconds < 60) {
+                            status.textContent = `Hoạt động ${seconds} giây trước`;
+                        } else if (minutes < 60) {
+                            status.textContent = `Hoạt động ${minutes} phút trước`;
+                        } else if (hours < 24) {
+                            status.textContent = `Hoạt động ${hours} giờ trước`;
+                        } else {
+                            status.textContent = `Hoạt động ${days} ngày trước`;
+                        }
+                    }
+                });
+
+
+                //cap nhat nut hoat dong
+                const dotActive = document.querySelector("[dot-active]")
+
+                if (infoReceiver.statusOnline == "online") {
+                    dotActive.classList.remove("d-none")
+                }
+                else {
+                    dotActive.classList.add("d-none")
+                }
+
+                //cap nhatid
+                const userreceive = document.querySelector("[userreceiveinfo]")
+                userreceive.setAttribute("userreceiveinfo", infoReceiver._id)
+
+                //cap nhat room
+                const room = document.querySelector("[room]")
+                room.setAttribute("room", data.data.roomId)
+
+
                 itemActive.classList.remove("active")
                 item.classList.add("active")
 
@@ -162,7 +217,7 @@ listUserChats.forEach(item => {
 
             })
             .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
+                console.log('There was a problem with the fetch operation:', error);
             });
 
     })
@@ -222,10 +277,21 @@ const initializeAudioPlayers = () => {
 
 initializeAudioPlayers();
 
-document.addEventListener('audioListUpdated', function() {
+document.addEventListener('audioListUpdated', function () {
     initializeAudioPlayers();
 })
 // Gọi hàm để khởi tạo tất cả các audio players
 
+//xu li trang chat hello
 
+const listUserChatsHello = document.querySelectorAll(".aside-item-chat.chat-hello")
+listUserChatsHello.forEach(item => {
+    item.addEventListener("click", () => {
+        console.log("click")
+        const room = item.getAttribute("room")
+        window.location.href = `/chat/${room}`
+    })
+
+
+})
 

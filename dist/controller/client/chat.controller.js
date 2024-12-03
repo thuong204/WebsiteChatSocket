@@ -40,8 +40,8 @@ const room_model_1 = __importDefault(require("../../model/room.model"));
 const message_model_1 = __importDefault(require("../../model/message.model"));
 const chatSocket = __importStar(require("../../socket/chat"));
 const user_model_1 = __importDefault(require("../../model/user.model"));
+const getLastOnline_1 = require("../../helpers/getLastOnline");
 const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    chatSocket.chatSocket(res);
     const rooms = yield room_model_1.default.find({
         deleted: false,
         user_id: res.locals.user.id
@@ -56,9 +56,18 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         status: "active",
         _id: { $in: userIds }
     });
-    res.render("client/pages/chat/index.pug", {
-        pageTitle: "Trang chat",
-        listUsers: listUsers
+    const enhancedListUsers = listUsers.map(user => {
+        const specificRoom = rooms.find(room => {
+            const members = room.user_id.map(id => id.toString());
+            return (members.includes(user._id.toString()) &&
+                members.includes(res.locals.user.id.toString()) &&
+                members.length === 2);
+        });
+        return Object.assign(Object.assign({}, user.toObject()), { room_id: specificRoom ? specificRoom._id : null });
+    });
+    res.render("client/pages/chat/chathello.pug", {
+        pageTitle: "Trang chủ",
+        listUsers: enhancedListUsers
     });
 });
 exports.index = index;
@@ -81,7 +90,9 @@ const fetchMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             deleted: false,
             status: "active",
             _id: filteredUserIds
-        }).select("fullName avatar");
+        }).select("id fullName avatar lastOnline statusOnline");
+        const lastOnline = (0, getLastOnline_1.getLastOnlineTime)(user.lastOnline);
+        user["lastOnlineTime"] = lastOnline;
         res.json({
             "code": 200,
             "data": {
@@ -110,7 +121,7 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         deleted: false,
         status: "active",
         _id: filteredUserIds
-    }).select("fullName avatar");
+    }).select("fullName avatar statusOnline lastOnline");
     const rooms = yield room_model_1.default.find({
         deleted: false,
         user_id: res.locals.user.id
@@ -131,10 +142,13 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         createdAt: "desc"
     });
     messages.reverse();
+    const lastOnline = (0, getLastOnline_1.getLastOnlineTime)(user.lastOnline);
+    user["lastOnlineTime"] = lastOnline;
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Trang chat",
         messages: messages,
         userreceive: user,
+        room: userInRoom,
         listUsers: listUsers
     });
 });

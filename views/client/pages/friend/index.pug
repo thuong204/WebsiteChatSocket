@@ -1,0 +1,37 @@
+extends ../../layouts/default.pug
+include ../../mixins/aside-list.pug
+block main
+    .main-content
+        .row
+            // Left Sidebar
+            .col-xl-3.col-lg-4.col-md-5.col-sm-5.aside-base
+                +aside-list(pageTitle)
+            // Right Content Area
+            .col-xl-9.col-lg-8.col-md-7.col-sm-7.main-content-right
+                .friend-header
+                    h2 Danh sách bạn bè
+                    input(type="text" placeholder="Tìm bạn" class="friend-search")
+                    select(class="sort-dropdown")
+                        option(value="az") Tên (A-Z)
+                        option(value="za") Tên (Z-A)
+                    select(class="sort-dropdown")
+                        option(value="all") Tất cả
+                        option(value="type") Phân loại
+                .friend-list
+                    .friend-item
+                        img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1721740436/pse7arjm9ojlgxbebsup.jpg" alt="Trần Công thường" class="friend-img")
+                        p Trần Công Thường
+                    .friend-item
+                        img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1721740436/pse7arjm9ojlgxbebsup.jpg" alt="Trần Công thường" class="friend-img")
+                        p Trần Công Thường
+                    .friend-item
+                        img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1721740436/pse7arjm9ojlgxbebsup.jpg" alt="Trần Công thường" class="friend-img")
+                        p Trần Công Thường
+                    .friend-item
+                        img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1721740436/pse7arjm9ojlgxbebsup.jpg" alt="Trần Công thường" class="friend-img")
+                        p Trần Công Thường
+
+
+                    // Additional friends...
+
+

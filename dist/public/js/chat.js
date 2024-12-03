@@ -7,6 +7,8 @@ const scrollToBottom = () => {
 };
 const form = document.getElementById("form-send")
 
+let idUserReceiver = document.querySelector("[userreceiveinfo]");
+
 
 const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-image', {
     multiple: true,
@@ -25,6 +27,8 @@ if (form) {
         const files = upload.cachedFileArray || []
         const images = files.filter(file => file.type.startsWith("image/")) || [];
 
+        
+
         const otherFiles = files.filter(file => !file.type.startsWith("image/")).map(file => ({
             buffer: file, // hoặc file.arrayBuffer() nếu bạn cần buffer
             name: file.name // Lưu tên file
@@ -39,13 +43,15 @@ if (form) {
                 type: "audio/wav" // Định dạng file ghi âm
             };
         }
+        const roomId = document.querySelector("[room]").getAttribute("room")
 
 
         if (content || images.length > 0 || otherFiles.length > 0 || audioBlob) {
             socket.emit("CLIENT_SEND_MESSAGE", {
                 content: content,
                 images: images,
-                files: [...otherFiles, audioFile].filter(Boolean)
+                files: [...otherFiles, audioFile].filter(Boolean),
+                roomId: roomId
             })
             audioBlob = ""
             e.target.elements.content.value = ""
@@ -426,7 +432,6 @@ let myId; // Kết nối với server
 
 // Bắt sự kiện click để thực hiện cuộc gọi
 const itemVideo = document.querySelector(".item-video");
-let idUserReceiver = document.querySelector("[userreceiveinfo]");
 if (idUserReceiver) {
     idUserReceiver = idUserReceiver.getAttribute("userreceiveinfo");
 }

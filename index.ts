@@ -11,6 +11,8 @@ import * as database from "./config/database"
 import { Server, Socket } from "socket.io";
 import MongoStore from "connect-mongo";
 import cors from"cors"
+import { configurePassport, configureSession } from './config/passportConfig';
+// import { configurePassport, configureSession } from './config/passportConfig';
 
 
 
@@ -20,18 +22,6 @@ const app: Express = express()
 const port:number |string = process.env.PORT || 3000;
 
 app.use(cookieParser("JHGJKLKLGFLJK"))
-app.use(
-  session({
-    secret: "keyboard cat" ,
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }), // Thay bằng URI của bạn
-    cookie: {
-      maxAge: 60000,
-      secure: process.env.NODE_ENV === 'production',
-    },
-  })
-);
 
 database.connect();
 app.use(flash())
@@ -54,6 +44,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(`${__dirname}/public`))
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug")
+
+configureSession(app);
+configurePassport(app);
+
 clientRoutes(app)
 
 server.listen(port, () => {

@@ -23,14 +23,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const chat_route_1 = require("./chat.route");
-const user_route_1 = require("./user.route");
-const authUser = __importStar(require("../../middlewares/clients/auth.middleware"));
-const infoUser = __importStar(require("../../middlewares/clients/user.middleware"));
-const friend_route_1 = require("./friend.route");
-const clientRoutes = (app) => {
-    app.use(`/chat`, authUser.authUser, infoUser.infoUser, chat_route_1.chatRoutes);
-    app.use("/user", user_route_1.userRoutes);
-    app.use("/friends", authUser.authUser, infoUser.infoUser, friend_route_1.friendRoutes);
-};
-exports.default = clientRoutes;
+exports.friendRoutes = void 0;
+const express_1 = require("express");
+const friendController = __importStar(require("../../controller/client/friend.controller"));
+const router = (0, express_1.Router)();
+router.get("/", friendController.index);
+router.get("/suggestions", friendController.suggestion);
+exports.friendRoutes = router;

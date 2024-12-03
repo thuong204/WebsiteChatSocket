@@ -43,12 +43,12 @@ const uploadToCloudinary = __importStar(require("../helpers/uploadToCloudinary")
 const arrUserInfo = [];
 const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = res.locals.user.id;
-    const fullName = res.locals.user.fullNamez;
+    const fullName = res.locals.user.fullName;
     global._io.once('connection', (socket) => {
         socket.on('CLIENT_SEND_MESSAGE', (data) => __awaiter(void 0, void 0, void 0, function* () {
             const room = yield room_model_1.default.findOne({
                 deleted: false,
-                user_id: res.locals.user.id
+                _id: data.roomId
             });
             let images = [];
             for (const imageBuffer of data.images) {

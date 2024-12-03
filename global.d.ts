@@ -2,7 +2,7 @@
 import { Server } from "socket.io";
 
 declare global {
-    var _io: Server; // Khai báo _io có kiểu là Server
+    var _io: Server;
 }
 
-export {}; // Đảm bảo file này được coi là một module
+export { }; // Đảm bảo file này được coi là một module

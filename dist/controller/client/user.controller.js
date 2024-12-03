@@ -12,20 +12,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPasswordPost = exports.resetPassword = exports.otpPasswordPost = exports.otpPassword = exports.forgotPasswordPost = exports.forgotPassword = exports.logout = exports.verifyotp = exports.registerPost = exports.loginPost = exports.register = exports.login = void 0;
+exports.loginSuccessFacebook = exports.loginSuccessGoogle = exports.resetPasswordPost = exports.resetPassword = exports.otpPasswordPost = exports.otpPassword = exports.forgotPasswordPost = exports.forgotPassword = exports.logout = exports.verifyotp = exports.registerPost = exports.loginPost = exports.register = exports.login = void 0;
 const user_model_1 = __importDefault(require("../../model/user.model"));
 const generate_1 = require("../../helpers/generate");
 const sendmail_1 = require("../../helpers/sendmail");
 const forgotpassword_model_1 = __importDefault(require("../../model/forgotpassword.model"));
-const login = (req, res) => {
-    res.render("client/pages/user/login", {
-        pageTitle: "Đăng nhập"
-    });
-};
+const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.cookies.tokenUser) {
+        const user = yield user_model_1.default.findOne({
+            tokenUser: req.cookies.tokenUser
+        });
+        res.redirect("/user/chat");
+    }
+    else {
+        res.render("client/pages/user/login", {
+            pageTitle: "Đăng nhập"
+        });
+    }
+});
 exports.login = login;
 const register = (req, res) => {
     res.render("client/pages/user/register", {
-        pageTitle: "Đăng kis"
+        pageTitle: "Đăng kí"
     });
 };
 exports.register = register;
@@ -99,6 +107,13 @@ const verifyotp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.verifyotp = verifyotp;
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const tokenUser = req.cookies.tokenUser;
+    yield user_model_1.default.updateOne({
+        tokenUser: tokenUser
+    }, {
+        statusOnline: "offine",
+        lastOnline: new Date()
+    });
     res.clearCookie("tokenUser");
     res.redirect("/user/login");
 });
@@ -176,3 +191,35 @@ const resetPasswordPost = (req, res) => __awaiter(void 0, void 0, void 0, functi
     res.redirect("/chat");
 });
 exports.resetPasswordPost = resetPasswordPost;
+const loginSuccessGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.user) {
+        const user = req.user;
+        if (user.status === "inactive") {
+            req.flash("error", "Tài khoản đã bị khóa");
+        }
+        else {
+            res.cookie("tokenUser", user.tokenUser);
+            res.redirect("/chat");
+        }
+    }
+    else {
+        res.redirect("/user/login");
+    }
+});
+exports.loginSuccessGoogle = loginSuccessGoogle;
+const loginSuccessFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.user) {
+        const user = req.user;
+        if (user.status === "inactive") {
+            req.flash("error", "Tài khoản đã bị khóa");
+        }
+        else {
+            res.cookie("tokenUser", user.tokenUser);
+            res.redirect("/");
+        }
+    }
+    else {
+        res.redirect("/user/login");
+    }
+});
+exports.loginSuccessFacebook = loginSuccessFacebook;

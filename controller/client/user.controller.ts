@@ -1,18 +1,29 @@
 import { Request, Response } from "express"
 import User from "../../model/user.model"
-import {generateRandomNumber,generateRandomString} from "../../helpers/generate"
+import IUser from "../../model/user.model"
+import { generateRandomNumber, generateRandomString } from "../../helpers/generate"
 import { sendOTP, verifyOTP } from '../../helpers/otp';
-import {sendMail} from "../../helpers/sendmail"
+import { sendMail } from "../../helpers/sendmail"
 import ForgotPassword from "../../model/forgotpassword.model";
-export const login = (req: Request, res: Response) => {
-    res.render("client/pages/user/login", {
-        pageTitle: "Đăng nhập"
-    })
+export const login = async (req: Request, res: Response) => {
+
+    if (req.cookies.tokenUser) {
+        const user = await User.findOne({
+            tokenUser: req.cookies.tokenUser
+        })
+        res.redirect("/user/chat")
+    }
+    else {
+        res.render("client/pages/user/login", {
+            pageTitle: "Đăng nhập"
+        })
+
+    }
 
 }
 export const register = (req: Request, res: Response) => {
     res.render("client/pages/user/register", {
-        pageTitle: "Đăng kis"
+        pageTitle: "Đăng kí"
     })
 
 }
@@ -40,7 +51,7 @@ export const loginPost = async (req: Request, res: Response) => {
                 await user.updateOne({
                     statusOnline: "online"
                 })
-                global._io.once("connection",(socket) =>{
+                global._io.once("connection", (socket) => {
                     socket.broadcast.emit("SERVER_RETURN_USER_ONLINE", user.id)
                 })
                 res.redirect("/chat")
@@ -89,18 +100,26 @@ export const verifyotp = async (req: Request, res: Response) => {
         pageTitle: "Xác thực OTP"
     })
 }
-export const logout = async(req:Request,res:Response) =>{
+export const logout = async (req: Request, res: Response) => {
+
+    const tokenUser = req.cookies.tokenUser
+    await User.updateOne({
+        tokenUser:tokenUser
+    },{
+        statusOnline:"offine",
+        lastOnline: new Date()
+    })
     res.clearCookie("tokenUser")
     res.redirect("/user/login")
 }
 
-export const forgotPassword = async(req:Request, res:Response) =>{
-    res.render("client/pages/user/forgotpassword",{
+export const forgotPassword = async (req: Request, res: Response) => {
+    res.render("client/pages/user/forgotpassword", {
         pageTitle: "Quên mật khẩu"
     })
 }
 
-export const forgotPasswordPost  =async(req:Request,res:Response) =>{
+export const forgotPasswordPost = async (req: Request, res: Response) => {
     const email = req.body.email
     const user = await User.findOne({
         email: email,
@@ -128,36 +147,36 @@ export const forgotPasswordPost  =async(req:Request,res:Response) =>{
 
     sendMail(email, subject, html)
     res.redirect(`/user/password/otp?email=${email}`)
-} 
+}
 
-export const otpPassword = async(req:Request,res:Response) =>{
-    res.render("client/pages/user/otp",{
-        pageTitle:"Nhập OTP",
-        email:req.query.email
+export const otpPassword = async (req: Request, res: Response) => {
+    res.render("client/pages/user/otp", {
+        pageTitle: "Nhập OTP",
+        email: req.query.email
     })
 }
-export const otpPasswordPost = async(req:Request, res:Response) =>{
-    const otp  = req.body.otp;
-    const email =req.body.email
+export const otpPasswordPost = async (req: Request, res: Response) => {
+    const otp = req.body.otp;
+    const email = req.body.email
     const otpPassword = await ForgotPassword.findOne({
-        otp:otp,
-        email:email
-    }) 
-    if(!otpPassword){
-        req.flash("Error","Mã OTP không chính xác hoặc đã hét hạn. Vui lòng thử lại.")
-     
-        res.redirect("back")
-    }
-    const user = await  User.findOne({
+        otp: otp,
         email: email
     })
-    res.cookie("tokenUser",  user.tokenUser)
+    if (!otpPassword) {
+        req.flash("Error", "Mã OTP không chính xác hoặc đã hét hạn. Vui lòng thử lại.")
+
+        res.redirect("back")
+    }
+    const user = await User.findOne({
+        email: email
+    })
+    res.cookie("tokenUser", user.tokenUser)
     res.redirect("/user/password/reset")
 }
-export const  resetPassword = (req:Request, res:Response) => {
+export const resetPassword = (req: Request, res: Response) => {
     res.render("client/pages/user/changepassword")
 }
-export const resetPasswordPost = async (req:Request, res:Response) => {
+export const resetPasswordPost = async (req: Request, res: Response) => {
     const password = req.body.password
     await User.updateOne({
         tokenUser: req.cookies.tokenUser
@@ -167,3 +186,45 @@ export const resetPasswordPost = async (req:Request, res:Response) => {
     req.flash("Success", "Thay đổi mật khẩu thành công")
     res.redirect("/chat")
 }
+
+
+
+interface IUser {
+    id: string;
+    googleId: string;
+    email: string;
+    name: string;
+    tokenUser: string;
+    status: string
+}
+
+
+export const loginSuccessGoogle = async (req: Request, res: Response) => {
+
+    if (req.user) {
+        const user = req.user as IUser
+
+        if (user.status === "inactive") {
+            req.flash("error", "Tài khoản đã bị khóa");
+        } else {
+            res.cookie("tokenUser", user.tokenUser);
+            res.redirect("/chat");
+        }
+    } else {
+        res.redirect("/user/login");
+    }
+};
+
+export const loginSuccessFacebook = async (req: Request, res: Response) => {
+    if (req.user) {
+        const user = req.user as IUser
+        if (user.status === "inactive") {
+            req.flash("error", "Tài khoản đã bị khóa");
+        } else {
+            res.cookie("tokenUser", user.tokenUser);
+            res.redirect("/");
+        }
+    } else {
+        res.redirect("/user/login");
+    }
+};

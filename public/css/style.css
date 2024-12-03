@@ -1,6 +1,6 @@
 /* header  */
 * {
-    max-width: 100vw; 
+    max-width: 100vw;
     box-sizing: border-box;
     /* Đảm bảo padding và border không làm tăng chiều rộng */
 }
@@ -370,9 +370,16 @@ ul li.aside-item-chat .media img {
 }
 
 ul li.aside-item-chat .user-info {
-    padding-top: 10px !important;
+    padding-top: 5px !important;
 
 }
+
+ul li.aside-item-chat .user-info h6 {
+    margin-top: 5px !important;
+
+}
+
+
 
 .media-col {
     flex-direction: column;
@@ -396,6 +403,7 @@ ul li.aside-item-chat .user-info {
     margin-right: 10px;
     font-weight: 400;
     font-size: 14px;
+    margin-top: -5px;
 }
 
 span.time {
@@ -436,14 +444,18 @@ span.time {
 
 .media-chat .user-info h6 {
     padding: 0;
-    margin: 0 !important;
-
-
+    margin-top: -5px;
+    margin-left: -5px;
 }
 
 .media-chat h6.message {
     font-size: 10px;
     padding-top: 5px;
+}
+
+.media-chat .status {
+    margin-top: -5px;
+    margin-left: -5px;
 }
 
 .media-group-chat {
@@ -506,7 +518,7 @@ li.nav-item:hover a.nav-link {
     background-color: #f9f9f9;
     overflow-y: auto;
     height: 500px;
-    max-height:800px;
+    max-height: 800px;
     border-bottom: 1px solid #ddd;
     border-right: 1px solid #ddd;
 }
@@ -695,6 +707,11 @@ ul.list-message-item>li {
     align-items: center;
 }
 
+li.item-mic {
+    margin-left: -10px;
+    margin-right: 5px;
+}
+
 /* cot 3  */
 .detail-content {
     margin: 0;
@@ -810,38 +827,46 @@ span.icon {
     background-color: #bfdbfe;
 
 }
-.tooltip{
+
+.tooltip {
     visibility: hidden;
 }
-.tooltip.shown{
+
+.tooltip.shown {
     visibility: visible;
     opacity: 1;
 }
-.reply-image img{
+
+.reply-image img {
     margin: 2px;
     border-radius: 10px;
 }
-.label-container{
+
+.label-container {
     display: none !important;
 }
-.input-container{
+
+.input-container {
     display: none !important;
 }
-.image-preview{
+
+.image-preview {
     height: auto !important;
     background: transparent;
-    padding: 0!important;
+    padding: 0 !important;
     width: 430px !important;
     overflow-x: hidden;
     position: absolute;
     top: -90px;
-    border-radius: 0 !important  ;
+    border-radius: 0 !important;
 }
- .image-preview-item{
+
+.image-preview-item {
     background-size: contain !important;
-    width: 50px !important; 
+    width: 50px !important;
     height: 50px !important;
 }
+
 .file-preview {
     border: 1px solid #ddd;
     padding: 10px;
@@ -858,7 +883,8 @@ span.icon {
 }
 
 .file-preview::before {
-    content: "📄"; /* Biểu tượng tài liệu */
+    content: "📄";
+    /* Biểu tượng tài liệu */
     font-size: 20px;
     margin-right: 5px;
 }
@@ -879,17 +905,19 @@ span.icon {
     margin-left: auto;
     display: inline-block;
 }
+
 /* Điều khiển chung cho các nút */
 /* Điều khiển chung cho các nút */
 
-  
-  /* Ẩn tất cả các nút khi không cần thiết */
-  .d-none {
+
+/* Ẩn tất cả các nút khi không cần thiết */
+.d-none {
     display: none;
-  }
-  
-  /* Chỉnh vị trí cho nút ghi âm và exit */
-  .record-button, .exit-button {
+}
+
+/* Chỉnh vị trí cho nút ghi âm và exit */
+.record-button,
+.exit-button {
     position: relative;
     top: 0;
     left: 0;
@@ -898,22 +926,27 @@ span.icon {
     margin: auto;
     font-size: 22px;
     background-color: transparent;
-  }
-  
-  .exit-button {
+}
+
+.exit-button {
     display: none;
-  }
-  
-  .stop-button, .play-button, .pause-button {
+}
+
+.stop-button,
+.play-button,
+.pause-button {
     position: absolute !important;
     left: -450px;
-    top:20px;
+    top: 20px;
     transform: translate(-50%, -50%);
     font-size: 22px;
     background-color: transparent;
-    
-  }
-  .stop-button i, .play-button i, .pause-button i {
+
+}
+
+.stop-button i,
+.play-button i,
+.pause-button i {
     border: 2px solid black;
     border-radius: 20px;
     font-size: 16px;
@@ -922,66 +955,78 @@ span.icon {
     align-items: center;
     width: 32.8px;
     height: 28px;
-  }
-  .record-button i, .exit-button i {
+}
+
+.record-button i,
+.exit-button i {
     font-size: 18px;
     width: 16px;
     height: 16px;
-  }
-  
-  .audio-progress-bar {
+}
+
+.audio-progress-bar {
     width: 400px;
     background: rgb(193, 193, 247);
     border-radius: 5px;
-    position: absolute !important; 
+    position: absolute !important;
     outline: none;
     left: -430px;
-    top:0px;
-  }
-  .audio-progress-bar::-ms-track {
-    height: 50px; /* Đặt chiều cao của track cho IE */
+    top: 0px;
+}
+
+.audio-progress-bar::-ms-track {
+    height: 50px;
+    /* Đặt chiều cao của track cho IE */
     background: #ddd;
     border-radius: 10px;
     border: none;
-  }
-  
-  .audio-progress-bar::-webkit-slider-thumb {
-    width: 50px; /* Chiều rộng của nút kéo */
-    height: 50px; /* Chiều cao của nút kéo */
+}
+
+.audio-progress-bar::-webkit-slider-thumb {
+    width: 50px;
+    /* Chiều rộng của nút kéo */
+    height: 50px;
+    /* Chiều cao của nút kéo */
     background: black !important;
-    border-radius: 50%; /* Hình tròn */
+    border-radius: 50%;
+    /* Hình tròn */
     cursor: pointer;
     -webkit-appearance: none;
     appearance: none;
     position: relative;
-    top: 50%; /* Dịch chuyển nút kéo theo chiều dọc */
-    transform: translateY(-50%); /* Căn giữa nút kéo theo chiều dọc */
-  }
+    top: 50%;
+    /* Dịch chuyển nút kéo theo chiều dọc */
+    transform: translateY(-50%);
+    /* Căn giữa nút kéo theo chiều dọc */
+}
 
-  .audio-progress-bar::-webkit-slider-runnable-track {
-    height: 40px; /* Đặt chiều cao của track */
+.audio-progress-bar::-webkit-slider-runnable-track {
+    height: 40px;
+    /* Đặt chiều cao của track */
     background: rgb(193, 193, 247);
     align-items: center;
     vertical-align: middle;
     border-radius: 10px;
-  }
-  .audio-progress-bar::-ms-thumb {
-    width: 20px; /* Kích thước nút kéo */
-    background:black;
+}
+
+.audio-progress-bar::-ms-thumb {
+    width: 20px;
+    /* Kích thước nút kéo */
+    background: black;
     border-radius: 50%;
     height: 50px;
     cursor: pointer;
-  }
+}
 
- 
-  .time-info{
+
+.time-info {
     position: absolute !important;
     top: 7px;
     left: -80px;
     font-weight: bold;
-  }
+}
 
-  .audio-container {
+.audio-container {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -993,13 +1038,14 @@ span.icon {
 }
 
 .audio-container .custom-audio-player {
-    display: none; /* Ẩn điều khiển mặc định */
+    display: none;
+    /* Ẩn điều khiển mặc định */
 }
 
 .custom-play-button,
 .custom-pause-button {
     background-color: transparent;
-    color:black;
+    color: black;
     border: none;
     font-size: 14px;
     padding: 5px 10px;
@@ -1019,6 +1065,7 @@ span.icon {
     border-radius: 5px;
     height: 5px;
 }
+
 .custom-progress-bar::-webkit-slider-thumb {
     width: 10px;
     height: 10px;
@@ -1034,18 +1081,275 @@ span.icon {
     cursor: pointer;
 }
 
-.dot-active {
-    width: 10px; /* Đường kính của chấm */
-    height: 10px;
-    margin-left: 30px;
-    background-color: #28a745; /* Màu xanh */
-    border-radius: 50%; /* Làm tròn thành chấm */
-    box-shadow: 0 0 10px #28a745; /* Hiệu ứng phát sáng */
-    animation: pulse 1.5s infinite; /* Hiệu ứng nhấp nháy */
+.media-col.status {
+    position: absolute;
+    margin-top: 27px;
+    margin-left: 15px;
+
 }
-.incoming .reply-text{
+
+.dot-active {
+    width: 13px;
+    /* Đường kính của chấm */
+    height: 13px;
+    border: 2px solid white;
+    margin-left: 30px;
+    background-color: #28a745;
+    /* Màu xanh */
+    border-radius: 50%;
+    /* Làm tròn thành chấm */
+    animation: pulse 1.5s infinite;
+    /* Hiệu ứng nhấp nháy */
+}
+
+.dot-online-detail {
+    margin-left: 32px;
+    margin-top: -12px;
+    position: absolute;
+
+}
+
+.incoming .reply-text {
     margin-bottom: 5px !important;
 }
-.reply-file{
+
+.reply-file {
     margin-top: 2px;
 }
+
+span.status {
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+/* hello chat  */
+/* Định dạng tổng quát */
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    height: 50vh;
+}
+
+.welcome-logo img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    /* Space between logo and text */
+}
+
+.welcome-content {
+    margin-top: 20px;
+}
+
+h1.title {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+p.description {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    font-weight: 400;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+
+/* trang bạn bè  */
+
+
+
+.search-bar,
+.friend-search {
+    width: 75%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd !important;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+.search-bar:focus,
+.friend-search:focus {
+    border: 1px solid #ddd !important; /* Keep border the same on focus */
+    outline: none; /* Removes the default focus outline */
+}
+
+
+.aside-list-friends .nav-item {
+    color: #333;
+    padding: 10px 0px 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    align-items: center;
+}
+
+.aside-list-friends .nav-item span {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+.aside-list-friends .active {
+    background-color: #dcefff;
+}
+
+.aside-list-friends .nav-item.active:hover {
+    background-color: #dcefff;
+}
+
+.aside-list-friends .nav-item:hover {
+    background-color: #f1f1f1;
+}
+
+
+.main-content-right {
+    padding: 10px;
+    width: 70%;
+}
+
+.friend-header h2 {
+    margin-top: -10px;
+    padding: 5px;
+}
+
+.friend-list {
+    margin-top: 10px;
+}
+
+.friend-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 15px ;
+}
+
+.friend-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.friend-item p {
+    font-size: 1.1rem;
+    padding-top: 10px !important;
+}
+
+.sort-dropdown {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.sort-dropdown:focus {
+    border: 1px solid #ddd !important; /* Keep border the same on focus */
+    outline: none; /* Removes the default focus outline */
+}
+
+
+/* goi y ket ban  */
+
+/* Overall Friend Suggestions Container */
+.friend-suggestions {
+    padding-left: 20px;
+    padding-top: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .friend-suggestions h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  /* Flex container for cards with horizontal scrolling */
+  .friend-suggestions .suggestion-cards {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  
+  /* Individual Friend Card Styling */
+  .friend-suggestions .suggestion-cards .card {
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  /* Image inside the card */
+  .friend-suggestions .suggestion-cards .card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Info section inside the card */
+  .friend-suggestions .suggestion-cards .card .info {
+    padding: 10px;
+    text-align: center;
+  }
+  
+  /* Name in the info section */
+  .friend-suggestions .suggestion-cards .card .info p {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin: 10px 0;
+  }
+  
+  /* Mutual friends section */
+  .friend-suggestions .suggestion-cards .card .info span {
+    color: #888;
+    font-size: 0.9rem;
+  }
+  
+  /* Buttons inside each card */
+  .friend-suggestions .suggestion-cards .card .buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+  }
+  
+  /* Styling for buttons */
+  .friend-suggestions .suggestion-cards .card .buttons button {
+    color: white;
+    border: none;
+    flex-wrap: wrap;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* View all link at the bottom of the section */
+  .friend-suggestions .view-all {
+    text-align: right;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .friend-suggestions .view-all:hover {
+    text-decoration: underline;
+  }
+  

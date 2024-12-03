@@ -22,11 +22,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRoutes = void 0;
 const express_1 = require("express");
 const userController = __importStar(require("../../controller/client/user.controller"));
 const validateUser = __importStar(require("../../validate/validate-user"));
+const passportHelper_1 = require("../../helpers/passportHelper");
+const passport_1 = __importDefault(require("passport"));
 const router = (0, express_1.Router)();
 router.get("/login", userController.login);
 router.get("/register", userController.register);
@@ -40,4 +45,14 @@ router.get("/password/otp", userController.otpPassword);
 router.post("/password/otp", userController.otpPasswordPost);
 router.get("/password/reset", userController.resetPassword);
 router.post("/password/reset", userController.resetPasswordPost);
+router.get("/login/federated/google", passport_1.default.authenticate('google'));
+router.get('/oauth2/redirect/google', passport_1.default.authenticate('google', {
+    failureRedirect: '/login'
+}), userController.loginSuccessGoogle);
+router.get('/login/federated/facebook', passport_1.default.authenticate('facebook'));
+router.get('/oauth2/redirect/facebook', passport_1.default.authenticate('facebook', {
+    failureRedirect: '/login',
+}), userController.loginSuccessFacebook);
+(0, passportHelper_1.setupGoogleStrategy)();
+(0, passportHelper_1.setupFacebookStrategy)();
 exports.userRoutes = router;
