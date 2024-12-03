@@ -10,8 +10,11 @@ mixin aside-list(pageTitle)
             a.btn(href="/friends/groups")
                 span Danh sách nhóm và cộng đồng
         .nav-item(class=pageTitle == "Lời mời kết bạn" ? "active" : "")
-            a.btn(href="/friends/friend-requests")
+            a.btn(href="/friends/accept")
                 span Lời mời kết bạn
+        .nav-item(class=pageTitle == "Lời mời đã gửi" ? "active" : "")
+            a.btn(href="/friends/send")
+                span Lời mời đã gửi
         .nav-item(class=pageTitle == "Gợi ý kết bạn" ? "active" : "")
             a.btn(href="/friends/suggestions")
                 span Gợi ý kết bạn

@@ -29,4 +29,6 @@ const friendController = __importStar(require("../../controller/client/friend.co
 const router = (0, express_1.Router)();
 router.get("/", friendController.index);
 router.get("/suggestions", friendController.suggestion);
+router.get("/send", friendController.send);
+router.get("/accept", friendController.accept);
 exports.friendRoutes = router;

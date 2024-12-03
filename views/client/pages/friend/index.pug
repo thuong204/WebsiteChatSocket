@@ -18,20 +18,15 @@ block main
                         option(value="all") Tất cả
                         option(value="type") Phân loại
                 .friend-list
-                    .friend-item
-                        img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1721740436/pse7arjm9ojlgxbebsup.jpg" alt="Trần Công thường" class="friend-img")
-                        p Trần Công Thường
-                    .friend-item
-                        img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1721740436/pse7arjm9ojlgxbebsup.jpg" alt="Trần Công thường" class="friend-img")
-                        p Trần Công Thường
-                    .friend-item
-                        img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1721740436/pse7arjm9ojlgxbebsup.jpg" alt="Trần Công thường" class="friend-img")
-                        p Trần Công Thường
-                    .friend-item
-                        img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1721740436/pse7arjm9ojlgxbebsup.jpg" alt="Trần Công thường" class="friend-img")
-                        p Trần Công Thường
+                    if(listUsers && listUsers.length>0)
+                        each user in listUsers
+                            .friend-item
+                                img(src= user.avatar alt=user.fullName class="friend-img")
+                                p  #{user.fullName}
+                    else 
+                        .alert Danh sách bạn bè trống
+    block script 
+        script( type= "module" src="/js/user.js")
 
-
-                    // Additional friends...
 
 

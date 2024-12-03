@@ -9,7 +9,7 @@ block main
             // Right Content Area
             .col-xl-9.col-lg-8.col-md-7.col-sm-7.main-content-right
                 .friend-suggestions
-                    h3 Gợi ý kết bạn
+                    h3 Lời mời kết bạn
                     .suggestion-cards
                         each user in listUsers
                             .card(data-user= user.id)
@@ -21,8 +21,10 @@ block main
                                     p #{user.fullName}
                                     //- p 1 bạn chung
                                     .buttons
-                                        button.add-friend.btn-primary.btn(btn-add-friend)  Thêm bạn bè
-                                        button.cancel-friend.btn-secondary.d-none.btn(btn-cancel-friend)  Hủy yêu cầu
-                                        button.remove-friend.btn-secondary.btn(btn-delete-friend) Gỡ
+                                        button.add-friend.btn-success.btn.btn(btn-accept-friend)  Chấp nhận
+                                        button.become-friend.btn-success.btn.btn.d-none(btn-friend)  Bạn bè
+                                        button.cancel-friend.btn-secondary.btn(btn-cancel-friend)  Xóa
+                                        button.cancel-friend.btn-secondary.btn.d-none   Đã xóa
+                                        
     block script 
         script( type= "module" src="/js/user.js")

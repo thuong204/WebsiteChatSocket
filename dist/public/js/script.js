@@ -9,6 +9,7 @@ const scrollList = document.querySelector(".chat-body.scrollable-list");
 const scrollToBottom = () => {
     scrollList.scrollTop = scrollList.scrollHeight;
 };
+
 if (scrollList) {
     scrollToBottom()
 }
@@ -294,4 +295,5 @@ listUserChatsHello.forEach(item => {
 
 
 })
+
 

@@ -1,4 +1,4 @@
-const socket = io()
+
 let audioBlob;
 const scrollList = document.querySelector(".chat-body.scrollable-list");
 // Hàm cuộn xuống cuối danh sách
@@ -13,7 +13,9 @@ let idUserReceiver = document.querySelector("[userreceiveinfo]");
 const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-image', {
     multiple: true,
     maxFileCount: 6,
-});
+}); 
+
+
 
 
 // const inputImage  = document.getElementById("file-upload-with-preview-upload-image")
@@ -44,7 +46,6 @@ if (form) {
             };
         }
         const roomId = document.querySelector("[room]").getAttribute("room")
-
 
         if (content || images.length > 0 || otherFiles.length > 0 || audioBlob) {
             socket.emit("CLIENT_SEND_MESSAGE", {
@@ -404,7 +405,7 @@ const clearMedia = () => {
 
 // call
 
-let myId; // Kết nối với server
+
 
 // Kiểm tra xem peer đã được tạo chưa, nếu chưa thì tạo mới
 
@@ -465,6 +466,9 @@ if (itemVideo) {
 // Xử lý khi có cuộc gọi đến
 
 
+socket.emit("CLIENT_LOGIN",userId)
+
+
 socket.on("SERVER_RETURN_USER_ONLINE", (userId) => {
     const dataUser = document.querySelector(`[data-user="${userId}"]`)
     if (dataUser) {
@@ -475,7 +479,7 @@ socket.on("SERVER_RETURN_USER_ONLINE", (userId) => {
 
     }
 })
-socket.emit("CLIENT_LOGIN", userId)
+
 
 socket.on("SERVER_CALLVIDEO", (data) => {
     console.log("Nhận yêu cầu gọi video từ: ", data.callerId);

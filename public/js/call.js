@@ -46,7 +46,7 @@ peer.on('call', (call) => {
     });
 });
 
-socketPeer.on("SERVER_CALLVIDEO", (data) => {
+socket.on("SERVER_CALLVIDEO", (data) => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         .then((stream) => {
             localStream = stream; // Lưu stream của người gọi

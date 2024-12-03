@@ -121,7 +121,6 @@ export const chatSocket = async (res: Response) => {
         });
 
         socket.on("CLIENT_LOGIN", (userId) => {
-            console.log("ok")
             const user = arrUserInfo.find(user => user === userId);
             if (!user) {
                 arrUserInfo.push(userId);

@@ -41,10 +41,14 @@ const userSchema = new mongoose_1.default.Schema({
         type: String,
         default: "offline"
     },
-    listFriends: {
-        type: Array,
-        default: []
-    },
+    acceptFriends: Array,
+    requestFriends: Array,
+    listFriends: [
+        {
+            user_id: String,
+            room_id: String
+        }
+    ],
     avatar: {
         type: String,
         default: "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"
