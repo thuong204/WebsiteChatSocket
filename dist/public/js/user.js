@@ -77,6 +77,31 @@ listAcceptFriends.forEach(item => {
 });
 
 
+//huy ket ban
+
+const listRemoveFriends = document.querySelectorAll("[btn-remove-friend]")
+listRemoveFriends.forEach(item =>{
+    item.addEventListener("click",()=>{
+        console.log("click")
+
+
+        const userId = item.closest(".card").getAttribute("data-user")
+
+        if (!userId) {
+            console.error("Không tìm thấy userId");
+            return;
+        }
+
+        if (typeof socket !== "undefined") {
+            socket.emit("CLIENT_REMOVE_FRIEND", userId);
+            console.log("đã gửi yêu cầu hủy kết bạn")
+        } else {
+            console.error("Socket không được định nghĩa.");
+        }
+
+    })
+})
+
 
 const btnSearch = document.querySelector("[btn-search-friend]")
 const valueSearch  = document.querySelector("[find-friend-all]")
@@ -93,8 +118,6 @@ if(btnSearch){
             // Gửi yêu cầu API
             const response = await fetch(`/friends/search-api?keyword=${valueSearch.value}`);
             const friends = await response.json();
-            console.log(friends)
-
             
             let html =``
             friends.data.forEach(friend =>{

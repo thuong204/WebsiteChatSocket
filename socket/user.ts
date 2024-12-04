@@ -116,11 +116,7 @@ export const userSocket = async (res: Response) => {
                 $expr: { $eq: [{ $size: "$user_id" }, 2] }
             });
 
-
-
             //them vao danh sach ban be cua 2 nguoi
-
-
             // Kiểm tra và thêm bạn bè vào danh sách của myUserA
             const existingFriendA = await User.findOne({
                 _id: myUserA,
@@ -131,7 +127,7 @@ export const userSocket = async (res: Response) => {
                 await User.updateOne(
                     { _id: myUserA },
                     {
-                        $push: {
+                        $pull: {
                             listFriends: {
                                 user_id: userB,
                                 room_id: roomUser._id,
@@ -160,8 +156,49 @@ export const userSocket = async (res: Response) => {
                     }
                 );
             }
+        })
+        socket.on("CLIENT_REMOVE_FRIEND", async (userId) => {
 
-            console.log("Lưu thành công")
+            //id cua nguoi nhan
+            const myUserA = res.locals.user.id
+
+            //id của nguoi gui
+            const userB = userId
+
+            const roomUser = await Room.findOne({
+                user_id: { $all: [myUserA, userB] },
+                deleted: false,
+                $expr: { $eq: [{ $size: "$user_id" }, 2] }
+            });
+
+            //xoa ban be cua nguoi A voi B
+            await User.updateOne(
+                { _id: myUserA },
+                {
+                    $pull: {
+                        listFriends: {
+                            user_id: userB,
+                            room_id: roomUser._id,
+                        },
+                    },
+                }
+            );
+
+            //xoa ban be cua nguoi B voi A
+            await User.updateOne(
+                { _id: userB },
+                {
+                    $pull: {
+                        listFriends: {
+                            user_id: myUserA,
+                            room_id: roomUser._id,
+                        },
+                    },
+                }
+            );
+
+            console.log("Xóa bạn bè thành công")
+
         })
     })
 }

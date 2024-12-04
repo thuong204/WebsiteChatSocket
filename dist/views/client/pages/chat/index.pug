@@ -38,22 +38,22 @@ block main
                             ul.list-aside-item.scrollable-list
                                 if (listUsers && listUsers.length > 0)
                                     each user, index in listUsers
-                                        li.aside-item-chat.chat-main(data-user=user.id style="cursor:pointer" class=(userreceive.id == user.id? 'active' : ''))
+                                        li.aside-item-chat.chat-main(data-user=user.user.id style="cursor:pointer" class=(userreceive.id == user.id? 'active' : ''))
                                             .group-media.d-flex.align-items-center
                                                 .media
-                                                    img(src= user.avatar ? user.avatar : "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png" alt="User Image" class="rounded-circle")
+                                                    img(src= user.user.avatar ? user.user.avatar : "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png" alt="User Image" class="rounded-circle")
                                                 .media-col.d-flex.status
-                                                    if(user.statusOnline=="online")
+                                                    if(user.user.statusOnline=="online")
                                                         div(class="dot-active")
                                                     else 
                                                         div(class="dot-active d-none")
                                                 .media-col.d-flex
                                                     .user-info
-                                                        h6 #{user.fullName}
+                                                        h6 #{user.user.fullName}
                                                     .user-message
-                                                        h6.message Last message preview...
+                                                        h6.message(content-message) #{user.latestMessage.content}
                                                 .media-col.d-flex
-                                                    span.time 10:30 AM
+                                                    span.time(content-time) #{user.latestMessage.time}
 
             .col-xl-6.col-lg-8.col-md-7.col-12.col-sm-7.chat-content
                 .chat-head

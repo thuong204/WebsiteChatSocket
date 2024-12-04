@@ -402,13 +402,16 @@ ul li.aside-item-chat .user-info h6 {
     display: inline-block;
     margin-right: 10px;
     font-weight: 400;
-    font-size: 14px;
-    margin-top: -5px;
+    font-size: 12px;
+    margin-top: 0px;
 }
 
 span.time {
-    font-size: 12px;
+    font-size: 12px;    
     padding-top: 25px;
+    font-weight: 600;
+    margin-left: 90px;
+    justify-content: flex-end !important;
 }
 
 /* chat head  */
@@ -1367,3 +1370,16 @@ p.description {
   .become-friend{
   }
   
+  /* Ban đầu nút "Xóa bạn" ẩn */
+.btn-remove-friend-find {
+    display: none !important;
+}
+
+/* Khi hover vào nút "Tìm bạn bè", nút "Tìm bạn bè" ẩn và nút "Xóa bạn" hiển thị */
+.btn-friend-find:hover {
+    display: none; 
+}
+
+.btn-friend-find:hover + .btn-remove-friend-find {
+    display: block !important; 
+}

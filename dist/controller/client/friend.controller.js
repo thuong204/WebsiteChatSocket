@@ -121,14 +121,39 @@ const accept = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.accept = accept;
 const find = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    userSocket.userSocket(res);
     const listUsers = yield user_model_1.default.find({
         deleted: false,
         status: "active",
         _id: { $ne: res.locals.user.id }
-    }).select("fullName avatar");
+    }).select("fullName avatar").lean().limit(20);
+    const currentUser = yield user_model_1.default.findById(res.locals.user.id).select("acceptFriends requestFriends listFriends").lean();
+    const usersWithRelationship = listUsers.map(user => {
+        const userId = user._id.toString();
+        let relationship = "none";
+        if (currentUser.listFriends.some(friend => friend.user_id === userId)) {
+            relationship = "friends";
+        }
+        else if (currentUser.requestFriends.includes(userId)) {
+            relationship = "requested";
+        }
+        else if (currentUser.acceptFriends.includes(userId)) {
+            relationship = "invited";
+        }
+        return Object.assign(Object.assign({}, user), { relationship });
+    });
+    const relationshipPriority = {
+        none: 0,
+        requested: 1,
+        invited: 2,
+        friends: 3,
+    };
+    usersWithRelationship.sort((a, b) => {
+        return relationshipPriority[a.relationship] - relationshipPriority[b.relationship];
+    });
     res.render("client/pages/friend/find", {
         pageTitle: "Tìm kiếm bạn bè",
-        listUsers: listUsers
+        listUsers: usersWithRelationship,
     });
 });
 exports.find = find;

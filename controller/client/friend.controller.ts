@@ -12,6 +12,8 @@ export const index = async (req: Request, res: Response) => {
         }
     }).select("fullName avatar");
 
+
+
     res.render("client/pages/friend/index", {
         pageTitle: "Bạn bè",
         listUsers: listUsers
@@ -102,15 +104,51 @@ export const accept = async (req: Request, res: Response) => {
 }
 export const find = async (req: Request, res: Response) => {
 
+    userSocket.userSocket(res)
+
     const listUsers = await User.find({
-        deleted:false,
-        status:"active",
+        deleted: false,
+        status: "active",
         _id: { $ne: res.locals.user.id }
-    }).select("fullName avatar")
+    }).select("fullName avatar").lean().limit(20);
+    
+    const currentUser = await User.findById(res.locals.user.id).select("acceptFriends requestFriends listFriends").lean();
+    
+    const usersWithRelationship = listUsers.map(user => {
+        const userId = user._id.toString();
+    
+        let relationship = "none";
+    
+        if (currentUser.listFriends.some(friend => friend.user_id === userId)) {
+            relationship = "friends";
+        } else if (currentUser.requestFriends.includes(userId)) {
+            relationship = "requested";
+        } else if (currentUser.acceptFriends.includes(userId)) {
+            relationship = "invited";
+        }
+    
+        return {
+            ...user, // Không cần dùng _doc nữa
+            relationship,
+        };
+    });
+
+    const relationshipPriority: Record<string, number> = {
+        none: 0,
+        requested: 1,
+        invited: 2,
+        friends: 3,
+    };
+    
+    usersWithRelationship.sort((a, b) => {
+        return relationshipPriority[a.relationship] - relationshipPriority[b.relationship];
+    });
+
     res.render("client/pages/friend/find", {
         pageTitle: "Tìm kiếm bạn bè",
-        listUsers:listUsers
-    })
+        listUsers: usersWithRelationship, // Sử dụng danh sách với trạng thái quan hệ
+    });
+
 }
 
 export const searchApi = async (req: Request, res: Response) => {
@@ -124,23 +162,23 @@ export const searchApi = async (req: Request, res: Response) => {
             _id: { $ne: res.locals.user.id }, // Không phải chính người dùng hiện tại
             deleted: false, // Lọc các tài khoản chưa bị xóa
             status: "active", // Lọc các tài khoản đang hoạt động
-            fullName: keywordRegex , // Tìm kiếm gần đúng theo tên, không phân biệt chữ hoa chữ thường
+            fullName: keywordRegex, // Tìm kiếm gần đúng theo tên, không phân biệt chữ hoa chữ thường
 
 
-    };
+        };
 
 
-    const listAllUsers = await User.find(searchCondition).select("fullName avatar").limit(50);
-    res.json({
-        code: 200,
-        data: listAllUsers
-    });
-} catch (error) {
-    console.error(error);
-    res.status(500).json({
-        code: 500,
-        message: "Internal Server Error"
-    });
-}
+        const listAllUsers = await User.find(searchCondition).select("fullName avatar").limit(50);
+        res.json({
+            code: 200,
+            data: listAllUsers
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            code: 500,
+            message: "Internal Server Error"
+        });
+    }
 
 }

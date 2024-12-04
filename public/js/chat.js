@@ -13,7 +13,7 @@ let idUserReceiver = document.querySelector("[userreceiveinfo]");
 const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-image', {
     multiple: true,
     maxFileCount: 6,
-}); 
+});
 
 
 
@@ -29,7 +29,7 @@ if (form) {
         const files = upload.cachedFileArray || []
         const images = files.filter(file => file.type.startsWith("image/")) || [];
 
-        
+
 
         const otherFiles = files.filter(file => !file.type.startsWith("image/")).map(file => ({
             buffer: file, // hoặc file.arrayBuffer() nếu bạn cần buffer
@@ -69,6 +69,13 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
     const replyMessages = document.querySelectorAll(".reply-item");
     const lastReplyMessage = replyMessages[replyMessages.length - 1];
 
+
+    //xu li tin nhan moi nhat tren thanh
+
+    const dataContent = document.querySelector("[content-message]");
+    const dataTime = document.querySelector("[content-time]");
+
+
     // Xu li hinh anh tin nhan file
     let htmlImages = '';
     if (data.images && data.images.length > 0) {
@@ -103,7 +110,7 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
 
     let htmlText = data.content ? `<div class="reply-text">${data.content}</div>` : '';
 
-    let avatarReceiver ;
+    let avatarReceiver;
 
     let htmlContent = `
         <div class="reply-group">
@@ -118,6 +125,26 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
 
 
     if (data.sender == userId.getAttribute("myId")) {
+
+        if (data) {
+            if (data.images && data.images.length > 0) {
+                dataContent.textContent = "Bạn: Đã gửi một hình ảnh";
+            }
+
+            else if (data.files && data.files.length > 0) {
+                dataContent.textContent = "Bạn: Đã gửi một file";
+            }
+            else {
+                dataContent.textContent = `Bạn: ${data.content}`;
+            }
+        }
+        // Lấy thời gian hiện tại và cập nhật cho dataTime
+        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (dataTime) {
+            dataTime.textContent = currentTime;
+        }
+
+
         div.classList.add("reply-item")
         div.classList.add("outgoing")
         if (data.content || data.images || data.files) {
@@ -135,7 +162,27 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
 
 
     } else {
-        avatarReceiver = data.receiver.avatar  || "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"
+
+        if (data) {
+            if (data.images && data.images.length > 0) {
+                dataContent.textContent = "Đã gửi một hình ảnh";
+            }
+
+            else if (data.files && data.files.length > 0) {
+                dataContent.textContent = "Đã gửi một file";
+            }
+            else {
+                dataContent.textContent = data.content;
+            }
+        }
+        // Lấy thời gian hiện tại và cập nhật cho dataTime
+        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (dataTime) {
+            dataTime.textContent = currentTime;
+        }
+
+
+        avatarReceiver = data.receiver.avatar || "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"
 
         div.classList.add("reply-item")
         div.classList.add("incoming")
@@ -168,6 +215,8 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
         scrollToBottom();
 
     }
+
+
     const event = new CustomEvent('audioListUpdated');
     document.dispatchEvent(event);
 })
@@ -470,7 +519,7 @@ if (itemVideo) {
 // Xử lý khi có cuộc gọi đến
 
 
-socket.emit("CLIENT_LOGIN",userId)
+socket.emit("CLIENT_LOGIN", userId)
 
 
 socket.on("SERVER_RETURN_USER_ONLINE", (userId) => {

@@ -96,7 +96,7 @@ const userSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
             });
             if (!existingFriendA) {
                 yield user_model_1.default.updateOne({ _id: myUserA }, {
-                    $push: {
+                    $pull: {
                         listFriends: {
                             user_id: userB,
                             room_id: roomUser._id,
@@ -118,7 +118,32 @@ const userSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
                     },
                 });
             }
-            console.log("Lưu thành công");
+        }));
+        socket.on("CLIENT_REMOVE_FRIEND", (userId) => __awaiter(void 0, void 0, void 0, function* () {
+            const myUserA = res.locals.user.id;
+            const userB = userId;
+            const roomUser = yield room_model_1.default.findOne({
+                user_id: { $all: [myUserA, userB] },
+                deleted: false,
+                $expr: { $eq: [{ $size: "$user_id" }, 2] }
+            });
+            yield user_model_1.default.updateOne({ _id: myUserA }, {
+                $pull: {
+                    listFriends: {
+                        user_id: userB,
+                        room_id: roomUser._id,
+                    },
+                },
+            });
+            yield user_model_1.default.updateOne({ _id: userB }, {
+                $pull: {
+                    listFriends: {
+                        user_id: myUserA,
+                        room_id: roomUser._id,
+                    },
+                },
+            });
+            console.log("Xóa bạn bè thành công");
         }));
     });
 });

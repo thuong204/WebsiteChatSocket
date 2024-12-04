@@ -314,16 +314,8 @@ document.addEventListener('audioListUpdated', function () {
 const listUserChatsHello = document.querySelectorAll(".aside-item-chat.chat-hello")
 listUserChatsHello.forEach(item => {
     item.addEventListener("click", () => {
-        console.log("click")
         const room = item.getAttribute("room")
         window.location.href = `/chat/${room}`
     })
-
-
 })
-
-//xu kien thoat trinh duyet
-window.addEventListener('beforeunload', () => {
-    navigator.sendBeacon('/user/update-status', JSON.stringify({ status: 'offline' }));
-});
 

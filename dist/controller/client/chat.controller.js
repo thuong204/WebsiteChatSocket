@@ -40,26 +40,82 @@ const room_model_1 = __importDefault(require("../../model/room.model"));
 const message_model_1 = __importDefault(require("../../model/message.model"));
 const chatSocket = __importStar(require("../../socket/chat"));
 const user_model_1 = __importDefault(require("../../model/user.model"));
+const moment_1 = __importDefault(require("moment"));
 const getLastOnline_1 = require("../../helpers/getLastOnline");
 const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const rooms = yield room_model_1.default.find({
-        deleted: false,
-        user_id: res.locals.user.id
-    });
-    let userIds = [];
-    for (const room of rooms) {
-        userIds = userIds.concat(room.user_id);
+    try {
+        const rooms = yield room_model_1.default.find({
+            deleted: false,
+            user_id: res.locals.user.id
+        });
+        let userIds = [];
+        rooms.forEach(room => {
+            userIds.push(...room.user_id);
+        });
+        userIds = userIds.filter(id => id !== res.locals.user.id);
+        const listUsers = yield user_model_1.default.find({
+            deleted: false,
+            status: "active",
+            _id: { $in: userIds }
+        }).select("fullName avatar");
+        const userMessages = yield Promise.all(listUsers.map((user) => __awaiter(void 0, void 0, void 0, function* () {
+            const room = yield room_model_1.default.findOne({
+                user_id: { $all: [user._id, res.locals.user.id] },
+                deleted: false
+            });
+            const latestMessage = yield message_model_1.default.findOne({
+                room_id: room._id
+            })
+                .sort({ createdAt: -1 })
+                .limit(1).select("content images files createdAt room_id");
+            let messageContent = latestMessage ? latestMessage.content : null;
+            if (latestMessage) {
+                if (latestMessage.sender == res.locals.user.id) {
+                    if (latestMessage.images && latestMessage.images.length > 0) {
+                        messageContent = "Bạn: Đã gửi một hình ảnh";
+                    }
+                    else if (latestMessage.files && latestMessage.files.length > 0) {
+                        messageContent = "Bạn: Đã gửi một file";
+                    }
+                    else {
+                        messageContent = `Bạn: ${latestMessage.content}`;
+                    }
+                }
+                else {
+                    if (latestMessage.images && latestMessage.images.length > 0) {
+                        messageContent = "Đã gửi một hình ảnh";
+                    }
+                    else if (latestMessage.files && latestMessage.files.length > 0) {
+                        messageContent = "Đã gửi một file";
+                    }
+                    else {
+                        messageContent = `Bạn: ${latestMessage.content}`;
+                    }
+                }
+            }
+            const messageTime = latestMessage ? (0, moment_1.default)(latestMessage.createdAt).format('HH:mm') : null;
+            const specificRoom = rooms.find(room => {
+                const members = room.user_id.map(id => id.toString());
+                return (members.includes(user._id.toString()) &&
+                    members.includes(res.locals.user.id.toString()) &&
+                    members.length === 2);
+            });
+            return {
+                user,
+                latestMessage: Object.assign(Object.assign({}, latestMessage.toObject()), { content: messageContent }),
+                messageTime,
+                room_id: specificRoom ? specificRoom._id : null
+            };
+        })));
+        res.render("client/pages/chat/chathello.pug", {
+            pageTitle: "Trang chủ",
+            listUsers: userMessages,
+        });
     }
-    userIds = userIds.filter(id => id !== res.locals.user.id);
-    const listUsers = yield user_model_1.default.find({
-        deleted: false,
-        status: "active",
-        _id: { $in: userIds }
-    });
-    res.render("client/pages/chat/chathello.pug", {
-        pageTitle: "Trang chủ",
-        listUsers: listUsers
-    });
+    catch (error) {
+        console.error("Error loading chat data:", error);
+        res.status(500).send("Server Error");
+    }
 });
 exports.index = index;
 const fetchMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -137,9 +193,7 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     });
     const messages = yield message_model_1.default.find({
         room_id: req.params.roomId
-    }).limit(20).sort({
-        createdAt: "desc"
-    });
+    }).limit(20).sort({ createdAt: -1 });
     messages.reverse();
     const lastOnline = (0, getLastOnline_1.getLastOnlineTime)(user.lastOnline);
     user["lastOnlineTime"] = lastOnline;
@@ -149,13 +203,59 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         deleted: false
     })
         .sort({ createdAt: -1 })
-        .limit(20).select("images");
+        .limit(20)
+        .select("images");
+    const userMessages = yield Promise.all(listUsers.map((user) => __awaiter(void 0, void 0, void 0, function* () {
+        const room = yield room_model_1.default.findOne({
+            user_id: { $all: [user._id, res.locals.user.id] },
+            deleted: false
+        });
+        const latestMessage = yield message_model_1.default.findOne({
+            room_id: room._id
+        })
+            .sort({ createdAt: -1 })
+            .limit(1).select("content images files createdAt");
+        let messageContent = latestMessage ? latestMessage.content : null;
+        if (latestMessage) {
+            if (latestMessage.sender == res.locals.user.id) {
+                if (latestMessage.images && latestMessage.images.length > 0) {
+                    messageContent = "Bạn: Đã gửi một hình ảnh";
+                }
+                else if (latestMessage.files && latestMessage.files.length > 0) {
+                    messageContent = "Bạn: Đã gửi một file";
+                }
+                else {
+                    messageContent = `Bạn: ${latestMessage.content}`;
+                }
+            }
+            else {
+                if (latestMessage.images && latestMessage.images.length > 0) {
+                    messageContent = "Đã gửi một hình ảnh";
+                }
+                else if (latestMessage.files && latestMessage.files.length > 0) {
+                    messageContent = "Đã gửi một file";
+                }
+                else {
+                    messageContent = `Bạn: ${latestMessage.content}`;
+                }
+            }
+        }
+        const messageTime = latestMessage ? (0, moment_1.default)(latestMessage.createdAt).format('HH:mm') : null;
+        return {
+            user,
+            latestMessage: {
+                content: messageContent,
+                time: messageTime,
+                createdAt: latestMessage ? latestMessage.createdAt : null
+            }
+        };
+    })));
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Trang chat",
         messages: messages,
         userreceive: user,
         room: userInRoom,
-        listUsers: listUsers,
+        listUsers: userMessages,
         listImages: listMessagesWithImages
     });
 });
