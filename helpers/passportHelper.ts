@@ -21,7 +21,7 @@ export const setupGoogleStrategy = (): void => {
               googleId: profile.id,
               fullName: profile.displayName,
               email: profile.emails ? profile.emails[0].value : '',
-              avatar: profile.photos ? profile.photos[0].value : '',
+              avatar: "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png",
             });
           }
 

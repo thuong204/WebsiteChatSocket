@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginSuccessFacebook = exports.loginSuccessGoogle = exports.resetPasswordPost = exports.resetPassword = exports.otpPasswordPost = exports.otpPassword = exports.forgotPasswordPost = exports.forgotPassword = exports.logout = exports.verifyotp = exports.registerPost = exports.loginPost = exports.register = exports.login = void 0;
+exports.updateStatus = exports.loginSuccessFacebook = exports.loginSuccessGoogle = exports.resetPasswordPost = exports.resetPassword = exports.otpPasswordPost = exports.otpPassword = exports.forgotPasswordPost = exports.forgotPassword = exports.logout = exports.verifyotp = exports.registerPost = exports.loginPost = exports.register = exports.login = void 0;
 const user_model_1 = __importDefault(require("../../model/user.model"));
 const generate_1 = require("../../helpers/generate");
 const sendmail_1 = require("../../helpers/sendmail");
@@ -223,3 +223,13 @@ const loginSuccessFacebook = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.loginSuccessFacebook = loginSuccessFacebook;
+const updateStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const tokenUser = req.cookies.tokenUser;
+    yield user_model_1.default.updateOne({
+        tokenUser: tokenUser
+    }, {
+        statusOnline: "offine",
+        lastOnline: new Date()
+    });
+});
+exports.updateStatus = updateStatus;

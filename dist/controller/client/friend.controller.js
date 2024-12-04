@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.accept = exports.send = exports.suggestion = exports.index = void 0;
+exports.searchApi = exports.find = exports.accept = exports.send = exports.suggestion = exports.index = void 0;
 const user_model_1 = __importDefault(require("../../model/user.model"));
 const userSocket = __importStar(require("../../socket/user"));
 const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -120,3 +120,40 @@ const accept = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.accept = accept;
+const find = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const listUsers = yield user_model_1.default.find({
+        deleted: false,
+        status: "active",
+        _id: { $ne: res.locals.user.id }
+    }).select("fullName avatar");
+    res.render("client/pages/friend/find", {
+        pageTitle: "Tìm kiếm bạn bè",
+        listUsers: listUsers
+    });
+});
+exports.find = find;
+const searchApi = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const keyword = typeof req.query.keyword === "string" ? req.query.keyword.trim() : "";
+        const keywordRegex = new RegExp(keyword, "i");
+        const searchCondition = {
+            _id: { $ne: res.locals.user.id },
+            deleted: false,
+            status: "active",
+            fullName: keywordRegex,
+        };
+        const listAllUsers = yield user_model_1.default.find(searchCondition).select("fullName avatar").limit(50);
+        res.json({
+            code: 200,
+            data: listAllUsers
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            code: 500,
+            message: "Internal Server Error"
+        });
+    }
+});
+exports.searchApi = searchApi;

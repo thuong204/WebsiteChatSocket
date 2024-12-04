@@ -208,6 +208,32 @@ listUserChats.forEach(item => {
                 mediaImageDetail.setAttribute("src", infoReceiver.avatar)
                 fullNameDetail.textContent = infoReceiver.fullName
 
+
+
+                //cap nhat list image
+
+                const listImages = document.querySelector(".list-chat-image")
+                listImages.innerHTML=""
+
+                const dataImages = data.data.listImages
+                
+                if(dataImages && dataImages.length> 0){
+                    dataImages.forEach(listImage =>{
+                        if(listImage || listImage.images.length >0 ){
+                            listImage.images.forEach(image =>{
+                                const divCol = document.createElement("div")
+                                divCol.classList.add("col-4")
+                                const img = document.createElement("img")
+                                img.src=image
+                                img.alt="chat-image"
+                                divCol.appendChild(img)
+                                listImages.appendChild(divCol)
+                            })
+                        }
+                    })
+                }
+
+
                 scrollToBottom()
 
                 const event = new CustomEvent('audioListUpdated');
@@ -296,4 +322,8 @@ listUserChatsHello.forEach(item => {
 
 })
 
+//xu kien thoat trinh duyet
+window.addEventListener('beforeunload', () => {
+    navigator.sendBeacon('/user/update-status', JSON.stringify({ status: 'offline' }));
+});
 

@@ -29,8 +29,13 @@ router.get('/oauth2/redirect/facebook', passport.authenticate('facebook', {
 
 }),userController.loginSuccessFacebook);
 
+
+
 setupGoogleStrategy()
 setupFacebookStrategy()
+
+router.post("/update-status",userController.updateStatus)
+
 
 
 export const userRoutes:Router  =router

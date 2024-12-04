@@ -55,4 +55,5 @@ router.get('/oauth2/redirect/facebook', passport_1.default.authenticate('faceboo
 }), userController.loginSuccessFacebook);
 (0, passportHelper_1.setupGoogleStrategy)();
 (0, passportHelper_1.setupFacebookStrategy)();
+router.post("/update-status", userController.updateStatus);
 exports.userRoutes = router;

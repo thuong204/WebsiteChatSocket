@@ -41,7 +41,7 @@ block main
                                         li.aside-item-chat.chat-hello(data-user=user._id style="cursor:pointer" room = user.room_id  )
                                             .group-media.d-flex.align-items-center
                                                 .media
-                                                    img(src=user.avatar alt="User Image" class="rounded-circle")
+                                                    img(src= user.avatar ? user.avatar : "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"  alt="User Image" class="rounded-circle")
                                                 .media-col.d-flex.status
                                                     if(user.statusOnline=="online")
                                                         div(class="dot-active")

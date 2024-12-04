@@ -1177,8 +1177,20 @@ p.description {
     font-size: 1rem;
     margin-bottom: 20px;
 }
+.friend-search-all {
+    width: 90%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd !important;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+.btn-search-friend{
+    height: 45px;
+    margin-top: -3px;
+}
 .search-bar:focus,
-.friend-search:focus {
+.friend-search:focus, .friend-search-all:focus {
     border: 1px solid #ddd !important; /* Keep border the same on focus */
     outline: none; /* Removes the default focus outline */
 }

@@ -103,6 +103,8 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
 
     let htmlText = data.content ? `<div class="reply-text">${data.content}</div>` : '';
 
+    let avatarReceiver ;
+
     let htmlContent = `
         <div class="reply-group">
             <div class="reply-bubble">
@@ -133,6 +135,8 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
 
 
     } else {
+        avatarReceiver = data.receiver.avatar  || "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"
+
         div.classList.add("reply-item")
         div.classList.add("incoming")
 
@@ -140,7 +144,7 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
             <div class="reply-avatar">
                 <div class="media">
                     <img 
-                        src= ${data.receiver.avatar}
+                        src= ${avatarReceiver}
                         width="32" 
                         height="32" 
                         class="rounded-circle"

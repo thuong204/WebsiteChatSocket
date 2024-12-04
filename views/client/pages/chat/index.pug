@@ -41,7 +41,7 @@ block main
                                         li.aside-item-chat.chat-main(data-user=user.id style="cursor:pointer" class=(userreceive.id == user.id? 'active' : ''))
                                             .group-media.d-flex.align-items-center
                                                 .media
-                                                    img(src=user.avatar alt="User Image" class="rounded-circle")
+                                                    img(src= user.avatar ? user.avatar : "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png" alt="User Image" class="rounded-circle")
                                                 .media-col.d-flex.status
                                                     if(user.statusOnline=="online")
                                                         div(class="dot-active")
@@ -60,7 +60,12 @@ block main
                     .media-group-chat.d-flex.align-items-center( userreceiveinfo= userreceive ? userreceive.id : ""  room=  room._id)
                         .media-img
                             if(userreceive)
-                                img(src=userreceive.avatar alt="User Image" class="rounded-circle")
+                                img(
+                                src=(userreceive.avatar ? userreceive.avatar : "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png") 
+                                alt="User Image" 
+                                class="rounded-circle"
+                                )
+
                                 if(userreceive.statusOnline == "online")
                                     .dot-active.dot-online-detail(dot-active)
                                 else 
@@ -261,22 +266,17 @@ block main
                             .tab-content
                                 .tab-pane.fade.show.active(id="media-images" role="tabpanel" aria-labelledby="nav-images-tab")
                                     .row.list-chat-image 
-                                        .col-4 
-                                            img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1733049502/bgmqy0ahqdr7heczv3k4.jpg")
-                                        .col-4 
-                                            img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1733049501/lhqslu5f3ovcpvhb1d5i.jpg")
-                                        .col-4
-                                            img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1733049500/u3yn8jgntz5ddwuxpjmv.webp")
+                                        if(listImages && listImages.length > 0)
+                                            each images in listImages
+                                                if(images && images.images.length>0)
+                                                    each image in images.images
+                                                        .col-4 
+                                                            img(src= image)
                                 .tab-pane.fade(id="media-videos" role="tabpanel" aria-labelledby="nav-images-tab")
                                     .row.list-chat-video
                                         .col-6 
                                             img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
-                                        .col-6
-                                            img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
-                                        .col-6 
-                                            img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
-                                        .col-6
-                                            img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
+                                        
 
 
 

@@ -22,30 +22,14 @@ export const index = async (req: Request, res: Response) => {
     const listUsers = await User.find({
         deleted: false,
         status: "active",
-        _id: { $in: userIds } 
+        _id: { $in: userIds }
     });
 
-    //gán phòng của ng trong danh sách  
-    const enhancedListUsers = listUsers.map(user => {
-        const specificRoom = rooms.find(room => {
-            const members = room.user_id.map(id => id.toString());
-            return (
-                members.includes(user._id.toString()) && 
-                members.includes(res.locals.user.id.toString()) && 
-                members.length === 2 
-            )
-        })
-    
-        return {
-            ...user.toObject(),
-            room_id: specificRoom ? specificRoom._id : null 
-        };
-    });
 
 
     res.render("client/pages/chat/chathello.pug", {
         pageTitle: "Trang chủ",
-        listUsers: enhancedListUsers
+        listUsers: listUsers
     })
 }
 export const fetchMessage = async (req: Request, res: Response) => {
@@ -60,7 +44,7 @@ export const fetchMessage = async (req: Request, res: Response) => {
         const messages = await Message.find({
             room_id: room.id
         }).select("sender content room_id images files").limit(20).sort({
-             createdAt:"desc"
+            createdAt: "desc"
         })
         messages.reverse();
         const filteredUserIds = room.user_id.filter(userId => userId !== res.locals.user.id);
@@ -71,15 +55,25 @@ export const fetchMessage = async (req: Request, res: Response) => {
             _id: filteredUserIds // Loại trừ người dùng có ID là res.locals.user.id
         }).select("id fullName avatar lastOnline statusOnline");
 
-        const lastOnline  = getLastOnlineTime(user.lastOnline)
+        const lastOnline = getLastOnlineTime(user.lastOnline)
         user["lastOnlineTime"] = lastOnline;
+
+        // Tìm 20 tin nhắn gần nhất có chứa hình ảnh trong phòng
+        const listMessagesWithImages = await Message.find({
+            room_id: room.id,
+            images: { $exists: true, $not: { $size: 0 } }, // Chỉ lấy các tin nhắn có ít nhất 1 hình ảnh
+            deleted: false // Loại bỏ các tin nhắn đã bị xóa
+        })
+            .sort({ createdAt: -1 }) // Sắp xếp giảm dần theo thời gian
+            .limit(10).select("images"); // Lấy 20 tin nhắn
 
         res.json({
             "code": 200,
             "data": {
                 messages: messages,
                 infoReceiver: user,
-                roomId:room.id
+                roomId: room.id,
+                listImages: listMessagesWithImages
             }
         })
     } else {
@@ -117,35 +111,47 @@ export const roomMessage = async (req: Request, res: Response) => {
     const listUsers = await User.find({
         deleted: false,
         status: "active",
-        _id: { $in: userIds } 
+        _id: { $in: userIds }
     });
 
     const messages = await Message.find({
         room_id: req.params.roomId
     }).limit(20).sort({
-        createdAt:"desc"
+        createdAt: "desc"
     })
     messages.reverse();
 
-    const lastOnline  = getLastOnlineTime(user.lastOnline)
+    const lastOnline = getLastOnlineTime(user.lastOnline)
     user["lastOnlineTime"] = lastOnline;
+
+
+    //lấy ra image
+    // Tìm 20 tin nhắn gần nhất có chứa hình ảnh trong phòng
+    const listMessagesWithImages = await Message.find({
+        room_id: req.params.roomId,
+        images: { $exists: true, $not: { $size: 0 } }, // Chỉ lấy các tin nhắn có ít nhất 1 hình ảnh
+        deleted: false // Loại bỏ các tin nhắn đã bị xóa
+    })
+        .sort({ createdAt: -1 }) // Sắp xếp giảm dần theo thời gian
+        .limit(20).select("images"); // Lấy 20 tin nhắn
 
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Trang chat",
         messages: messages,
         userreceive: user,
         room: userInRoom,
-        listUsers: listUsers
+        listUsers: listUsers,
+        listImages: listMessagesWithImages
     })
 }
-export const videoCall = async(req:Request,res:Response) =>{ 
+export const videoCall = async (req: Request, res: Response) => {
     const userId = req.params.userId
     const objectCall = {
         caller: res.locals.user.id,
         callee: userId
     }
-   
-    res.render("client/pages/chat/call.pug",{
+
+    res.render("client/pages/chat/call.pug", {
         objectCall: objectCall
     })
 }

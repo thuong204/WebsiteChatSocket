@@ -1,0 +1,31 @@
+extends ../../layouts/default.pug
+include ../../mixins/aside-list.pug
+block main
+    .main-content
+        .row
+            // Left Sidebar
+            .col-xl-3.col-lg-4.col-md-5.col-sm-5.aside-base
+                +aside-list(pageTitle)
+            // Right Content Area
+            .col-xl-9.col-lg-8.col-md-7.col-sm-7.main-content-right
+                .friend-header(friend-header)
+                    h2 Tìm kiếm bạn bè
+                    input(type="text" placeholder="Tìm bạn" class="friend-search-all" find-friend-all) 
+                    button.btn.btn-success.btn-search-friend(btn-search-friend) Tìm kiếm
+                .friend-suggestions
+                    .suggestion-cards
+                        each list in listUsers
+                            .card
+                                img(src=list.avatar alt="Profile Picture")
+                                .info
+                                    p #{list.fullName}
+                                    .buttons
+                                        button.add-friend.btn-primary.btn(btn-add-friend)  Thêm bạn bè
+                                        button.cancel-friend.btn-secondary.d-none.btn(btn-cancel-friend)  Hủy yêu cầu
+                                        button.remove-friend.btn-secondary.btn(btn-delete-friend) Gỡ
+
+    block script 
+        script( type= "module" src="/js/user.js")
+
+
+

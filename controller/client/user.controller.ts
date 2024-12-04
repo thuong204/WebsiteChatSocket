@@ -228,3 +228,13 @@ export const loginSuccessFacebook = async (req: Request, res: Response) => {
         res.redirect("/user/login");
     }
 };
+export const updateStatus = async(req:Request,res:Response) =>{
+    const tokenUser = req.cookies.tokenUser
+    await User.updateOne({
+        tokenUser:tokenUser
+    },{
+        statusOnline:"offine",
+        lastOnline: new Date()
+    })
+
+}

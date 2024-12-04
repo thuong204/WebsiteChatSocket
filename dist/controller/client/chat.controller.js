@@ -56,18 +56,9 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         status: "active",
         _id: { $in: userIds }
     });
-    const enhancedListUsers = listUsers.map(user => {
-        const specificRoom = rooms.find(room => {
-            const members = room.user_id.map(id => id.toString());
-            return (members.includes(user._id.toString()) &&
-                members.includes(res.locals.user.id.toString()) &&
-                members.length === 2);
-        });
-        return Object.assign(Object.assign({}, user.toObject()), { room_id: specificRoom ? specificRoom._id : null });
-    });
     res.render("client/pages/chat/chathello.pug", {
         pageTitle: "Trang chủ",
-        listUsers: enhancedListUsers
+        listUsers: listUsers
     });
 });
 exports.index = index;
@@ -93,12 +84,20 @@ const fetchMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         }).select("id fullName avatar lastOnline statusOnline");
         const lastOnline = (0, getLastOnline_1.getLastOnlineTime)(user.lastOnline);
         user["lastOnlineTime"] = lastOnline;
+        const listMessagesWithImages = yield message_model_1.default.find({
+            room_id: room.id,
+            images: { $exists: true, $not: { $size: 0 } },
+            deleted: false
+        })
+            .sort({ createdAt: -1 })
+            .limit(10).select("images");
         res.json({
             "code": 200,
             "data": {
                 messages: messages,
                 infoReceiver: user,
-                roomId: room.id
+                roomId: room.id,
+                listImages: listMessagesWithImages
             }
         });
     }
@@ -144,12 +143,20 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     messages.reverse();
     const lastOnline = (0, getLastOnline_1.getLastOnlineTime)(user.lastOnline);
     user["lastOnlineTime"] = lastOnline;
+    const listMessagesWithImages = yield message_model_1.default.find({
+        room_id: req.params.roomId,
+        images: { $exists: true, $not: { $size: 0 } },
+        deleted: false
+    })
+        .sort({ createdAt: -1 })
+        .limit(20).select("images");
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Trang chat",
         messages: messages,
         userreceive: user,
         room: userInRoom,
-        listUsers: listUsers
+        listUsers: listUsers,
+        listImages: listMessagesWithImages
     });
 });
 exports.roomMessage = roomMessage;

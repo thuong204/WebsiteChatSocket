@@ -8,13 +8,13 @@ export const index = async (req: Request, res: Response) => {
     const listUsers = await User.find({
         deleted: false,
         listFriends: {
-          $elemMatch: { user_id: res.locals.user.id } // Kiểm tra res.locals.user.id có trong user_id của listFriends
+            $elemMatch: { user_id: res.locals.user.id } // Kiểm tra res.locals.user.id có trong user_id của listFriends
         }
-      }).select("fullName avatar");
-      
+    }).select("fullName avatar");
+
     res.render("client/pages/friend/index", {
         pageTitle: "Bạn bè",
-        listUsers:listUsers
+        listUsers: listUsers
     })
 
 }
@@ -77,7 +77,7 @@ export const send = async (req: Request, res: Response) => {
         pageTitle: "Lời mòi đã gửi",
         listUsers: listUsers
     })
-    
+
 
 
 }
@@ -91,7 +91,6 @@ export const accept = async (req: Request, res: Response) => {
     })
 
     const listUsers = await User.find({
-        // vua ko la id cua minh vua ko la danh sach da gui loi moi ket ban
         _id: { $in: myUser.acceptFriends },
         deleted: false,
         status: "active"
@@ -100,4 +99,48 @@ export const accept = async (req: Request, res: Response) => {
         pageTitle: "Lời mời kết bạn",
         listUsers: listUsers
     })
+}
+export const find = async (req: Request, res: Response) => {
+
+    const listUsers = await User.find({
+        deleted:false,
+        status:"active",
+        _id: { $ne: res.locals.user.id }
+    }).select("fullName avatar")
+    res.render("client/pages/friend/find", {
+        pageTitle: "Tìm kiếm bạn bè",
+        listUsers:listUsers
+    })
+}
+
+export const searchApi = async (req: Request, res: Response) => {
+    try {
+        const keyword = typeof req.query.keyword === "string" ? req.query.keyword.trim() : "";
+
+        const keywordRegex = new RegExp(keyword, "i")
+
+
+        const searchCondition = {
+            _id: { $ne: res.locals.user.id }, // Không phải chính người dùng hiện tại
+            deleted: false, // Lọc các tài khoản chưa bị xóa
+            status: "active", // Lọc các tài khoản đang hoạt động
+            fullName: keywordRegex , // Tìm kiếm gần đúng theo tên, không phân biệt chữ hoa chữ thường
+
+
+    };
+
+
+    const listAllUsers = await User.find(searchCondition).select("fullName avatar").limit(50);
+    res.json({
+        code: 200,
+        data: listAllUsers
+    });
+} catch (error) {
+    console.error(error);
+    res.status(500).json({
+        code: 500,
+        message: "Internal Server Error"
+    });
+}
+
 }

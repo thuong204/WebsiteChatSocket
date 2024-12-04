@@ -31,4 +31,6 @@ router.get("/", friendController.index);
 router.get("/suggestions", friendController.suggestion);
 router.get("/send", friendController.send);
 router.get("/accept", friendController.accept);
+router.get("/find", friendController.find);
+router.get("/search-api", friendController.searchApi);
 exports.friendRoutes = router;
