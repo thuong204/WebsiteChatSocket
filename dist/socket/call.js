@@ -9,14 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.chatSocket = void 0;
-const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.callSocket = void 0;
+const callSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = res.locals.user.id;
     const fullName = res.locals.user.fullNamez;
     global._io.once('connection', (socket) => {
-        socket.on("CLIENT_SEND_PEER", (data) => {
-            console.log(`${data} heo`);
+        socket.on("CLIENT_ACCEPT_CALL", (data) => {
+            console.log("ok");
         });
     });
 });
-exports.chatSocket = chatSocket;
+exports.callSocket = callSocket;

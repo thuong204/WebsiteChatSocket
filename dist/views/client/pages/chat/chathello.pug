@@ -40,7 +40,7 @@ block main
                                         li.aside-item-chat.chat-hello(data-user=user.user._id style="cursor:pointer" room = user.room_id  )
                                             .group-media.d-flex.align-items-center
                                                 .media
-                                                    img(src= user.user.avatar ? user.user.avatar : "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"  alt="User Image" class="rounded-circle")
+                                                    img(src= user.user.avatar ? user.user.avatar : "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png" alt="User Image" class="rounded-circle")
                                                 .media-col.d-flex.status
                                                     if(user.user.statusOnline=="online")
                                                         div(class="dot-active")
@@ -49,14 +49,17 @@ block main
                                                 .media-col.d-flex
                                                     .user-info
                                                         h6 #{user.user.fullName}
-                                                    .user-message
-                                                        h6.message #{user.latestMessage.content}
-                                                .media-col.d-flex
-                                                    span.time #{user.messageTime}
+                                                    .user-message.d-flex
+                                                        if(user.latestMessage)
+                                                            h6.message #{user.latestMessage.content}
+                                                        if(user.latestMessage)
+                                                            span.time(content-time) #{user.latestMessage.formattedMessageTime}
+
+                                               
             .col-xl-9.col-lg-8.col-md-7.col-sm-7
                 .welcome-container
                     .welcome-logo 
-                        img(src="https://cryptologos.cc/logos/chatcoin-chat-logo.png" width="100px", alt="")
+                        img(src="https://cryptologos.cc/logos/chatcoin-chat-logo.png" width="100px" alt="")
                     .welcome-content
                         h1.title
                             | Chào mừng đến với 

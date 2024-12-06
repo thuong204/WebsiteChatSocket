@@ -8,6 +8,12 @@ const messageSchema = new mongoose_1.default.Schema({
     sender: String,
     room_id: String,
     content: String,
+    call: {
+        title: String,
+        statusCall: String,
+        peerIdCall: String,
+        peerIdReceiver: String
+    },
     images: [String],
     files: [{
             link: String,

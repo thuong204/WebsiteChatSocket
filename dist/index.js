@@ -52,6 +52,7 @@ const io = new socket_io_1.Server(server, {
 });
 global._io = io;
 app.use((0, cors_1.default)());
+app.use(express_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.static(`${__dirname}/public`));
 app.set("views", `${__dirname}/views`);

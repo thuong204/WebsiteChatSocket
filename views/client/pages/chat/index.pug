@@ -38,7 +38,7 @@ block main
                             ul.list-aside-item.scrollable-list
                                 if (listUsers && listUsers.length > 0)
                                     each user, index in listUsers
-                                        li.aside-item-chat.chat-main(data-user=user.user.id style="cursor:pointer" class=(userreceive.id == user.id? 'active' : ''))
+                                        li.aside-item-chat.chat-main(data-user=user.user.id style="cursor:pointer" class=(userreceive.id == user.user.id ? 'active' : ''))
                                             .group-media.d-flex.align-items-center
                                                 .media
                                                     img(src= user.user.avatar ? user.user.avatar : "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png" alt="User Image" class="rounded-circle")
@@ -50,10 +50,13 @@ block main
                                                 .media-col.d-flex
                                                     .user-info
                                                         h6 #{user.user.fullName}
-                                                    .user-message
-                                                        h6.message(content-message) #{user.latestMessage.content}
-                                                .media-col.d-flex
-                                                    span.time(content-time) #{user.latestMessage.time}
+                                                    .user-message.d-flex
+                                                        if(user.latestMessage.content)
+                                                            h6.message(content-message) #{user.latestMessage.content}
+                                                        if(user.latestMessage.formattedMessageTime)
+                                                            span.time(content-time) #{user.latestMessage.formattedMessageTime}
+
+
 
             .col-xl-6.col-lg-8.col-md-7.col-12.col-sm-7.chat-content
                 .chat-head
@@ -125,8 +128,20 @@ block main
                                                                 button.custom-pause-button.d-none 
                                                                     i(class="fa-solid fa-pause")
                                                                 input.custom-progress-bar(type="range" min="0" max="100" value="0")
-                                                                span.custom-current-time 0:00                                              
+                                                                span.custom-current-time 0:00   
+                                                if(message.call && message.call.statusCall)               
+
+                                                    if(message.call.statusCall=="call fail")
+                                                        .reply-call.missed
+                                                            i.icon.fas.fa-phone-slash.text-danger
+                                                            span.status-text #{message.call.title}
+
+                                                    else if(message.call.statusCall=="success")
+                                                        .reply-call.ended
+                                                            i.icon.fas.fa-phone.text-secondary
+                                                            span.status-text #{message.call.title}
                                                     .reply-tool
+
                                 else
                                     .reply-item.incoming.d-flex.flex-row
                                         .reply-avatar 
@@ -154,7 +169,17 @@ block main
                                                                 button.custom-pause-button.d-none 
                                                                     i(class="fa-solid fa-pause")
                                                                 input.custom-progress-bar(type="range" min="0" max="100" value="0")
-                                                                span.custom-current-time 0:00             
+                                                                span.custom-current-time 0:00   
+                                                if(message.call && message.call.statusCall)               
+                                                    if(message.call.statusCall=="call fail")
+                                                        .reply-call.missed
+                                                            i.icon.fas.fa-phone-slash.text-danger
+                                                            span.status-text #{message.call.title}
+
+                                                    else if(message.call.statusCall=="success")
+                                                        .reply-call.ended
+                                                            i.icon.fas.fa-phone.text-secondary
+                                                            span.status-text #{message.call.title}          
                                                     .reply-tool
                                                 .reply-tool
                 .chat-form.d-flex
@@ -276,7 +301,7 @@ block main
                                     .row.list-chat-video
                                         .col-6 
                                             img(src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg")
-                                        
+
 
 
 

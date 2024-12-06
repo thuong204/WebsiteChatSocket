@@ -228,7 +228,7 @@ const updateStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     yield user_model_1.default.updateOne({
         tokenUser: tokenUser
     }, {
-        statusOnline: "offine",
+        statusOnline: req.body.status,
         lastOnline: new Date()
     });
 });

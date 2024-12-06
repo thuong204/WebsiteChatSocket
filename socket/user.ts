@@ -122,12 +122,13 @@ export const userSocket = async (res: Response) => {
                 _id: myUserA,
                 "listFriends.user_id": userB, // Kiểm tra userB đã tồn tại trong listFriends chưa
             });
+            console.log(existingFriendA)
 
             if (!existingFriendA) {
                 await User.updateOne(
                     { _id: myUserA },
                     {
-                        $pull: {
+                        $push: {
                             listFriends: {
                                 user_id: userB,
                                 room_id: roomUser._id,
@@ -142,6 +143,7 @@ export const userSocket = async (res: Response) => {
                 _id: userB,
                 "listFriends.user_id": myUserA, // Kiểm tra myUserA đã tồn tại trong listFriends chưa
             });
+            console.log(existingFriendB)
 
             if (!existingFriendB) {
                 await User.updateOne(
@@ -200,5 +202,7 @@ export const userSocket = async (res: Response) => {
             console.log("Xóa bạn bè thành công")
 
         })
+
+        // Khi kết nối bị ngắt (người dùng đóng tab hoặc rời khỏi trang)
     })
 }

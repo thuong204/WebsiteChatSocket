@@ -61,17 +61,21 @@ const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
                 const link = yield uploadToCloudinary.uploadSingle(fileBuffer.buffer);
                 files.push({ link: link, name: nameFile });
             }
-            console.log(files);
             if (!room) {
                 const room = new room_model_1.default({
                     user_id: [res.locals.user.id],
                 });
             }
-            const filteredUserIds = room.user_id.filter(userId => userId == res.locals.user.id);
+            const filteredUserIds = room.user_id.filter(userId => userId != res.locals.user.id);
             const userReceiver = yield user_model_1.default.findOne({
                 deleted: false,
                 status: "active",
                 _id: filteredUserIds
+            }).select("fullName avatar");
+            const userSender = yield user_model_1.default.findOne({
+                deleted: false,
+                status: "active",
+                _id: res.locals.user.id
             }).select("fullName avatar");
             if (data) {
                 const message = new message_model_1.default({
@@ -83,8 +87,10 @@ const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
                 });
                 yield message.save();
             }
+            console.log(userSender);
+            console.log(userReceiver);
             global._io.emit('SERVER_RETURN_MESSAGE', {
-                sender: userId,
+                sender: userSender,
                 room_id: room.id,
                 content: data.content,
                 images: images,
@@ -93,7 +99,6 @@ const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }));
         socket.on("CLIENT_REGISTER", (data) => __awaiter(void 0, void 0, void 0, function* () {
-            console.log("helo");
             const exists = arrUserInfo.some(user => user.userId === data.userId);
             if (exists) {
                 const user = arrUserInfo.find(user => user.userId === data.userId);
@@ -102,36 +107,159 @@ const chatSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
                 }
             }
             else {
-                arrUserInfo.push(data);
+                const newUser = { userId: userId, peerId: "" };
+                arrUserInfo.push(newUser);
             }
             console.log(arrUserInfo);
         }));
-        socket.on("CLIENT_CALLVIDEO", (data) => {
+        socket.on("CLIENT_CALL_VIDEO", (data) => __awaiter(void 0, void 0, void 0, function* () {
             const callerId = data.callerId;
-            const calleeId = data.calleeId;
-            const user = arrUserInfo.find(user => user === calleeId);
-            if (user) {
-                console.log(calleeId);
-                global._io.to(calleeId).emit("SERVER_CALLVIDEO", {
-                    callerId: callerId,
-                    calleeId: calleeId
-                });
-                console.log("Gửi tới người nhận ");
+            const roomId = data.roomID;
+            const userIds = arrUserInfo.map(user => user.userId);
+            const matchedUsers = yield room_model_1.default.findOne({
+                user_id: { $in: userIds },
+            }).select('user_id');
+            const user = yield user_model_1.default.findOne({
+                _id: callerId
+            }).select("fullName");
+            const objectMessage = {
+                sender: callerId,
+                room_id: roomId,
+                call: {
+                    title: "Đang gọi dến",
+                    statusCall: "called",
+                    peerIdCall: "",
+                    peerIdReceiver: ""
+                }
+            };
+            const message = new message_model_1.default(objectMessage);
+            yield message.save();
+            if (matchedUsers && matchedUsers.user_id.length > 0) {
+                for (const calleeId of matchedUsers.user_id) {
+                    if (calleeId == callerId)
+                        continue;
+                    global._io.to(calleeId).emit("SERVER_CALL_VIDEO", {
+                        callerId: user,
+                        calleeId: calleeId,
+                        roomId: roomId
+                    });
+                }
             }
             else {
                 console.log("Không tìm thấy người nhận.");
             }
-        });
-        socket.on("CLIENT_LOGIN", (userId) => {
-            const user = arrUserInfo.find(user => user === userId);
+        }));
+        socket.on("CLIENT_LOGIN", (userId) => __awaiter(void 0, void 0, void 0, function* () {
+            yield user_model_1.default.updateOne({
+                _id: userId
+            }, {
+                statusOnline: "online"
+            });
+            const user = arrUserInfo.find(user => user.userId === userId);
             if (!user) {
-                arrUserInfo.push(userId);
+                const newUser = { userId: userId, peerId: "" };
+                arrUserInfo.push(newUser);
             }
             else {
             }
             console.log(arrUserInfo);
             socket.join(userId);
-        });
+        }));
+        socket.on("CLIENT_SAVE_PEER", (data) => __awaiter(void 0, void 0, void 0, function* () {
+            var _a;
+            const user = arrUserInfo.find(user => user.userId === data.userId);
+            if (user) {
+                user.peerId = data.peerId;
+                const userIds = arrUserInfo.map(user => user.userId);
+                const room = yield room_model_1.default.findOne({
+                    user_id: { $in: userIds }
+                }).select('user_id');
+                if (!room) {
+                    console.log('Không tìm thấy phòng');
+                    return;
+                }
+                const userIdsInRoom = room.user_id;
+                const missingPeerIds = arrUserInfo.filter(user => userIdsInRoom.includes(user.userId) && user.peerId === '');
+                if (missingPeerIds.length > 0) {
+                    console.log('Các người dùng thiếu peerId:', missingPeerIds);
+                }
+                else {
+                    const peerIdCall = (_a = arrUserInfo.find(user => user.userId === data.userId)) === null || _a === void 0 ? void 0 : _a.peerId;
+                    const peerIdReceiver = arrUserInfo
+                        .filter(user => userIdsInRoom.includes(user.userId) && user.userId !== data.userId)
+                        .map(user => user.peerId)[0];
+                    if (peerIdCall && peerIdReceiver) {
+                        const userCall = arrUserInfo.find(user => user.peerId === peerIdReceiver);
+                        const message = yield message_model_1.default.findOne({
+                            sender: userCall.userId,
+                            room_id: room._id,
+                            "call.title": { $exists: true }
+                        })
+                            .sort({ createdAt: -1 });
+                        if (message) {
+                            const updatedMessage = yield message_model_1.default.updateOne({ _id: message._id }, {
+                                $set: {
+                                    "call.title": "Cuộc gọi đang diễn ra",
+                                    "call.statusCall": "calling",
+                                    "call.peerIdCall": peerIdCall,
+                                    "call.peerIdReceiver": peerIdReceiver
+                                }
+                            });
+                        }
+                        global._io.emit("SERVER_RETURN_MAKE_CALL", {
+                            peerIdCall: peerIdCall,
+                            peerIdReceiver: peerIdReceiver,
+                        });
+                    }
+                    else {
+                        console.log("Không tìm thấy peerId hợp lệ cho cuộc gọi.");
+                    }
+                }
+            }
+            else {
+            }
+        }));
+        socket.on("USER_DISCONNECTED_PEER", (id) => __awaiter(void 0, void 0, void 0, function* () {
+            const userCaller = arrUserInfo.find(user => user.peerId === id);
+            console.log(id);
+            const message = yield message_model_1.default.findOne({
+                "call.peerIdCall": id
+            })
+                .sort({ createdAt: -1 });
+            if (message) {
+                const updatedMessage = yield message_model_1.default.updateOne({ _id: message._id }, {
+                    $set: {
+                        "call.title": "Cuộc gọi đã kết thúc",
+                        "call.statusCall": "success"
+                    }
+                });
+            }
+            if (userCaller) {
+                const userCall = yield user_model_1.default.findOne({
+                    _id: userCaller.userId
+                }).select("fullName");
+                userCaller.peerId = "";
+                socket.broadcast.emit("USER_RETURN_DISCONNECTED_PEER", userCall);
+            }
+            else {
+            }
+        }));
+        socket.on("CLIENT_REJECT_CALL", (data) => __awaiter(void 0, void 0, void 0, function* () {
+            const message = yield message_model_1.default.findOne({
+                sender: data.userId._id,
+                room_id: data.roomId,
+                "call.title": { $exists: true }
+            })
+                .sort({ createdAt: -1 });
+            if (message) {
+                const updatedMessage = yield message_model_1.default.updateOne({ _id: message._id }, {
+                    $set: {
+                        "call.title": "Cuộc gọi bị nhỡ",
+                        "call.statusCall": "call fail"
+                    }
+                });
+            }
+        }));
     });
 });
 exports.chatSocket = chatSocket;

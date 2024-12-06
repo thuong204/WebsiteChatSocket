@@ -1,5 +1,7 @@
 
 let audioBlob;
+moment.locale("vi")
+
 const scrollList = document.querySelector(".chat-body.scrollable-list");
 // Hàm cuộn xuống cuối danh sách
 const scrollToBottom = () => {
@@ -7,7 +9,7 @@ const scrollToBottom = () => {
 };
 const form = document.getElementById("form-send")
 
-let idUserReceiver = document.querySelector("[userreceiveinfo]");
+let roomID = document.querySelector("[room]");
 
 
 const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-image', {
@@ -15,6 +17,8 @@ const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-image', {
     maxFileCount: 6,
 });
 
+
+const userreceiveinfo = document.querySelector("[userreceiveinfo]")
 
 
 
@@ -63,16 +67,18 @@ if (form) {
 }
 
 socket.on('SERVER_RETURN_MESSAGE', (data) => {
+
+
     const userId = document.querySelector("[myId]")
+
     const message = document.querySelector(".chat-message")
     const div = document.createElement("div")
     const replyMessages = document.querySelectorAll(".reply-item");
     const lastReplyMessage = replyMessages[replyMessages.length - 1];
 
-
     //xu li tin nhan moi nhat tren thanh
 
-    const dataContent = document.querySelector("[content-message]");
+    let dataContent
     const dataTime = document.querySelector("[content-time]");
 
 
@@ -110,7 +116,7 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
 
     let htmlText = data.content ? `<div class="reply-text">${data.content}</div>` : '';
 
-    let avatarReceiver;
+    let avatarSender;
 
     let htmlContent = `
         <div class="reply-group">
@@ -124,24 +130,33 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
     `;
 
 
-    if (data.sender == userId.getAttribute("myId")) {
 
+    if (data.sender._id == userId.getAttribute("myId") && data.receiver._id == userreceiveinfo.getAttribute("userreceiveinfo")) {
+
+
+        const dataUser = document.querySelector(`[data-user="${data.receiver._id}"]`)
         if (data) {
-            if (data.images && data.images.length > 0) {
-                dataContent.textContent = "Bạn: Đã gửi một hình ảnh";
+            if (dataUser) {
+                dataContent = dataUser.querySelector("[content-message]")
+                if (data.images && data.images.length > 0) {
+                    dataContent.textContent = "Bạn: Đã gửi một hình ảnh";
+                }
+
+                else if (data.files && data.files.length > 0) {
+                    dataContent.textContent = "Bạn: Đã gửi một file";
+                }
+                else {
+                    dataContent.textContent = `Bạn: ${data.content}`;
+                }
             }
 
-            else if (data.files && data.files.length > 0) {
-                dataContent.textContent = "Bạn: Đã gửi một file";
-            }
-            else {
-                dataContent.textContent = `Bạn: ${data.content}`;
-            }
         }
         // Lấy thời gian hiện tại và cập nhật cho dataTime
-        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        // Định dạng thời gian của tin nhắn
+        const messageTime = moment(); // Lấy thời gian hiện tại
+        const formattedMessageTime = messageTime.fromNow(); // Hiển thị "Vừa xong" hoặc khoảng thời gian
         if (dataTime) {
-            dataTime.textContent = currentTime;
+            dataTime.textContent = formattedMessageTime;
         }
 
 
@@ -161,37 +176,47 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
         scrollToBottom();
 
 
-    } else {
+    } else if (data.receiver && userreceiveinfo) {
+        if (data.receiver._id == userId.getAttribute("myId") && data.sender._id == userreceiveinfo.getAttribute("userreceiveinfo")) {
 
-        if (data) {
-            if (data.images && data.images.length > 0) {
-                dataContent.textContent = "Đã gửi một hình ảnh";
+            const dataUser = document.querySelector(`[data-user="${data.sender._id}"]`)
+            if (dataUser) {
+                dataContent = dataUser.querySelector("[content-message]")
+                if (data) {
+                    if (data.images && data.images.length > 0) {
+                        dataContent.textContent = "Đã gửi một hình ảnh";
+                    }
+
+                    else if (data.files && data.files.length > 0) {
+                        dataContent.textContent = "Đã gửi một file";
+                    }
+                    else {
+                        dataContent.textContent = data.content;
+                    }
+                }
             }
 
-            else if (data.files && data.files.length > 0) {
-                dataContent.textContent = "Đã gửi một file";
+
+
+            dataContent.classList.add('bold-text');
+            // Lấy thời gian hiện tại và cập nhật cho dataTime
+            const messageTime = moment();
+            const formattedMessageTime = messageTime.fromNow(); // Hiển thị "Vừa xong" hoặc khoảng thời gian
+            if (dataTime) {
+                dataTime.textContent = formattedMessageTime;
             }
-            else {
-                dataContent.textContent = data.content;
-            }
-        }
-        // Lấy thời gian hiện tại và cập nhật cho dataTime
-        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        if (dataTime) {
-            dataTime.textContent = currentTime;
-        }
 
 
-        avatarReceiver = data.receiver.avatar || "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"
+            avatarSender = data.sender.avatar || "https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png"
 
-        div.classList.add("reply-item")
-        div.classList.add("incoming")
+            div.classList.add("reply-item")
+            div.classList.add("incoming")
 
-        let htmlSender = `
+            let htmlSender = `
             <div class="reply-avatar">
                 <div class="media">
                     <img 
-                        src= ${avatarReceiver}
+                        src= ${avatarSender}
                         width="32" 
                         height="32" 
                         class="rounded-circle"
@@ -199,21 +224,22 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
                 </div>
             </div>
        `
-        if (data.content || data.images || data.files) {
-            div.innerHTML = `
+            if (data.content || data.images || data.files) {
+                div.innerHTML = `
         ${htmlSender}
         ${htmlContent}
         `
-        }
+            }
 
-        if (lastReplyMessage) {
-            lastReplyMessage.insertAdjacentElement("afterend", div);
-        } else {
-            // Nếu không có tin nhắn nào, chèn vào đầu danh sách
-            message.appendChild(div);
-        }
-        scrollToBottom();
+            if (lastReplyMessage) {
+                lastReplyMessage.insertAdjacentElement("afterend", div);
+            } else {
+                // Nếu không có tin nhắn nào, chèn vào đầu danh sách
+                message.appendChild(div);
+            }
+            scrollToBottom();
 
+        }
     }
 
 
@@ -232,7 +258,6 @@ const emojiPicker = document.querySelector("emoji-picker")
 const tooltip = document.querySelector('.tooltip')
 const inputChat = document.querySelector(".input-message")
 const button = document.querySelector(".btn-icon-emoji")
-console.log(button)
 if (button) {
     Popper.createPopper(button, tooltip, {
         placement: 'top', // Position the tooltip above the button
@@ -486,37 +511,31 @@ const clearMedia = () => {
 
 // Bắt sự kiện click để thực hiện cuộc gọi
 const itemVideo = document.querySelector(".item-video");
-if (idUserReceiver) {
-    idUserReceiver = idUserReceiver.getAttribute("userreceiveinfo");
+if (roomID) {
+    roomID = roomID.getAttribute("room");
 }
 const userId = document.querySelector("[myid]").getAttribute("myid")
-let localStream
 // Khi người gọi nhấn vào để gọi
 if (itemVideo) {
     itemVideo.addEventListener("click", () => {
 
         // Gửi thông báo đến server về người nhận cuộc gọi
-        socket.emit("CLIENT_CALLVIDEO", {
+        socket.emit("CLIENT_CALL_VIDEO", {
             callerId: userId,
-            calleeId: idUserReceiver
+            roomID: roomID
         });
 
         const videoCallWindow = window.open(
-            `video/${idUserReceiver}`, // Đường dẫn tới trang video call
-            "_blank",          // Mở trong tab hoặc cửa sổ mới
+            `video/${roomID}`,
+            "_blank",
             "width=800,height=600,toolbar=no,location=no"
         );
-        // Kiểm tra nếu cửa sổ bị chặn bởi trình duyệt
         if (!videoCallWindow) {
             alert("Cửa sổ bật lên bị chặn. Hãy bật popup trong trình duyệt của bạn.");
         }
-        // Lấy media stream từ camera và microphone
     });
 }
 
-// Lắng nghe cuộc gọi từ server
-
-// Xử lý khi có cuộc gọi đến
 
 
 socket.emit("CLIENT_LOGIN", userId)
@@ -534,37 +553,43 @@ socket.on("SERVER_RETURN_USER_ONLINE", (userId) => {
 })
 
 
-socket.on("SERVER_CALLVIDEO", (data) => {
-    console.log("Nhận yêu cầu gọi video từ: ", data.callerId);
+const playSound = (soundUrl) =>{
+    const audio = new Audio(soundUrl);
+    audio.play().catch(err => console.error("Failed to play sound:", err));
+}
 
+socket.on("SERVER_CALL_VIDEO", (data) => {
+    // Phát âm thanh khi có cuộc gọi đến
+    const callSound = new Audio('https://res.cloudinary.com/dwk6tmsmh/video/upload/v1733487203/fhvctprud0jx1y2gfeus.mp3');
+    callSound.play();
+
+    // Hiển thị thông báo yêu cầu cuộc gọi video
     Swal.fire({
         title: 'Yêu cầu cuộc gọi video',
-        text: `Bạn có muốn nhận cuộc gọi từ ${data.callerId}?`,
+        text: `Bạn có muốn nhận cuộc gọi từ ${data.callerId.fullName}?`,
         icon: 'question',
+        timer: 10000,  // Thời gian tự động đóng hộp thoại (10 giây)
         showCancelButton: true,
         confirmButtonText: 'Chấp nhận',
-        cancelButtonText: 'Từ chối'
+        cancelButtonText: 'Từ chối',
     }).then((result) => {
         if (result.isConfirmed) {
+            // Khi người dùng chấp nhận cuộc gọi, mở cửa sổ cuộc gọi video
             const videoCallWindow = window.open(
-                `video/${data.callerId}`,
+                `video/${data.roomId}`,
                 "_blank",
                 "width=800,height=600,toolbar=no,location=no"
             );
-            socket.emit("CLIENT_ACCEPT_CALL", {
-                userId: data.userId,
-            });
-            if (!videoCallWindow) {
-                alert("Cửa sổ bật lên bị chặn. Hãy bật popup trong trình duyệt của bạn.");
-            }
         } else {
+            // Khi người dùng từ chối cuộc gọi, gửi thông báo từ chối tới server
             socket.emit("CLIENT_REJECT_CALL", {
-                userId: data.userId
+                userId: data.callerId,
+                roomId: data.roomId
             });
-            console.log("Cuộc gọi bị từ chối");
         }
     });
 });
+
 
 
 

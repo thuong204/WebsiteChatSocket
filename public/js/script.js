@@ -319,3 +319,38 @@ listUserChatsHello.forEach(item => {
     })
 })
 
+
+//xu li nguoi dung offline
+let isUserActive = true; // Biến để theo dõi hoạt động của người dùng
+
+// Kiểm tra trạng thái người dùng theo thời gian
+let idleTime = 0;
+const MAX_IDLE_TIME = 300; // 300 giây = 5 phút
+
+setInterval(function() {
+    if (isUserActive) {
+        idleTime++;
+        if (idleTime >= MAX_IDLE_TIME) {
+            updateUserStatus("offline");
+        }
+    }
+}, 1000);
+
+// Reset idle time khi có hoạt động
+document.addEventListener('mousemove', resetIdleTime);
+document.addEventListener('keydown', resetIdleTime);
+
+function resetIdleTime() {
+    idleTime = 0;
+    isUserActive = true;  // Người dùng vẫn đang hoạt động
+}
+
+
+// Hàm cập nhật trạng thái người dùng
+function updateUserStatus(status) {
+    fetch('/user/update-status', {
+        method: 'POST',
+        body: JSON.stringify({ status: status }),
+        headers: { 'Content-Type': 'application/json' }
+    });
+}

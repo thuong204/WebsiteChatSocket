@@ -94,9 +94,10 @@ const userSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
                 _id: myUserA,
                 "listFriends.user_id": userB,
             });
+            console.log(existingFriendA);
             if (!existingFriendA) {
                 yield user_model_1.default.updateOne({ _id: myUserA }, {
-                    $pull: {
+                    $push: {
                         listFriends: {
                             user_id: userB,
                             room_id: roomUser._id,
@@ -108,6 +109,7 @@ const userSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
                 _id: userB,
                 "listFriends.user_id": myUserA,
             });
+            console.log(existingFriendB);
             if (!existingFriendB) {
                 yield user_model_1.default.updateOne({ _id: userB }, {
                     $push: {

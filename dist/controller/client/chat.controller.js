@@ -42,8 +42,11 @@ const chatSocket = __importStar(require("../../socket/chat"));
 const user_model_1 = __importDefault(require("../../model/user.model"));
 const moment_1 = __importDefault(require("moment"));
 const getLastOnline_1 = require("../../helpers/getLastOnline");
+require("moment/locale/vi");
+moment_1.default.locale('vi');
 const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        chatSocket.chatSocket(res);
         const rooms = yield room_model_1.default.find({
             deleted: false,
             user_id: res.locals.user.id
@@ -57,17 +60,28 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             deleted: false,
             status: "active",
             _id: { $in: userIds }
-        }).select("fullName avatar");
+        }).select("fullName avatar statusOnline");
         const userMessages = yield Promise.all(listUsers.map((user) => __awaiter(void 0, void 0, void 0, function* () {
             const room = yield room_model_1.default.findOne({
                 user_id: { $all: [user._id, res.locals.user.id] },
                 deleted: false
+            });
+            const specificRoom = rooms.find(room => {
+                const members = room.user_id.map(id => id.toString());
+                return (members.includes(user._id.toString()) &&
+                    members.includes(res.locals.user.id.toString()) &&
+                    members.length === 2);
             });
             const latestMessage = yield message_model_1.default.findOne({
                 room_id: room._id
             })
                 .sort({ createdAt: -1 })
                 .limit(1).select("content images files createdAt room_id");
+            if (!latestMessage)
+                return {
+                    user,
+                    room_id: specificRoom ? specificRoom._id : null
+                };
             let messageContent = latestMessage ? latestMessage.content : null;
             if (latestMessage) {
                 if (latestMessage.sender == res.locals.user.id) {
@@ -89,21 +103,17 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                         messageContent = "Đã gửi một file";
                     }
                     else {
-                        messageContent = `Bạn: ${latestMessage.content}`;
+                        messageContent = `${latestMessage.content}`;
                     }
                 }
             }
-            const messageTime = latestMessage ? (0, moment_1.default)(latestMessage.createdAt).format('HH:mm') : null;
-            const specificRoom = rooms.find(room => {
-                const members = room.user_id.map(id => id.toString());
-                return (members.includes(user._id.toString()) &&
-                    members.includes(res.locals.user.id.toString()) &&
-                    members.length === 2);
-            });
+            const messageTime = latestMessage ? (0, moment_1.default)(latestMessage.createdAt) : null;
+            const formattedMessageTime = messageTime
+                ? (0, moment_1.default)(messageTime).fromNow()
+                : "Chưa có tin nhắn";
             return {
                 user,
-                latestMessage: Object.assign(Object.assign({}, latestMessage.toObject()), { content: messageContent }),
-                messageTime,
+                latestMessage: Object.assign(Object.assign({}, latestMessage.toObject()), { content: messageContent, formattedMessageTime: formattedMessageTime }),
                 room_id: specificRoom ? specificRoom._id : null
             };
         })));
@@ -190,7 +200,7 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         deleted: false,
         status: "active",
         _id: { $in: userIds }
-    });
+    }).select("-password -email");
     const messages = yield message_model_1.default.find({
         room_id: req.params.roomId
     }).limit(20).sort({ createdAt: -1 });
@@ -214,7 +224,7 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             room_id: room._id
         })
             .sort({ createdAt: -1 })
-            .limit(1).select("content images files createdAt");
+            .limit(1).select("content images files createdAt call");
         let messageContent = latestMessage ? latestMessage.content : null;
         if (latestMessage) {
             if (latestMessage.sender == res.locals.user.id) {
@@ -224,28 +234,37 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 else if (latestMessage.files && latestMessage.files.length > 0) {
                     messageContent = "Bạn: Đã gửi một file";
                 }
+                else if (latestMessage.call.title) {
+                    messageContent = `${latestMessage.call.title}`;
+                }
                 else {
                     messageContent = `Bạn: ${latestMessage.content}`;
                 }
             }
             else {
                 if (latestMessage.images && latestMessage.images.length > 0) {
-                    messageContent = "Đã gửi một hình ảnh";
+                    messageContent = `${user.fullName} đã gửi một hình ảnh`;
                 }
                 else if (latestMessage.files && latestMessage.files.length > 0) {
-                    messageContent = "Đã gửi một file";
+                    messageContent = `${user.fullName} gửi một file`;
+                }
+                else if (latestMessage.call.title) {
+                    messageContent = `${latestMessage.call.title}`;
                 }
                 else {
-                    messageContent = `Bạn: ${latestMessage.content}`;
+                    messageContent = `${latestMessage.content}`;
                 }
             }
         }
-        const messageTime = latestMessage ? (0, moment_1.default)(latestMessage.createdAt).format('HH:mm') : null;
+        const messageTime = latestMessage ? (0, moment_1.default)(latestMessage.createdAt) : null;
+        const formattedMessageTime = messageTime
+            ? (0, moment_1.default)(messageTime).fromNow()
+            : "Chưa có tin nhắn";
         return {
             user,
             latestMessage: {
                 content: messageContent,
-                time: messageTime,
+                formattedMessageTime: formattedMessageTime,
                 createdAt: latestMessage ? latestMessage.createdAt : null
             }
         };
@@ -261,11 +280,18 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.roomMessage = roomMessage;
 const videoCall = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userId = req.params.userId;
-    const objectCall = {
-        caller: res.locals.user.id,
-        callee: userId
-    };
+    chatSocket.chatSocket(res);
+    const userInRoom = yield room_model_1.default.findOne({
+        _id: req.params.roomId
+    });
+    let objectCall;
+    const userId = req.params.roomId;
+    if (userInRoom) {
+        objectCall = {
+            caller: res.locals.user.id,
+            callee: userInRoom.user_id
+        };
+    }
     res.render("client/pages/chat/call.pug", {
         objectCall: objectCall
     });

@@ -10,39 +10,81 @@ html(lang="en")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     style.
       body {
-        background-color: #f8f9fa;
+        background-color: #f0f2f5;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
       .video-container {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         gap: 20px;
-        margin-top: 20px;
+        margin-top: 30px;
+        flex-wrap: wrap;
       }
-      video#local-video {
+      video {
         width: 100%;
         border-radius: 10px;
         border: 1px solid #dee2e6;
       }
-      video#local-video {
-        width: 50%;
+      .col-md-6 {
+        padding: 0;
+        max-width: 600px;
+      }
+      .video-wrapper {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* Aspect ratio 16:9 */
+        background: #000;
         border-radius: 10px;
-        border: 1px solid #dee2e6;
+        overflow: hidden;
+      }
+      .video-wrapper video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .btn-finish {
+        width: 100%;
+        padding: 15px;
+        background-color: #ff4d4d;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+      .btn-finish:hover {
+        background-color: #ff1a1a;
+      }
+      .notifications {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .notifications p {
+        font-size: 18px;
+        color: #333;
       }
 
   body
-    .container
+    .container(myId = user.id)
       h1.text-center.mb-4 Video Call
       .input-group.mb-3
-        input#peer-id.form-control(type="text" placeholder="Nhập ID Peer khác")
-        button#call-peer.btn.btn-primary Bắt đầu gọi
-        button#join.btn.btn-success Tham gia
+        button#join.btn.btn-danger(btn-finish) Kết thúc cuộc gọi
       .video-container
         .col-md-6
-          video#remote-video(autoplay playsinline)
+          .video-wrapper
+            video#remote-video(autoplay playsinline)
         .col-md-6
-          video#local-video(autoplay muted playsinline)
-    script(src="/js/socket.io.js")
+          .video-wrapper
+            video#local-video(autoplay muted playsinline)
+    .notifications
+      #notifications
+        p Chờ kết nối hoặc kết thúc cuộc gọi.
+
     script(src="/socket.io/socket.io.js")  
-    script(type ="module" src="/js/call.js")
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
     script(src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js")
-    script(type="module" src="/js/chat.js")
+    script(src="/js/socket.js")
+    script(src="/js/call.js")

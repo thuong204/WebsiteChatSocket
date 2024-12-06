@@ -30,5 +30,5 @@ const router = (0, express_1.Router)();
 router.get("/", chatController.index);
 router.get("/receiver/:receiverId", chatController.fetchMessage);
 router.get("/:roomId", chatController.roomMessage);
-router.get("/video/:userId", chatController.videoCall);
+router.get("/video/:roomId", chatController.videoCall);
 exports.chatRoutes = router;

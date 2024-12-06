@@ -17,6 +17,9 @@ header {
     border-bottom: 1px solid #dddd;
 }
 
+.bold-text {
+    font-weight: bold !important;
+}
 .navbar-header {
     justify-content: space-between;
     align-items: center;
@@ -374,10 +377,6 @@ ul li.aside-item-chat .user-info {
 
 }
 
-ul li.aside-item-chat .user-info h6 {
-    margin-top: 5px !important;
-
-}
 
 
 
@@ -403,14 +402,13 @@ ul li.aside-item-chat .user-info h6 {
     margin-right: 10px;
     font-weight: 400;
     font-size: 12px;
-    margin-top: 0px;
+    margin-top: -4px;
 }
 
 span.time {
-    font-size: 12px;    
-    padding-top: 25px;
+    font-size: 11px;    
+    margin-top: -4px;
     font-weight: 600;
-    margin-left: 90px;
     justify-content: flex-end !important;
 }
 
@@ -447,7 +445,7 @@ span.time {
 
 .media-chat .user-info h6 {
     padding: 0;
-    margin-top: -5px;
+    margin-top: -10px;
     margin-left: -5px;
 }
 
@@ -1383,3 +1381,40 @@ p.description {
 .btn-friend-find:hover + .btn-remove-friend-find {
     display: block !important; 
 }
+.call-ended-notification {
+    background-color: #f44336;  /* Màu đỏ */
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* cuoc goi  */
+.reply-call {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+    margin-top: 10px;
+  }
+  .reply-call .icon {
+    font-size: 1.5rem;
+    margin-right: 10px;
+  }
+  .reply-call.ongoing {
+    background-color: #fff ;
+  }
+  .reply-call.missed {
+    border-left: 4px solid red;
+    background-color: #fff ;
+  }
+  .reply-call.ended {
+    border-left: 4px solid gray;
+  }
+  .reply-call .status-text {
+    font-weight: bold;
+  }

@@ -233,7 +233,7 @@ export const updateStatus = async(req:Request,res:Response) =>{
     await User.updateOne({
         tokenUser:tokenUser
     },{
-        statusOnline:"offine",
+        statusOnline: req.body.status,
         lastOnline: new Date()
     })
 

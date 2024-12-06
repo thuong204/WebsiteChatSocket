@@ -7,10 +7,16 @@ import User from "../../model/user.model"
 import { timeStamp } from "console"
 import moment from "moment"
 import { getLastOnlineTime } from "../../helpers/getLastOnline"
+import * as callSocket from "../../socket/call"
+import 'moment/locale/vi'; // Import locale tiếng Việt
+moment.locale('vi');
 
 
 export const index = async (req: Request, res: Response) => {
     try {
+
+        chatSocket.chatSocket(res);
+
         // Lấy danh sách phòng của người dùng hiện tại
         const rooms = await Room.find({
             deleted: false,
@@ -29,7 +35,7 @@ export const index = async (req: Request, res: Response) => {
             deleted: false,
             status: "active",
             _id: { $in: userIds }
-        }).select("fullName avatar");
+        }).select("fullName avatar statusOnline");
 
         // Lấy danh sách người dùng đã lọc
         const userMessages = await Promise.all(
@@ -41,12 +47,26 @@ export const index = async (req: Request, res: Response) => {
                     deleted: false
                 });
 
+
+                // Tìm phòng liên quan đến người dùng và gán room_id
+                const specificRoom = rooms.find(room => {
+                    const members = room.user_id.map(id => id.toString());
+                    return (
+                        members.includes(user._id.toString()) &&
+                        members.includes(res.locals.user.id.toString()) &&
+                        members.length === 2 // Phòng chỉ chứa đúng 2 người
+                    );
+                });
                 // Lấy tin nhắn mới nhất
                 const latestMessage = await Message.findOne({
                     room_id: room._id  // Lọc theo phòng
                 })
                     .sort({ createdAt: -1 })
                     .limit(1).select("content images files createdAt room_id")
+                if (!latestMessage) return {
+                    user,
+                    room_id: specificRoom ? specificRoom._id : null
+                }
 
                 // Kiểm tra loại tin nhắn và thay thế nội dung nếu là file hoặc hình ảnh
                 let messageContent = latestMessage ? latestMessage.content : null;
@@ -65,32 +85,26 @@ export const index = async (req: Request, res: Response) => {
                         } else if (latestMessage.files && latestMessage.files.length > 0) {
                             messageContent = "Đã gửi một file";
                         } else {
-                            messageContent = `Bạn: ${latestMessage.content}`
+                            messageContent = `${latestMessage.content}`
                         }
                     }
                 }
 
                 // Định dạng thời gian của tin nhắn
-            
-                const messageTime = latestMessage ? moment(latestMessage.createdAt).format('HH:mm') : null;
+                const messageTime = latestMessage ? moment(latestMessage.createdAt) : null;
 
-                // Tìm phòng liên quan đến người dùng và gán room_id
-                const specificRoom = rooms.find(room => {
-                    const members = room.user_id.map(id => id.toString());
-                    return (
-                        members.includes(user._id.toString()) &&
-                        members.includes(res.locals.user.id.toString()) &&
-                        members.length === 2 // Phòng chỉ chứa đúng 2 người
-                    );
-                });
+                // Nếu có thời gian tin nhắn
+                const formattedMessageTime = messageTime
+                    ? moment(messageTime).fromNow()
+                    : "Chưa có tin nhắn";
 
                 return {
                     user,
                     latestMessage: {
                         ...latestMessage.toObject(),
-                        content: messageContent
+                        content: messageContent,
+                        formattedMessageTime: formattedMessageTime,
                     },
-                    messageTime,
                     room_id: specificRoom ? specificRoom._id : null
                 };
             })
@@ -200,7 +214,7 @@ export const roomMessage = async (req: Request, res: Response) => {
         deleted: false,
         status: "active",
         _id: { $in: userIds }
-    });
+    }).select("-password -email");
 
     // Lấy 20 tin nhắn gần nhất trong phòng
     const messages = await Message.find({
@@ -239,7 +253,7 @@ export const roomMessage = async (req: Request, res: Response) => {
                 room_id: room._id  // Lọc theo phòng
             })
                 .sort({ createdAt: -1 })
-                .limit(1).select("content images files createdAt")
+                .limit(1).select("content images files createdAt call")
 
             // Định dạng nội dung tin nhắn nếu là hình ảnh hoặc file
             let messageContent = latestMessage ? latestMessage.content : null;
@@ -249,33 +263,46 @@ export const roomMessage = async (req: Request, res: Response) => {
                         messageContent = "Bạn: Đã gửi một hình ảnh";
                     } else if (latestMessage.files && latestMessage.files.length > 0) {
                         messageContent = "Bạn: Đã gửi một file";
-                    } else {
+                    }else if(latestMessage.call.title){
+                        messageContent = `${latestMessage.call.title}`
+                    } 
+                    else {
                         messageContent = `Bạn: ${latestMessage.content}`
                     }
                 } else {
                     if (latestMessage.images && latestMessage.images.length > 0) {
-                        messageContent = "Đã gửi một hình ảnh";
+                        messageContent = `${user.fullName} đã gửi một hình ảnh`;
                     } else if (latestMessage.files && latestMessage.files.length > 0) {
-                        messageContent = "Đã gửi một file";
-                    } else {
-                        messageContent = `Bạn: ${latestMessage.content}`
+                        messageContent = `${user.fullName} gửi một file`;
+                    }else if(latestMessage.call.title){
+                        messageContent = `${latestMessage.call.title}`
+                    }  else {
+                        messageContent = `${latestMessage.content}`
                     }
                 }
             }
 
             // Định dạng thời gian của tin nhắn
-            const messageTime = latestMessage ? moment(latestMessage.createdAt).format('HH:mm') : null;
+            const messageTime = latestMessage ? moment(latestMessage.createdAt) : null;
+
+            // Nếu có thời gian tin nhắn
+            const formattedMessageTime = messageTime
+                ? moment(messageTime).fromNow()
+                : "Chưa có tin nhắn";
+
 
             return {
                 user,
                 latestMessage: {
                     content: messageContent,
-                    time: messageTime,
+                    formattedMessageTime: formattedMessageTime,
                     createdAt: latestMessage ? latestMessage.createdAt : null
                 }
             };
         })
     );
+
+    
 
     // Gửi dữ liệu đến view
     res.render("client/pages/chat/index.pug", {
@@ -289,12 +316,21 @@ export const roomMessage = async (req: Request, res: Response) => {
 };
 
 export const videoCall = async (req: Request, res: Response) => {
-    const userId = req.params.userId
-    const objectCall = {
-        caller: res.locals.user.id,
-        callee: userId
-    }
 
+    chatSocket.chatSocket(res)
+
+    const userInRoom = await Room.findOne({
+        _id: req.params.roomId
+    })
+    let objectCall
+
+    const userId = req.params.roomId
+    if (userInRoom) {
+        objectCall = {
+            caller: res.locals.user.id,
+            callee: userInRoom.user_id
+        }
+    }
     res.render("client/pages/chat/call.pug", {
         objectCall: objectCall
     })
