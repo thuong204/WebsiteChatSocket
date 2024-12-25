@@ -44,6 +44,7 @@ listCancelFriends.forEach(item => {
 
         item.classList.add("d-none");
         item.parentElement.querySelector("[btn-add-friend]").classList.remove("d-none");
+
         item.parentElement.querySelector("[btn-delete-friend]").classList.remove("d-none");
 
 
@@ -70,11 +71,31 @@ listAcceptFriends.forEach(item => {
         }
 
         item.classList.add("d-none");
+        item.parentElement.querySelector("[btn-remove-friend]").classList.remove("d-none")
         item.parentElement.querySelector("[btn-friend]").classList.remove("d-none");
-        item.parentElement.querySelector("[btn-cancel-friend]").classList.add("d-none");
+        item.parentElement.querySelector("[btn-delete-request-friend]").classList.add("d-none");
+        
         
     });
 });
+
+
+
+//xoa loi moi ket ban
+const listDeleteFriend= document.querySelectorAll("[btn-delete-request-friend]")
+listDeleteFriend.forEach(item=>{
+    item.addEventListener("click",()=>{
+        console.log("ok")
+        const userId = item.closest(".card").getAttribute("data-user")
+        socket.emit("CLIENT_DELETE_REQUEST_FRIEND",userId)
+
+        item.classList.add("d-none")
+
+        item.parentElement.querySelector("[btn-accept-friend]").classList.add("d-none")
+        item.parentElement.querySelector("[btn-deleted-friend]").classList.remove("d-none")
+
+    })
+})
 
 
 //huy ket ban
@@ -94,10 +115,14 @@ listRemoveFriends.forEach(item =>{
 
         if (typeof socket !== "undefined") {
             socket.emit("CLIENT_REMOVE_FRIEND", userId);
-            console.log("đã gửi yêu cầu hủy kết bạn")
         } else {
             console.error("Socket không được định nghĩa.");
         }
+
+        item.classList.add("d-none")
+        item.parentElement.querySelector("[btn-friend]").classList.add("d-none")
+        item.parentElement.querySelector("[btn-removed-friend]").classList.remove("d-none")
+        item.parentElement.querySelector("[btn-remove-friend]").classList.remove("d-none")
 
     })
 })

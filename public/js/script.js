@@ -108,6 +108,27 @@ listUserChats.forEach(item => {
                         htmlFiles += `</div>`;
                     }
 
+                    let htmlCall = ''
+                    if (message.call && message.call.statusCall) {
+                        if (message.call.statusCall == "call fail") {
+                            htmlCall = `
+                            <div class="reply-call missed>
+                                <i class="icon fas fa-phone-slash text-danger"></i>
+                                <span class="status-text">Cuộc gọi bị nhỡ</span>
+                            </div>
+                            `
+
+                        }
+                        else if (message.call.statusCall == "success") {
+                            htmlCall = `
+                            <div class="reply-call missed">
+                                <i class="icon fas fa-phone-slash text-danger"></i>
+                                <span class="status-text">Cuộc gọi đã kết thúc</span>
+                            </div>
+                            `
+                        }
+                    }
+
                     let htmlText = message.content ? `<div class="reply-text">${message.content}</div>` : '';
 
                     // Kiểm tra xem tin nhắn có phải là tin nhắn gửi đi hay không
@@ -119,6 +140,7 @@ listUserChats.forEach(item => {
                                         ${htmlText}
                                         ${htmlImages}
                                         ${htmlFiles}
+                                        ${htmlCall}
                                     </div>
                                 </div>
                             </div>`;
@@ -135,6 +157,7 @@ listUserChats.forEach(item => {
                                     ${htmlText}
                                     ${htmlImages}
                                     ${htmlFiles}
+                                    ${htmlCall}
                                     </div>
                                 </div>
                             </div>`;
@@ -213,19 +236,19 @@ listUserChats.forEach(item => {
                 //cap nhat list image
 
                 const listImages = document.querySelector(".list-chat-image")
-                listImages.innerHTML=""
+                listImages.innerHTML = ""
 
                 const dataImages = data.data.listImages
-                
-                if(dataImages && dataImages.length> 0){
-                    dataImages.forEach(listImage =>{
-                        if(listImage || listImage.images.length >0 ){
-                            listImage.images.forEach(image =>{
+
+                if (dataImages && dataImages.length > 0) {
+                    dataImages.forEach(listImage => {
+                        if (listImage || listImage.images.length > 0) {
+                            listImage.images.forEach(image => {
                                 const divCol = document.createElement("div")
                                 divCol.classList.add("col-4")
                                 const img = document.createElement("img")
-                                img.src=image
-                                img.alt="chat-image"
+                                img.src = image
+                                img.alt = "chat-image"
                                 divCol.appendChild(img)
                                 listImages.appendChild(divCol)
                             })
@@ -327,7 +350,7 @@ let isUserActive = true; // Biến để theo dõi hoạt động của người
 let idleTime = 0;
 const MAX_IDLE_TIME = 300; // 300 giây = 5 phút
 
-setInterval(function() {
+setInterval(function () {
     if (isUserActive) {
         idleTime++;
         if (idleTime >= MAX_IDLE_TIME) {

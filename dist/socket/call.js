@@ -15,7 +15,6 @@ const callSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
     const fullName = res.locals.user.fullNamez;
     global._io.once('connection', (socket) => {
         socket.on("CLIENT_ACCEPT_CALL", (data) => {
-            console.log("ok");
         });
     });
 });

@@ -76,6 +76,8 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
     const replyMessages = document.querySelectorAll(".reply-item");
     const lastReplyMessage = replyMessages[replyMessages.length - 1];
 
+    const listChatImage = document.querySelector(".list-chat-image")
+
     //xu li tin nhan moi nhat tren thanh
 
     let dataContent
@@ -84,12 +86,27 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
 
     // Xu li hinh anh tin nhan file
     let htmlImages = '';
+    let htmlImagesNav = ''
     if (data.images && data.images.length > 0) {
         htmlImages = `<div class="reply-image d-flex">`;
         data.images.forEach(image => {
             htmlImages += `<img src="${image}" width="100" height="100">`;
         });
         htmlImages += `</div>`;
+
+        data.images.forEach(image => {
+            htmlImagesNav += `
+                <div class="col-4">
+                    <img src= "${image}" alt="">
+                </div>
+            `
+        })
+
+        //chèn vào phàn tử cuối cùng
+        listChatImage.insertAdjacentHTML('beforeend', htmlImagesNav);
+
+
+
     }
 
     let htmlFiles = '';
@@ -553,15 +570,13 @@ socket.on("SERVER_RETURN_USER_ONLINE", (userId) => {
 })
 
 
-const playSound = (soundUrl) =>{
+const playSound = (soundUrl) => {
     const audio = new Audio(soundUrl);
     audio.play().catch(err => console.error("Failed to play sound:", err));
 }
 
 socket.on("SERVER_CALL_VIDEO", (data) => {
     // Phát âm thanh khi có cuộc gọi đến
-    const callSound = new Audio('https://res.cloudinary.com/dwk6tmsmh/video/upload/v1733487203/fhvctprud0jx1y2gfeus.mp3');
-    callSound.play();
 
     // Hiển thị thông báo yêu cầu cuộc gọi video
     Swal.fire({

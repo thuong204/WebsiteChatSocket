@@ -22,9 +22,11 @@ block main
                                     //- p 1 bạn chung
                                     .buttons
                                         button.add-friend.btn-success.btn.btn(btn-accept-friend)  Chấp nhận
-                                        button.become-friend.btn-success.btn.btn.d-none(btn-friend)  Bạn bè
-                                        button.cancel-friend.btn-secondary.btn(btn-cancel-friend)  Xóa
-                                        button.cancel-friend.btn-secondary.btn.d-none   Đã xóa
+                                        button.become-friend.btn-friend-find.btn-success.btn.btn.d-none(btn-friend)  Bạn bè
+                                        button.btn-remove-friend-find.btn-danger.btn.d-none(btn-remove-friend) Hủy kết bạn
+                                        button.btn-removed-find.btn-danger.btn.disabled.d-none(btn-removed-friend) Đã hủy kết bạn
+                                        button.cancel-friend.btn-secondary.btn(btn-delete-request-friend)  Xóa
+                                        button.cancel-friend.disabled.btn-secondary.btn.d-none(btn-deleted-friend)  Đã xóa
                                         
     block script 
         script( type= "module" src="/js/user.js")

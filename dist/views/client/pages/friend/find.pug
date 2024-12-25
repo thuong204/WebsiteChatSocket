@@ -12,26 +12,32 @@ block main
                     h2 Tìm kiếm bạn bè
                     input(type="text" placeholder="Tìm bạn" class="friend-search-all" find-friend-all) 
                     button.btn.btn-success.btn-search-friend(btn-search-friend) Tìm kiếm
-                .friend-suggestions
+                .friend-suggestions.friend-find
                     .suggestion-cards
                         each list in listUsers
                             .card(data-user=list._id)
-                                img(src=list.avatar alt="Profile Picture")
+                                if(list.avatar)
+                                    img(src=list.avatar alt="Profile Picture")
+                                else   
+                                    img(src="https://res.cloudinary.com/dwk6tmsmh/image/upload/v1730014980/ul35qvsq9dt0yqgo0jku.png" alt="Profile Picture")
                                 .info
                                     p #{list.fullName}
                                     .buttons
                                         if(list.relationship =="friends")
                                             button.btn-friend-find.btn-success.btn(btn-friend) Bạn bè
                                             button.btn-remove-friend-find.btn-danger.btn(btn-remove-friend) Hủy kết bạn
+                                            button.btn-removed-find.btn-danger.btn.disabled.d-none(btn-removed-friend) Đã hủy kết bạn
                                         else if(list.relationship =="requested")
                                             button.add-friend.btn-primary.btn.d-none.btn(btn-add-friend)  Thêm bạn bè
                                             button.cancel-friend.btn-secondary.btn(btn-cancel-friend)  Hủy yêu cầu
                                             button.remove-friend.btn-secondary.btn.d-none(btn-delete-friend) Gỡ
                                         else if(list.relationship =="invited")
                                             button.add-friend.btn-success.btn.btn(btn-accept-friend)  Chấp nhận
-                                            button.become-friend.btn-success.btn.btn.d-none(btn-friend)  Bạn bè
-                                            button.cancel-friend.btn-secondary.btn(btn-cancel-friend)  Xóa
-                                            button.cancel-friend.btn-secondary.btn.d-none   Đã xóa
+                                            button.become-friend.btn-friend-find.btn-success.btn.btn.d-none(btn-friend)  Bạn bè
+                                            button.btn-remove-friend-find.btn-danger.btn.d-none(btn-remove-friend) Hủy kết bạn
+                                            button.btn-removed-find.btn-danger.btn.disabled.d-none(btn-removed-friend) Đã hủy kết bạn
+                                            button.cancel-friend.btn-secondary.btn(btn-delete-request-friend)  Xóa
+                                            button.cancel-friend.btn-secondary.btn.d-none(btn-deleted-friend)   Đã xóa
                                         else
                                             button.add-friend.btn-primary.btn(btn-add-friend)  Thêm bạn bè
                                             button.cancel-friend.btn-secondary.d-none.btn(btn-cancel-friend)  Hủy yêu cầu

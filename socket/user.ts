@@ -203,6 +203,33 @@ export const userSocket = async (res: Response) => {
 
         })
 
-        // Khi kết nối bị ngắt (người dùng đóng tab hoặc rời khỏi trang)
+        // tu choi loi moi kert ban
+        socket.on("CLIENT_DELETE_REQUEST_FRIEND", async (userId) => {
+            //id cua nguoi nhan
+            const myUserA = res.locals.user.id
+
+            //id của nguoi gui
+            const userB = userId
+
+            //xoa id cua nguoi gui(b) trong acceptfriend cua nguoi nhan(a)
+
+            await User.updateOne({
+                _id: myUserA
+            }, {
+                $pull: { acceptFriends: userB }
+            })
+
+
+            //xoa id cua nguoi nhan vao requestfriend cua nguoi gui
+
+            await User.updateOne({
+                _id: userB
+            }, {
+                $pull: { requestFriends: myUserA }
+            })
+
+        })
     })
+
+
 }

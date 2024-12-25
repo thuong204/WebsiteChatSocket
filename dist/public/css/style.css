@@ -8,9 +8,9 @@
 /* Ẩn cuộn ngang nếu không cần thiết */
 body,
 html {
-    /* overflow-x: hidden;  */
+    overflow-x: hidden; 
     /* Ẩn thanh cuộn ngang */
-    /* overflow-y: hidden; */
+    overflow-y: hidden;
 }
 
 header {
@@ -1178,6 +1178,9 @@ p.description {
     font-size: 1rem;
     margin-bottom: 20px;
 }
+.friend-find{
+    height: 530px !important;
+}
 .friend-search-all {
     width: 90%;
     padding: 10px;
@@ -1278,6 +1281,9 @@ p.description {
 .friend-suggestions {
     padding-left: 20px;
     padding-top: 10px;
+    overflow-y: auto;
+    height: 650px;
+    max-height:2000px;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -1372,6 +1378,13 @@ p.description {
 .btn-remove-friend-find {
     display: none !important;
 }
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
 
 /* Khi hover vào nút "Tìm bạn bè", nút "Tìm bạn bè" ẩn và nút "Xóa bạn" hiển thị */
 .btn-friend-find:hover {

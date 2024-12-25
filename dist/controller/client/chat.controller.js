@@ -76,7 +76,7 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 room_id: room._id
             })
                 .sort({ createdAt: -1 })
-                .limit(1).select("content images files createdAt room_id");
+                .limit(1).select("content images files createdAt room_id call");
             if (!latestMessage)
                 return {
                     user,
@@ -91,6 +91,9 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     else if (latestMessage.files && latestMessage.files.length > 0) {
                         messageContent = "Bạn: Đã gửi một file";
                     }
+                    else if (latestMessage.call.title) {
+                        messageContent = `${latestMessage.call.title}`;
+                    }
                     else {
                         messageContent = `Bạn: ${latestMessage.content}`;
                     }
@@ -101,6 +104,9 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     }
                     else if (latestMessage.files && latestMessage.files.length > 0) {
                         messageContent = "Đã gửi một file";
+                    }
+                    else if (latestMessage.call.title) {
+                        messageContent = `${latestMessage.call.title}`;
                     }
                     else {
                         messageContent = `${latestMessage.content}`;
@@ -138,7 +144,7 @@ const fetchMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     if (room) {
         const messages = yield message_model_1.default.find({
             room_id: room.id
-        }).select("sender content room_id images files").limit(20).sort({
+        }).select("sender content room_id images files call").limit(20).sort({
             createdAt: "desc"
         });
         messages.reverse();
@@ -243,10 +249,10 @@ const roomMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             }
             else {
                 if (latestMessage.images && latestMessage.images.length > 0) {
-                    messageContent = `${user.fullName} đã gửi một hình ảnh`;
+                    messageContent = `Đã gửi một hình ảnh`;
                 }
                 else if (latestMessage.files && latestMessage.files.length > 0) {
-                    messageContent = `${user.fullName} gửi một file`;
+                    messageContent = `Đã gửi một file`;
                 }
                 else if (latestMessage.call.title) {
                     messageContent = `${latestMessage.call.title}`;

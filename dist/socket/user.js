@@ -147,6 +147,20 @@ const userSocket = (res) => __awaiter(void 0, void 0, void 0, function* () {
             });
             console.log("Xóa bạn bè thành công");
         }));
+        socket.on("CLIENT_DELETE_REQUEST_FRIEND", (userId) => __awaiter(void 0, void 0, void 0, function* () {
+            const myUserA = res.locals.user.id;
+            const userB = userId;
+            yield user_model_1.default.updateOne({
+                _id: myUserA
+            }, {
+                $pull: { acceptFriends: userB }
+            });
+            yield user_model_1.default.updateOne({
+                _id: userB
+            }, {
+                $pull: { requestFriends: myUserA }
+            });
+        }));
     });
 });
 exports.userSocket = userSocket;

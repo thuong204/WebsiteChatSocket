@@ -12,7 +12,7 @@ export const callSocket = async (res: Response) => {
         // })
 
         socket.on("CLIENT_ACCEPT_CALL",(data) =>{
-            console.log("ok")
+            
         })
 
         // // Khi kết nối bị ngắt (người dùng đóng tab hoặc rời khỏi trang)

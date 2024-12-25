@@ -62,7 +62,7 @@ export const index = async (req: Request, res: Response) => {
                     room_id: room._id  // Lọc theo phòng
                 })
                     .sort({ createdAt: -1 })
-                    .limit(1).select("content images files createdAt room_id")
+                    .limit(1).select("content images files createdAt room_id call")
                 if (!latestMessage) return {
                     user,
                     room_id: specificRoom ? specificRoom._id : null
@@ -76,7 +76,11 @@ export const index = async (req: Request, res: Response) => {
                             messageContent = "Bạn: Đã gửi một hình ảnh";
                         } else if (latestMessage.files && latestMessage.files.length > 0) {
                             messageContent = "Bạn: Đã gửi một file";
-                        } else {
+                        }
+                        else if (latestMessage.call.title) {
+                            messageContent = `${latestMessage.call.title}`
+                        }
+                        else {
                             messageContent = `Bạn: ${latestMessage.content}`
                         }
                     } else {
@@ -84,6 +88,9 @@ export const index = async (req: Request, res: Response) => {
                             messageContent = "Đã gửi một hình ảnh";
                         } else if (latestMessage.files && latestMessage.files.length > 0) {
                             messageContent = "Đã gửi một file";
+                        }
+                        else if (latestMessage.call.title) {
+                            messageContent = `${latestMessage.call.title}`
                         } else {
                             messageContent = `${latestMessage.content}`
                         }
@@ -133,7 +140,7 @@ export const fetchMessage = async (req: Request, res: Response) => {
     if (room) {
         const messages = await Message.find({
             room_id: room.id
-        }).select("sender content room_id images files").limit(20).sort({
+        }).select("sender content room_id images files call").limit(20).sort({
             createdAt: "desc"
         })
         messages.reverse();
@@ -263,20 +270,20 @@ export const roomMessage = async (req: Request, res: Response) => {
                         messageContent = "Bạn: Đã gửi một hình ảnh";
                     } else if (latestMessage.files && latestMessage.files.length > 0) {
                         messageContent = "Bạn: Đã gửi một file";
-                    }else if(latestMessage.call.title){
+                    } else if (latestMessage.call.title) {
                         messageContent = `${latestMessage.call.title}`
-                    } 
+                    }
                     else {
                         messageContent = `Bạn: ${latestMessage.content}`
                     }
                 } else {
                     if (latestMessage.images && latestMessage.images.length > 0) {
-                        messageContent = `${user.fullName} đã gửi một hình ảnh`;
+                        messageContent = `Đã gửi một hình ảnh`;
                     } else if (latestMessage.files && latestMessage.files.length > 0) {
-                        messageContent = `${user.fullName} gửi một file`;
-                    }else if(latestMessage.call.title){
+                        messageContent = `Đã gửi một file`;
+                    } else if (latestMessage.call.title) {
                         messageContent = `${latestMessage.call.title}`
-                    }  else {
+                    } else {
                         messageContent = `${latestMessage.content}`
                     }
                 }
@@ -302,7 +309,7 @@ export const roomMessage = async (req: Request, res: Response) => {
         })
     );
 
-    
+
 
     // Gửi dữ liệu đến view
     res.render("client/pages/chat/index.pug", {
